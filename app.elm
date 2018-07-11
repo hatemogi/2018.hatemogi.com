@@ -1,4 +1,5 @@
-import Html exposing (Html, button, nav, div, ul, li, p, a, text, aside, main_, section, footer)
+import Html exposing (Html, button, nav, div, ul, li, p, a, i,
+                      text, aside, main_, section, footer)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, classList)
 
@@ -39,15 +40,17 @@ view model =
 
 menuView : Model -> Html Msg
 menuView model =
-  nav []
-    [ div [ class "tabs" ]
-      [ ul []
-        [ li [ classList [("is-active", model.section == S소개)] ]
-             [ a [ onClick (Go S소개)] [ text "소개" ]]
-        , li [ classList [("is-active", model.section == S프로젝트)]]
-             [ a [ onClick (Go S프로젝트)] [ text "프로젝트" ]]
-        , li [ classList [("is-active", model.section == S잡담)]]
-             [ a [ onClick (Go S잡담)] [ text "잡담" ]]]]]
+  let
+    menu section label =
+      li [ classList [("is-active", model.section == section)] ]
+         [ a [onClick (Go section)] [ text label ]]
+  in
+    nav [ class "container" ]
+      [ div [ class "tabs" ]
+        [ ul []
+          [ menu S소개 "소개"
+          , menu S프로젝트 "프로젝트"
+          , menu S잡담 "잡담" ]]]
 
 mainView : Model -> Html Msg
 mainView model =
@@ -58,4 +61,5 @@ footerView : Model -> Html Msg
 footerView model =
   footer [ class "footer" ]
     [ div [ class "content has-text-centered" ]
-      [ p [] [ text "copyright 2018" ]]]
+      [ p [] [ text "Copyright 2018 "
+             , i [ class "fab fa-medium fa-lg" ] [] ]]]
