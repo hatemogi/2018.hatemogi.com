@@ -1,20 +1,18 @@
 import Html exposing (Html, button, div, text)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class)
-import Bootstrap.CDN as CDN
-import Bootstrap.Grid as Grid
 
 main =
   Html.beginnerProgram { model = model, view = view, update = update }
 
-
 -- MODEL
 
-type alias Model = Int
+type Section = S소개 | S프로젝트
+type alias Model = { section : Section }
 
 model : Model
 model =
-  0
+  { section = S소개 }
 
 
 -- UPDATE
@@ -25,21 +23,21 @@ update : Msg -> Model -> Model
 update msg model =
   case msg of
     Increment ->
-      model + 1
+      model
 
     Decrement ->
-      model - 1
+      model
 
 
 -- VIEW
 
 view : Model -> Html Msg
 view model =
-  Grid.container []
-    [Grid.row []
-      [ Grid.col []
-        [ button [ class "btn", onClick Decrement ] [ text "-" ]
-        , text (toString model)
-        , button [ class "btn", onClick Increment ] [ text "+" ]]
-      ]
+  div [ class "columns" ]
+    [ div [ class "column" ]
+      [ button [ class "btn", onClick Decrement ] [ text "-" ]
+      , text (toString model)
+      , button [ class "btn", onClick Increment ] [ text "+" ]]
+    , div [ class "column" ]
+      [text "메인"]
     ]
