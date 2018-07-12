@@ -4,6 +4,7 @@ import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, classList)
 import Http
 import Markdown
+import Xml.Decode
 
 main =
   Html.program { init = init "테스트", view = view,
@@ -12,16 +13,17 @@ main =
 -- MODEL
 
 type Section = S소개 | S프로젝트 | S잡담
-type alias Model = { section : Section, md : String }
+type alias Model = { section : Section, medium : Maybe String }
 
 init : String -> (Model, Cmd Msg)
 init name =
-  ({ section = S소개, md = "" }, loadMarkdown "README.md")
+  ({ section = S소개, medium = Nothing }, loadMediumFeed)
 
 -- UPDATE
 
 type Msg = Increment | Decrement |
-           Go Section | Got (Result Http.Error String)
+           Go Section |
+           MediumFeed (Result Http.Error String)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -33,13 +35,13 @@ update msg model =
       (model, Cmd.none)
 
     Go section ->
-      ({model | section = section}, loadMarkdown "README.md")
+      ({model | section = section}, Cmd.none)
 
-    Got (Ok content) ->
-      ({model | md = content}, Cmd.none)
+    MediumFeed (Ok content) ->
+      ({model | medium = Just content}, Cmd.none)
 
-    Got (Err _) ->
-      (model, Cmd.none)
+    MediumFeed (Err _) ->
+      ({model | medium = Nothing}, Cmd.none)
 
 -- VIEW
 
@@ -62,10 +64,34 @@ menuView model =
           , menu S프로젝트 "프로젝트"
           , menu S잡담 "잡담" ]]]
 
+introView : Html Msg
+introView =
+  div []
+    [text
+    """소프트웨어 개발자.
+    어려서 Apple IIe로 독학 프로그래밍에 빠져든 이래 개발을 취미이자
+    직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,
+    다음커뮤니케이션(현: 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년
+    정도 근무한 뒤 퇴사하여, 1인 소프트웨어 개발사의 대표로 지내고 있습니다."""]
+
+projectsView : Html Msg
+projectsView =
+  div [] [text "프로젝트"]
+
+writingsView : Html Msg
+writingsView =
+  div [] [text "잡담"]
+
 mainView : Model -> Html Msg
 mainView model =
   main_ []
-    [Markdown.toHtml [] model.md]
+    (case model.section of
+      S소개 ->
+        [introView]
+      S프로젝트 ->
+        [projectsView]
+      S잡담 ->
+        [writingsView])
 
 footerView : Model -> Html Msg
 footerView model =
@@ -82,6 +108,8 @@ subscriptions model =
 
 -- HTTP
 
-loadMarkdown : String -> Cmd Msg
-loadMarkdown name =
-  Http.send Got (Http.getString name)
+loadMediumFeed : Cmd Msg
+loadMediumFeed =
+  -- CORS 해결 필요
+  -- Http.send MediumFeed (Http.getString "https://medium.com/feed/happyprogrammer-in-jeju")
+  Cmd.none
