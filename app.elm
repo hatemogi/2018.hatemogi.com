@@ -2,34 +2,44 @@ import Html exposing (Html, button, nav, div, ul, li, p, a, i,
                       text, aside, main_, section, footer)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (class, classList)
+import Http
+import Markdown
 
 main =
-  Html.beginnerProgram { model = model, view = view, update = update }
+  Html.program { init = init "테스트", view = view,
+                 update = update, subscriptions = subscriptions }
 
 -- MODEL
 
 type Section = S소개 | S프로젝트 | S잡담
-type alias Model = { section : Section }
+type alias Model = { section : Section, md : String }
 
-model : Model
-model =
-  { section = S소개 }
+init : String -> (Model, Cmd Msg)
+init name =
+  ({ section = S소개, md = "" }, loadMarkdown "README.md")
 
 -- UPDATE
 
-type Msg = Increment | Decrement | Go Section
+type Msg = Increment | Decrement |
+           Go Section | Got (Result Http.Error String)
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     Increment ->
-      model
+      (model, Cmd.none)
 
     Decrement ->
-      model
+      (model, Cmd.none)
 
     Go section ->
-      {model | section = section}
+      ({model | section = section}, loadMarkdown "README.md")
+
+    Got (Ok content) ->
+      ({model | md = content}, Cmd.none)
+
+    Got (Err _) ->
+      (model, Cmd.none)
 
 -- VIEW
 
@@ -55,7 +65,7 @@ menuView model =
 mainView : Model -> Html Msg
 mainView model =
   main_ []
-   [ text "body area" ]
+    [Markdown.toHtml [] model.md]
 
 footerView : Model -> Html Msg
 footerView model =
@@ -63,3 +73,15 @@ footerView model =
     [ div [ class "content has-text-centered" ]
       [ p [] [ text "Copyright 2018 "
              , i [ class "fab fa-medium fa-lg" ] [] ]]]
+
+-- SUBSCRIPTIONS
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Sub.none
+
+-- HTTP
+
+loadMarkdown : String -> Cmd Msg
+loadMarkdown name =
+  Http.send Got (Http.getString name)
