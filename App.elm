@@ -89,7 +89,14 @@ introView =
 
 projectsView : Html Msg
 projectsView =
-  markdown "# 프로젝트"
+  let
+    entryf : Projects.Project -> Html Msg
+    entryf p =
+      div [] [(h3 [] [text (toString p.year)]), text p.title]
+  in
+    div []
+      ([ h1 [ class "title" ] [ text "프로젝트" ] ]
+      ++ (List.map entryf Projects.data))
 
 writingsView : Html Msg
 writingsView =

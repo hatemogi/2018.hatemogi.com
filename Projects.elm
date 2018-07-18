@@ -1,4 +1,4 @@
-module Projects exposing (data)
+module Projects exposing (Project, data)
 import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (decode, required, optional)
 
