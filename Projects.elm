@@ -1,6 +1,7 @@
-module Projects exposing (Project, data)
+module Projects exposing (Project, data, tags)
 import Json.Decode exposing (..)
 import Json.Decode.Pipeline exposing (decode, required, optional)
+import Set
 
 type alias Project =
   { category    : String
@@ -86,3 +87,9 @@ data =
   , Project "번역" 2000 "Ring - 클로저 웹서버 인터페이스 스펙 및 라이브러리 문서 번역"
     (Just "https://github.com/hatemogi/ring/wiki") "개인" [] Nothing
   ]
+
+tags = data
+  |> List.concatMap .tags
+  |> List.map String.toLower
+  |> Set.fromList
+  |> Set.toList
