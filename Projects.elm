@@ -88,22 +88,36 @@ data =
   , Project "업무" 2007 "Daum 캘린더 서비스 개발 및 리딩"
     (Just "https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05")
     "TFT장" ["팀리딩", "Ruby", "Rails", "MySQL"]
-    """"""
+    """다음 캘린더 서비스의 초기 기획단계부터 안정화 단계까지 개발에 참여 및 TFT 리딩. Ruby On Rails로 백엔드 서비스를 구현했고,
+       당시 유행하던 웹 2.0 서비스를 한메일 익스프레스와 함께 다음 최초로 실서비스 도입한 사례. 카카오 합병에 이어 서비스 종료에
+       즈음해 작성해 공개한 글 (제목 링크 참조)도 꽤 호응을 얻었습니다."""
   , Project "업무" 2006 "Daum 카페 채팅 서비스 부하분산 서버 개발" Nothing "팀원" ["C", "PThread"]
-    """"""
+    """다음 카페의 채팅 서비스에 교체 도입되는 채팅서버의 앞단에서 부하 분산을 담당하는 C 서버 개발. 당시 카페 채팅 서비스는
+       Java로 구현해 운영했는데, 과도한 트래픽으로 잦은 장애상황이 발생하던 상황이었고, CTO가 C기반 비동기 메시징 서버로 교체를
+       결정했고, 저는 그 교체시스템 중에 앞단 로드 밸런서를 개발했습니다. 채팅 서비스의 흐름상 멀티스레드 대비 비동기 처리의
+       효과가 극대화되는 특성으로 인해, 기존 36대의 채팅서버를 4대로 줄였고, 장애 빈도를 대폭 낮추었습니다. """
   , Project "업무" 2005 "Daum 일본, 개인홈 서비스 개발 및 운영" Nothing "팀장" ["Java", "Spring", "MySQL"]
-    """"""
+    """다음 재팬 근무시절 개인 홈 서비스 개발 및 유지 보수"""
   , Project "업무" 2004 "Daum 일본, 커뮤니티 서비스 개발 및 운영" Nothing "팀원" ["Java", "Velocity", "MySQL"]
-    """"""
+    """다음 재팬 근무시절 커뮤니티 서비스 유지 보수"""
   , Project "업무" 2003 "Daum 플래닛 개인홈 서비스 개발 및 운영" Nothing "팀원" ["Java", "Struts", "MySQL"]
-    """"""
+    """개인 커뮤니티 서비스인 **Daum 플래닛** 개발에 참여."""
   , Project "업무" 2003 "Daum 카페 한줄 게시판, 투표판 개발" Nothing "팀원" ["Java", "Servlet", "FreeMarker"]
-    """"""
-  , Project "취미" 2017 "스타웍스 - 스타벅스 WiFi 자동연결 macOS 애플리케이션과 개발기" Nothing "개인" ["Swift"]
-    """"""
+    """다음 카페 서비스 개발팀 소속으로 서비스 유지보수와 더불어 **한줄 게시판**과 **투표판** 기능 추가 개발.
+       당시 다음 카페의 전성기로 **일 3억 PV**를 처리하는 경험을 쌓을 수 있었습니다."""
+  , Project "업무" 2000 "한국물류정보통신 시스템팀 사원" Nothing "팀원" ["C", "UNIX", "Python"]
+    """병역특례로 40개월간 한국물류정보통신(현재 KL-Net) 시스템팀에 근무하며, 윈도우NT 시스템 관리, 리눅스 개발장비 관리, CISCO 라우터 관리,
+       네트워크 방화벽 관리를 담당했고, EDI 전자문서중계 시스템의 유닉스 C 애플리케이션을 고객사에 수정배포하는 일도 담당했습니다."""
+  , Project "취미" 2017 "스타웍스 macOS 앱 개발" (Just "http://스타웍스.com") "개인" ["Swift"]
+    """스타벅스 WiFi 자동연결 macOS 애플리케이션과 개발기를 작성해 공유. 한국 스타벅스에서 맥북프로를 써서 무료 WiFi에 접속할 때
+       불편한 동의과정을 자동화해주는 macOS 앱을 만들어 공개했습니다. 스타벅스 기프트카드를 보낼 수 있는 무료 소프트웨어로 공개했고,
+       일부 사용자로부터 도합 10여만원 상당의 기프트카드를 받았습니다. Swift로 WebKit엔진을 붙여서 캡티브 네트워크 연결창을 띄워서
+       처리해 개발했습니다. [개발기도 미디엄에 연재](https://medium.com/happyprogrammer-in-jeju/스타벅스-연결러-앱-공개-개발-후기-c0c5f88a86e8)해서
+       일부 개발자들로부터 좋은 호응을 얻었습니다."""
   , Project "취미" 2016 "한글코딩.org 기획 공개"
     (Just "http://한글코딩.org/") "개인" ["Clojure"]
-    "변수, 함수, 객체 이름 지을 때, 콩글리시 영작 그만하고, 한글로 코딩하자는 주장을 담은 웹사이트 오픈"
+    """변수, 함수, 객체 이름 지을 때, 콩글리시 영작 그만하고, 한글로 코딩하자는 주장을 담은 웹사이트 오픈.
+       관련해서 PyCon 2016에서 라이트닝토크도 발표자로 참여했습니다."""
   , Project "취미" 2014 "AewolInputMethod - macOS용 한글 입력기 개발"
     (Just "https://medium.com/happyprogrammer-in-jeju/dvorak과-한글-입력기-개발-8940bc4714a1")
     "개인" ["Objective-C", "C"]
@@ -119,22 +133,25 @@ data =
     (Just "http://blog.naver.com/PostView.nhn?blogId=taksangs&logNo=60050324463")
     "개인" ["Borland Pascal", "Assembly", "MS-DOS"]
     """직접 개발한 VESA 한글 그래픽 라이브러리를 이용한 게임 개발"""
-  , Project "발표" 2017 "한글 코딩 도구 비지니스 피칭" Nothing "개인" ["Clojure"]
-    """"""
+  , Project "발표" 2017 "한글 코딩 도구 비지니스 피칭"
+    (Just "https://medium.com/happyprogrammer-in-jeju/한글-코딩-도구-비지니스-피칭-a7727fd99663") "개인" ["Clojure"]
+    """한글로 코딩하는 언어와 웹플랫폼을 만들어 코딩교육에 활용해보자는 사업화 아이디어를
+       **제주창조경제혁신센터**에서 발표했습니다. 심사위원들로부터, 스크래치와 실무자용 언어 사이의 중고등학교용
+       프로그래밍 언어로 공략하면 유효하겠다는 평가를 받았습니다. 슬라이드 내용은 제목 링크 참조."""
   , Project "발표" 2016 "PyCon 라이트닝토크 - 한글코딩 5분 발표"
     (Just "https://youtu.be/46UkzB-3z3Y") "개인" ["Python", "Clojure"]
-    "[발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)"
+    "한글코딩.org 사이트의 내용을 [발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)"
   , Project "발표" 2013 "Daum DevOn 컨퍼런스 - 사내 Git 저장소 개발사례"
     (Just "https://www.slideshare.net/hatemogi/devon2013-git") "개인" []
     """"""
-  , Project "번역" 2000 "유의미 버전 SemVer 한글 번역"
-    (Just "https://semver.org/lang/ko") "개인" []
-    """"""
-  , Project "번역" 2000 "클로저 선문답 - Clojure Koans 한글 번역"
+  , Project "번역" 2015 "클로저 선문답 - Clojure Koans 한글 번역"
     (Just "https://clojurekoans.hatemogi.com") "개인" []
     """"""
-  , Project "번역" 2000 "Ring - 클로저 웹서버 인터페이스 스펙 및 라이브러리 문서 번역"
+  , Project "번역" 2015 "Ring - 클로저 웹서버 인터페이스 스펙 및 라이브러리 문서 번역"
     (Just "https://github.com/hatemogi/ring/wiki") "개인" []
+    """"""
+  , Project "번역" 2014 "유의미 버전 SemVer 한글 번역"
+    (Just "https://semver.org/lang/ko") "개인" []
     """"""
   ]
 
