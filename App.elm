@@ -5,6 +5,7 @@ import Http
 import Markdown
 import Xml.Decode
 import Projects
+import Intro
 import Dict
 import Set
 
@@ -14,7 +15,7 @@ main =
 
 -- MODEL
 
-type Section = S소개 | S프로젝트 | S잡담
+type Section = S소개 | S프로젝트 | S글 | S잡담
 type alias Model = { section : Section, medium : Maybe String }
 
 init : String -> (Model, Cmd Msg)
@@ -42,42 +43,60 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  section [ class "section is-info is-fullheight"]
-    [ div [ class "container"] [ mainView model ]
-    , div [ class "hero-foot" ] [footerView model ]]
+  div [ class "wrap" ]
+    [ menuView model
+    , mainView model
+    , footerView model ]
 
 menuView : Model -> Html Msg
 menuView model =
-  header [ class "navbar" ]
-    [ div [ class "container" ] [] ]
-
-mainView : Model -> Html Msg
-mainView model =
-  div [ class "has-text-centered columns"]
-    [ div [ class "column is-narrow" ] [ introCardView ]
-    , div [ class "column box has-text-justified" ]
-      [ div []
-        (case model.section of
-          S소개 ->
-            [h1 [ class "title" ] [ text "김대현" ], introView]
-          S프로젝트 ->
-            [h1 [ class "title" ] [ text "프로젝트" ], projectsView]
-          S잡담 ->
-            [h1 [ class "title" ] [ text "잡담" ], writingsView])]]
-
-footerView : Model -> Html Msg
-footerView model =
   let
-    menu section label =
+    menu section (icon, label) =
       li [ classList [("is-active", model.section == section)]]
-         [a [onClick (Go section)] [ text label ]]
+         [a [onClick (Go section)] [span [class "icon is-small"] [i [class ("fas " ++ icon)] []], span [] [text label] ]]
   in
     nav [ class "tabs is-boxed is-fullwidth" ]
       [ div [ class "container" ]
         [ ul []
-          [ menu S소개 "소개"
-          , menu S프로젝트 "프로젝트"
-          , menu S잡담 "잡담"]]]
+          [ menu S소개 ("fa-user-circle", "소개")
+          , menu S프로젝트 ("fa-file-code", "프로젝트")
+          , menu S글 ("fa-edit", "글")
+          , menu S잡담 ("fa-comment", "잡담")]]]
+
+mainView : Model -> Html Msg
+mainView model =
+ div [ class "container" ]
+   [ div [ class "has-text-centered columns"]
+      [ div [ class "column is-narrow" ] [ profileView ]
+      , main_ [ class "column has-text-justified" ]
+          [ div []
+              (case model.section of
+                 S소개     -> [h1 [ class "title" ] [ text "김대현" ], introView]
+                 S프로젝트 -> [h1 [ class "title" ] [ text "프로젝트" ], projectsView]
+                 S글       -> [h1 [ class "title" ] [ text "글" ], projectsView]
+                 S잡담     -> [h1 [ class "title" ] [ text "잡담" ], writingsView])]]]
+
+footerView : Model -> Html Msg
+footerView model =
+  footer [ class "footer" ]
+    [ div [ class "content has-text-centered" ]
+          [ p [] [ text "hatemogi.com" ]
+          , markdown """Source code licensed [MIT](https://opensource.org/licenses/mit-license.php)<br/>
+Website content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)""" ] ]
+
+profileView : Html Msg
+profileView =
+  div [ class "card", style [("width", "230px")] ]
+    [ div [ class "card-image" ] [img [src "img/profile.jpg"] []]
+    , div [ class "card-content has-text-left" ]
+        [markdown
+         """백엔드 개발자. **이상적 Clojure**와 **현실적 Java**를 오가며 **실용 프로그래밍**.
+            개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새."""]
+    , footer [ class "card-footer" ]
+      [ p [ class "card-footer-item" ]
+       [span [] [ a [ href "https://medium.com/happyprogrammer-in-jeju"]
+                    [ i [ class "fab fa-medium fa-lg"] []
+                    , text " 미디엄 보기"]]]]]
 
 introView : Html Msg
 introView =
@@ -94,7 +113,7 @@ introView =
 참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로
 백엔드 웹서비스를 개발했습니다.
 
-## 오후코드
+## 오후코드 (개인 개발자)
 
 개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를
 위한 서버 소프트웨어를 개발해 납품했습니다.
@@ -105,41 +124,49 @@ introView =
 projectsView : Html Msg
 projectsView =
   let
+    categoryColor: String -> String
+    categoryColor cat =
+      case cat of
+        "업무" -> "is-warning"
+        "취미" -> "is-info"
+        "발표" -> "is-success"
+        "번역" -> "is-primary"
+        _ -> ""
     entryf : Projects.Project -> Html Msg
     entryf p =
-      div [] [div [class "tags has-addons"]
-                  [span [class "tag"] [text (toString p.year)]
-                  ,span [class "tag is-primary"] [text p.category]]
-             ,case p.url of
-                 Nothing  -> text p.title
-                 Just url -> a [href url] [text p.title, span [class "icon"] [i [class "fas fa-link"] []]]
-             ,div [class "tags"] (List.map (\t -> span [class "tag"] [text t]) p.tags)]
+      article [class "media"]
+              [div [class "media-left"]
+                   [div [class "tags has-addons"]
+                        [span [class "tag"] [text (toString p.year)]
+                        ,span [class ("tag " ++ (categoryColor p.category))] [text p.category]]]
+              ,div [class "media-content"]
+                 [Html.p []
+                   [div [class "content"]
+                     [strong []
+                       [case p.url of
+                         Nothing  -> text p.title
+                         Just url -> a [href url] [text p.title, span [class "icon"] [i [class "fas fa-link fa-sm"] []]]]
+                     , markdown p.description]
+                 ,div [class "tags"] (List.map (\t -> span [class "tag is-success"] [text t]) p.tags)]]]
     colors = []
   in
     div []
-      (List.map entryf Projects.data)
+      [div [class "buttons has-addons"]
+           [span [class "button is-info"] [text "전체"]
+           ,span [class "button"] [text "업무"]
+           ,span [class "button"] [text "취미"]
+           ,span [class "button"] [text "발표"]
+           ,span [class "button"] [text "번역"]
+           ,span [class "button"] [text "하이라이트"]]
+      ,div [] (List.map entryf Projects.data)]
 
 writingsView : Html Msg
 writingsView =
   div [] [text "잡담"]
 
-introCardView : Html Msg
-introCardView =
-  div [ class "card", style [("width", "230px")] ]
-    [ div [ class "card-image" ] [img [src "img/profile.jpg"] []]
-    , div [ class "card-content has-text-left" ]
-        [markdown
-         """백엔드 개발자. **이상적 Clojure**와 **현실적 Java**를 오가며 **실용 프로그래밍**.
-            개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새."""]
-    , footer [ class "card-footer" ]
-      [ p [ class "card-footer-item" ]
-       [span [] [ a [ href "https://medium.com/happyprogrammer-in-jeju"]
-                    [ i [ class "fab fa-medium fa-lg"] []
-                    , text " 둘러보기"]]]]]
-
 markdown : String -> Html Msg
 markdown content =
-  div [] [Markdown.toHtml [] content]
+  Markdown.toHtml [] content
 
 -- SUBSCRIPTIONS
 

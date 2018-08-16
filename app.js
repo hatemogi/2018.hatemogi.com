@@ -9966,11 +9966,10 @@ var _user$project$Projects$Project = F7(
 	function (a, b, c, d, e, f, g) {
 		return {category: a, year: b, title: c, url: d, role: e, tags: f, description: g};
 	});
-var _user$project$Projects$projectDecoder = A4(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+var _user$project$Projects$projectDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'description',
-	_elm_lang$core$Json_Decode$nullable(_elm_lang$core$Json_Decode$string),
-	_elm_lang$core$Maybe$Nothing,
+	_elm_lang$core$Json_Decode$string,
 	A3(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 		'tags',
@@ -10038,7 +10037,7 @@ var _user$project$Projects$data = {
 				}
 			}
 		},
-		_elm_lang$core$Maybe$Just('디자이너가 코드 작성 없이 모바일앱 프로토타이핑할 수 있는 데스크탑 애플리케이션인 [ProtoPie](https://protopie.io)의\n             기업용 클라우드 시스템 백엔드 개발 담당. ProtoPie의 고객사 자체 인프라 리눅스 시스템에 Docker Compose 이미지셋을 배포에서 자체\n             백엔드 시스템 운영할 수 있게 개발했으며, 현재 국내 대기업 세 곳과 납품계약되었고, 그 중 두 곳에 설치 운영 중. ')),
+		'UX 디자이너가 코드 작성 없이 모바일앱 프로토타이핑할 수 있는 데스크탑 애플리케이션인 [ProtoPie](https://protopie.io)의\n       기업용 클라우드 시스템 백엔드 개발 담당. ProtoPie의 고객사 자체 인프라 리눅스 시스템에 Docker Compose 이미지셋을 배포에서 자체\n       백엔드 시스템 운영할 수 있게 개발했으며, 현재 국내 대기업 세 곳과 납품계약되었고, 그 중 두 곳에 설치 운영 중입니다. '),
 	_1: {
 		ctor: '::',
 		_0: A7(
@@ -10061,7 +10060,7 @@ var _user$project$Projects$data = {
 					}
 				}
 			},
-			_elm_lang$core$Maybe$Just('고객사에서 개발 및 운영중인 시스템을 위한 [CardDAV](https://en.wikipedia.org/wiki/CardDAV) 게이트웨이 서버를 개발해 납품.\n             주소록 서비스를 위한 표준 프로토콜인 CardDAV를 서버를 Java8에 Jetty를 써서 구현.')),
+			'고객사에서 개발 및 운영중인 시스템을 위한 [CardDAV](https://en.wikipedia.org/wiki/CardDAV) 게이트웨이 서버를 개발해 납품.\n       주소록 서비스를 위한 표준 프로토콜인 CardDAV를 서버를 Java8에 Jetty를 써서 구현했습니다.'),
 		_1: {
 			ctor: '::',
 			_0: A7(
@@ -10084,7 +10083,7 @@ var _user$project$Projects$data = {
 						}
 					}
 				},
-				_elm_lang$core$Maybe$Just('고객사 시스템에 포함되는 [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol)\n             게이트웨이 서버를 개발해 납품. Java8에 Netty를 써서 LDAP 프로토콜 통신하는 서버 구현.')),
+				'고객사 시스템에 포함되는 [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol)\n       게이트웨이 서버를 개발해 납품. Java8에 Netty를 써서 LDAP 프로토콜 통신하는 서버 구현했습니다.'),
 			_1: {
 				ctor: '::',
 				_0: A7(
@@ -10111,7 +10110,7 @@ var _user$project$Projects$data = {
 							}
 						}
 					},
-					_elm_lang$core$Maybe$Just('고객사 시스템에 포함되는 주소록 백엔드 API서버 개발. MySQL 데이터베이스에 JPA로 접근해서 REST API 서비스를 제공하는\n             자바 스프링부트 애플리케이션을 개발해서 납품.')),
+					'고객사 시스템에 포함되는 주소록 백엔드 API서버 개발. MySQL 데이터베이스에 JPA로 접근해서 REST API 서비스를 제공하는\n       자바 스프링부트 애플리케이션을 개발해서 납품했습니다.'),
 				_1: {
 					ctor: '::',
 					_0: A7(
@@ -10130,7 +10129,7 @@ var _user$project$Projects$data = {
 								_1: {ctor: '[]'}
 							}
 						},
-						_elm_lang$core$Maybe$Nothing),
+						'고객사 시스템에 통합되는 캘린더 표준 프로토콜 [CalDAV](https://en.wikipedia.org/wiki/CalDAV) 지원 서버를\n       자바 스프링 부트로 개발해서 납품했습니다.'),
 					_1: {
 						ctor: '::',
 						_0: A7(
@@ -10149,7 +10148,7 @@ var _user$project$Projects$data = {
 									_1: {ctor: '[]'}
 								}
 							},
-							_elm_lang$core$Maybe$Nothing),
+							'고객사 시스템에 채팅 서비스 용도로 활용하는 메시징 서버를 자바에 Akka를 써서 비동기 서비스로 개발해서 납품했습니다.'),
 						_1: {
 							ctor: '::',
 							_0: A7(
@@ -10172,14 +10171,14 @@ var _user$project$Projects$data = {
 										}
 									}
 								},
-								_elm_lang$core$Maybe$Nothing),
+								'고객사 시스템에 메일 발송 기능을 위한 SMTP 서버를 자바에 Netty로 개발해서 납품. SMTP 프로토콜 성공 응답한 메일에 대해\n       완전한 발송 처리를 위해 고객사 기능 명세대로 Tape 파일 큐 라이브러리를 사용해서 구현했습니다.'),
 							_1: {
 								ctor: '::',
 								_0: A7(
 									_user$project$Projects$Project,
 									'업무',
 									2014,
-									'Daum Tomcat/Node PaaS 시스템 구축',
+									'Daum Tomcat/Node PaaS 시스템 구축 리딩',
 									_elm_lang$core$Maybe$Nothing,
 									'팀장',
 									{
@@ -10195,14 +10194,14 @@ var _user$project$Projects$data = {
 											}
 										}
 									},
-									_elm_lang$core$Maybe$Nothing),
+									'Java Tomcat 웹서비스와 Node.js서비스를 손쉽게 자동 배포하고 운영할 수 있는 클라우드 PaaS 시스템 구축을 리딩하고,\n       사내 타팀 이용을 장려하는 기술영업.'),
 								_1: {
 									ctor: '::',
 									_0: A7(
 										_user$project$Projects$Project,
 										'업무',
 										2013,
-										'Daum 사내 Rest API 접근 DNS 시스템 (애조로) 구축',
+										'Daum 사내 Rest API 접근 DNS 시스템 (애조로) 구축 리딩',
 										_elm_lang$core$Maybe$Nothing,
 										'팀장',
 										{
@@ -10214,14 +10213,14 @@ var _user$project$Projects$data = {
 												_1: {ctor: '[]'}
 											}
 										},
-										_elm_lang$core$Maybe$Nothing),
+										'사내 DNS를 직원 계정으로 접근해서 등록하고, 수정할 수 있는 웹서비스와 DNS서버 시스템을 기획하고 개발 리딩후 공개해서,\n       전사 직원이 각종 서비스 개발 테스트마다 고통받던 hosts파일 수정 작업으로부터 해방되었습니다. '),
 									_1: {
 										ctor: '::',
 										_0: A7(
 											_user$project$Projects$Project,
 											'업무',
 											2013,
-											'Daum Redis PaaS 시스템 구축',
+											'Daum Redis PaaS 시스템 구축 리딩',
 											_elm_lang$core$Maybe$Nothing,
 											'팀장',
 											{
@@ -10233,7 +10232,7 @@ var _user$project$Projects$data = {
 													_1: {ctor: '[]'}
 												}
 											},
-											_elm_lang$core$Maybe$Nothing),
+											'메모리 기반 단순한 데이터베이스 서버인 Redis를 사내 각 서비스에서 손쉽게 사용할 수 있도록 PaaS 클라우드 서비스로 제공하는 기획하고 리딩.\n       당시 캐싱 목적으로는 일반적으로 Java EHCache나 [Memcached](https://en.wikipedia.org/wiki/Memcached)를 쓰던 추세였는데, 이들은 캐시 처리를 할 때,\n       발생하던 잦은 invalidation으로 인해 캐시 hit ratio가 떨어져서 DB 부하가 증가하던 상황을 Redis의 List 캐시를 적용하도록 안내해서\n       전체 시스템 안정성 향상에 도움이 되었습니다.\n       일반적으로 새로운 좋은 도구나 서비스가 있더라도, 실 개발팀 입장에서는 새로운 서비스를 전환 도입할 때 운영 경험이 아직 없기에\n       알 수 없는 장애 상황이 미리 두려워서 신규 도입에 보수적일 수 밖에 없다는 점을 공략하기 위해, 공통 플랫폼을 구축하고 운영을 대행해주는 방식으로\n       전사 전파에 실효를 거두어, 카페 서비스를 비롯한 여러 실 서비스에 적용 운영되었습니다.\n       사실 Redis서버는 매우 안정적이어서 대행 운영에 큰 부담이 없었고, 이용 개발팀 입장에서는 운영 부담만 없으면, 개발 부담은 아주 가벼이 여길 수\n       있기에 널리 이용되었습니다. 이 서비스의 실효와 안정성이 입소문을 타고 여러 팀에 알려져서 우리팀이 공개하는 타 서비스의 전파에도 긍정적 영향을 끼쳤고,\n       전사입장에서는 전체 서비스 안정적과 처리속도 향상 효과를 얻었습니다.\n       '),
 										_1: {
 											ctor: '::',
 											_0: A7(
@@ -10264,7 +10263,7 @@ var _user$project$Projects$data = {
 														}
 													}
 												},
-												_elm_lang$core$Maybe$Nothing),
+												'전사 개발자들이 자율적으로 편리하게 쓸 수 있는 Git 저장소 시스템을 구축해서 운영.\n       Ruby에 Sinatra를 써서 웹서비스를 개발했습니다. Git 서비스 인증을 위해 OpenSSH 소스를 약간 패치했고, 저장소 관련 데이터베이스는\n       SQLite로 가볍게 가져갔습니다. Git 시스템 자체가 워낙 폭발적인 인기를 얻었기에, 자연스럽게 제가 만든 서비스도 사내 개발자들에게 널리\n       사용됐으며, 2~3년 성공적으로 운영되다가, 카카오 합병 이후 카카오가 사용하던 GitHub Enterprise로 전환되었습니다.'),
 											_1: {
 												ctor: '::',
 												_0: A7(
@@ -10283,7 +10282,7 @@ var _user$project$Projects$data = {
 															_1: {ctor: '[]'}
 														}
 													},
-													_elm_lang$core$Maybe$Nothing),
+													'사내 실험적 클라우드 플랫폼을 오픈소스 CloudFoundry 제품을 이용해서 구축해서 제공. 개발 테스트 서비스를 손쉽게 배포해 운영\n       테스트해볼 수 있도록 만들었습니다.'),
 												_1: {
 													ctor: '::',
 													_0: A7(
@@ -10306,7 +10305,7 @@ var _user$project$Projects$data = {
 																}
 															}
 														},
-														_elm_lang$core$Maybe$Nothing),
+														'한메일 서비스를 안드로이드 스마트폰에서 손쉽게 연결해 쓸 수 있도록 ActiveSync 프로토콜을 지원하게끔 게이트웨이 서버를 개발.'),
 													_1: {
 														ctor: '::',
 														_0: A7(
@@ -10325,7 +10324,7 @@ var _user$project$Projects$data = {
 																	_1: {ctor: '[]'}
 																}
 															},
-															_elm_lang$core$Maybe$Nothing),
+															'Dropbox같은 서비스인 Daum 클라우드에서 파일 동기화를 위해 사용하는 프로토콜을 설계하고 자바 SDK를 개발해서 제공. 기존 파일과\n       새로 올리는 파일의 차이점을 추려서 송수신하도록 하여 네트워크 비용을 줄이게끔 설계해서 제공했습니다.'),
 														_1: {
 															ctor: '::',
 															_0: A7(
@@ -10344,7 +10343,7 @@ var _user$project$Projects$data = {
 																		_1: {ctor: '[]'}
 																	}
 																},
-																_elm_lang$core$Maybe$Nothing),
+																'MyPeople서비스를 초기 개발하는 TFT에서 네트워크 아키텍쳐를 설계하고, 메시징 서버 연동을 비롯한 클라이언트 개발에도 참여했습니다. '),
 															_1: {
 																ctor: '::',
 																_0: A7(
@@ -10356,18 +10355,22 @@ var _user$project$Projects$data = {
 																	'TFT장',
 																	{
 																		ctor: '::',
-																		_0: 'Ruby',
+																		_0: '팀리딩',
 																		_1: {
 																			ctor: '::',
-																			_0: 'Rails',
+																			_0: 'Ruby',
 																			_1: {
 																				ctor: '::',
-																				_0: 'MySQL',
-																				_1: {ctor: '[]'}
+																				_0: 'Rails',
+																				_1: {
+																					ctor: '::',
+																					_0: 'MySQL',
+																					_1: {ctor: '[]'}
+																				}
 																			}
 																		}
 																	},
-																	_elm_lang$core$Maybe$Nothing),
+																	''),
 																_1: {
 																	ctor: '::',
 																	_0: A7(
@@ -10386,7 +10389,7 @@ var _user$project$Projects$data = {
 																				_1: {ctor: '[]'}
 																			}
 																		},
-																		_elm_lang$core$Maybe$Nothing),
+																		''),
 																	_1: {
 																		ctor: '::',
 																		_0: A7(
@@ -10409,7 +10412,7 @@ var _user$project$Projects$data = {
 																					}
 																				}
 																			},
-																			_elm_lang$core$Maybe$Nothing),
+																			''),
 																		_1: {
 																			ctor: '::',
 																			_0: A7(
@@ -10432,7 +10435,7 @@ var _user$project$Projects$data = {
 																						}
 																					}
 																				},
-																				_elm_lang$core$Maybe$Nothing),
+																				''),
 																			_1: {
 																				ctor: '::',
 																				_0: A7(
@@ -10455,7 +10458,7 @@ var _user$project$Projects$data = {
 																							}
 																						}
 																					},
-																					_elm_lang$core$Maybe$Nothing),
+																					''),
 																				_1: {
 																					ctor: '::',
 																					_0: A7(
@@ -10478,7 +10481,7 @@ var _user$project$Projects$data = {
 																								}
 																							}
 																						},
-																						_elm_lang$core$Maybe$Nothing),
+																						''),
 																					_1: {
 																						ctor: '::',
 																						_0: A7(
@@ -10493,14 +10496,14 @@ var _user$project$Projects$data = {
 																								_0: 'Swift',
 																								_1: {ctor: '[]'}
 																							},
-																							_elm_lang$core$Maybe$Nothing),
+																							''),
 																						_1: {
 																							ctor: '::',
 																							_0: A7(
 																								_user$project$Projects$Project,
 																								'취미',
 																								2016,
-																								'http://한글코딩.org/ - 한글로 코딩하자',
+																								'한글코딩.org 기획 공개',
 																								_elm_lang$core$Maybe$Just('http://한글코딩.org/'),
 																								'개인',
 																								{
@@ -10508,7 +10511,7 @@ var _user$project$Projects$data = {
 																									_0: 'Clojure',
 																									_1: {ctor: '[]'}
 																								},
-																								_elm_lang$core$Maybe$Just('변수, 함수, 객체 이름 지을 때, 콩글리시 영작 그만하고, 한글로 코딩하자는 주장을 담은 웹사이트 오픈')),
+																								'변수, 함수, 객체 이름 지을 때, 콩글리시 영작 그만하고, 한글로 코딩하자는 주장을 담은 웹사이트 오픈'),
 																							_1: {
 																								ctor: '::',
 																								_0: A7(
@@ -10527,7 +10530,7 @@ var _user$project$Projects$data = {
 																											_1: {ctor: '[]'}
 																										}
 																									},
-																									_elm_lang$core$Maybe$Just('Dvorak 자판과 한글 두벌식 자판을 함께 쓰기 편한 macOS용 한글 입력기')),
+																									'Dvorak 자판과 한글 두벌식 자판을 함께 쓰기 편한 macOS용 한글 입력기'),
 																								_1: {
 																									ctor: '::',
 																									_0: A7(
@@ -10546,7 +10549,7 @@ var _user$project$Projects$data = {
 																												_1: {ctor: '[]'}
 																											}
 																										},
-																										_elm_lang$core$Maybe$Just('Dvorak 자판과 한글 두벌식 자판을 함께 쓰기 편한 macOS용 한글 입력기')),
+																										'UNIX용 아케이드 게임을 macOS에서도 실행되게끔 수정해서 오픈소스 공개'),
 																									_1: {
 																										ctor: '::',
 																										_0: A7(
@@ -10565,7 +10568,7 @@ var _user$project$Projects$data = {
 																													_1: {ctor: '[]'}
 																												}
 																											},
-																											_elm_lang$core$Maybe$Just('X윈도우용 오픈소스 게임을 MS윈도용으로 포팅')),
+																											'대학시절 학과 동호회방에서 유행하던 UNIX X Window용 아케이드 게임을 윈도우용 Delphi로 재개발(포팅)해서 공개했습니다.'),
 																										_1: {
 																											ctor: '::',
 																											_0: A7(
@@ -10588,7 +10591,7 @@ var _user$project$Projects$data = {
 																														}
 																													}
 																												},
-																												_elm_lang$core$Maybe$Just('직접 개발한 VESA 그래픽 라이브러리를 이용한 게임 개발')),
+																												'직접 개발한 VESA 한글 그래픽 라이브러리를 이용한 게임 개발'),
 																											_1: {
 																												ctor: '::',
 																												_0: A7(
@@ -10603,7 +10606,7 @@ var _user$project$Projects$data = {
 																														_0: 'Clojure',
 																														_1: {ctor: '[]'}
 																													},
-																													_elm_lang$core$Maybe$Nothing),
+																													''),
 																												_1: {
 																													ctor: '::',
 																													_0: A7(
@@ -10622,7 +10625,7 @@ var _user$project$Projects$data = {
 																																_1: {ctor: '[]'}
 																															}
 																														},
-																														_elm_lang$core$Maybe$Just('[발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)')),
+																														'[발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)'),
 																													_1: {
 																														ctor: '::',
 																														_0: A7(
@@ -10633,7 +10636,7 @@ var _user$project$Projects$data = {
 																															_elm_lang$core$Maybe$Just('https://www.slideshare.net/hatemogi/devon2013-git'),
 																															'개인',
 																															{ctor: '[]'},
-																															_elm_lang$core$Maybe$Nothing),
+																															''),
 																														_1: {
 																															ctor: '::',
 																															_0: A7(
@@ -10644,7 +10647,7 @@ var _user$project$Projects$data = {
 																																_elm_lang$core$Maybe$Just('https://semver.org/lang/ko'),
 																																'개인',
 																																{ctor: '[]'},
-																																_elm_lang$core$Maybe$Nothing),
+																																''),
 																															_1: {
 																																ctor: '::',
 																																_0: A7(
@@ -10655,7 +10658,7 @@ var _user$project$Projects$data = {
 																																	_elm_lang$core$Maybe$Just('https://clojurekoans.hatemogi.com'),
 																																	'개인',
 																																	{ctor: '[]'},
-																																	_elm_lang$core$Maybe$Nothing),
+																																	''),
 																																_1: {
 																																	ctor: '::',
 																																	_0: A7(
@@ -10666,7 +10669,7 @@ var _user$project$Projects$data = {
 																																		_elm_lang$core$Maybe$Just('https://github.com/hatemogi/ring/wiki'),
 																																		'개인',
 																																		{ctor: '[]'},
-																																		_elm_lang$core$Maybe$Nothing),
+																																		''),
 																																	_1: {ctor: '[]'}
 																																}
 																															}
@@ -10733,6 +10736,21 @@ var _user$project$Main$writingsView = A2(
 	});
 var _user$project$Main$projectsView = function () {
 	var colors = {ctor: '[]'};
+	var categoryColor = function (cat) {
+		var _p0 = cat;
+		switch (_p0) {
+			case '업무':
+				return 'is-warning';
+			case '취미':
+				return 'is-info';
+			case '발표':
+				return 'is-success';
+			case '번역':
+				return 'is-primary';
+			default:
+				return '';
+		}
+	};
 	var entryf = function (p) {
 		return A2(
 			_elm_lang$html$Html$article,
@@ -10780,7 +10798,11 @@ var _user$project$Main$projectsView = function () {
 										_elm_lang$html$Html$span,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('tag is-warning'),
+											_0: _elm_lang$html$Html_Attributes$class(
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'tag ',
+													categoryColor(p.category))),
 											_1: {ctor: '[]'}
 										},
 										{
@@ -10824,15 +10846,15 @@ var _user$project$Main$projectsView = function () {
 												{
 													ctor: '::',
 													_0: function () {
-														var _p0 = p.url;
-														if (_p0.ctor === 'Nothing') {
+														var _p1 = p.url;
+														if (_p1.ctor === 'Nothing') {
 															return _elm_lang$html$Html$text(p.title);
 														} else {
 															return A2(
 																_elm_lang$html$Html$a,
 																{
 																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$href(_p0._0),
+																	_0: _elm_lang$html$Html_Attributes$href(_p1._0),
 																	_1: {ctor: '[]'}
 																},
 																{
@@ -10868,14 +10890,7 @@ var _user$project$Main$projectsView = function () {
 												}),
 											_1: {
 												ctor: '::',
-												_0: function () {
-													var _p1 = p.description;
-													if (_p1.ctor === 'Nothing') {
-														return _elm_lang$html$Html$text('');
-													} else {
-														return _user$project$Main$markdown(_p1._0);
-													}
-												}(),
+												_0: _user$project$Main$markdown(p.description),
 												_1: {ctor: '[]'}
 											}
 										}),

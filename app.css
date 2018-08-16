@@ -7,3 +7,11 @@ h2 {
   font-size: 1.3rem;
   font-weight: 600;
 }
+
+.wrap {
+  margin-top: 1rem;
+}
+
+footer {
+  margin-top: 2rem;
+}
