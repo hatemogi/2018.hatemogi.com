@@ -11199,7 +11199,7 @@ var _user$project$Main$projectsView = function (filter) {
 														_elm_lang$html$Html$span,
 														{
 															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('tag is-success'),
+															_0: _elm_lang$html$Html_Attributes$class('tag'),
 															_1: {ctor: '[]'}
 														},
 														{

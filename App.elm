@@ -150,7 +150,7 @@ projectsView filter =
                          Nothing  -> text p.title
                          Just url -> a [href url] [text p.title, span [class "icon"] [i [class "fas fa-link fa-sm"] []]]]
                      , markdown p.description]
-                 ,div [class "tags"] (List.map (\t -> span [class "tag is-success"] [text t]) p.tags)]]]
+                 ,div [class "tags"] (List.map (\t -> span [class "tag"] [text t]) p.tags)]]]
     button : String -> Html Msg
     button category =
       case filter of
