@@ -16,16 +16,20 @@ main =
 -- MODEL
 
 type Section = S소개 | S프로젝트 | S글 | S잡담
-type alias Model = { section : Section, medium : Maybe String }
+type alias Model =
+  { section : Section
+  , projectFilter: Maybe String
+  , medium : Maybe String }
 
 init : String -> (Model, Cmd Msg)
 init name =
-  ({ section = S프로젝트, medium = Nothing }, loadMediumFeed)
+  ({ section = S프로젝트, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
 
 -- UPDATE
 
 type Msg = Go Section |
-           MediumFeed (Result Http.Error String)
+           MediumFeed (Result Http.Error String) |
+           ProjectFilter (Maybe String)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -38,6 +42,9 @@ update msg model =
 
     MediumFeed (Err _) ->
       ({model | medium = Nothing}, Cmd.none)
+
+    ProjectFilter filter ->
+      ({model | projectFilter = filter}, Cmd.none)
 
 -- VIEW
 
@@ -72,8 +79,8 @@ mainView model =
           [ div []
               (case model.section of
                  S소개     -> [h1 [ class "title" ] [ text "김대현" ], introView]
-                 S프로젝트 -> [h1 [ class "title" ] [ text "프로젝트" ], projectsView]
-                 S글       -> [h1 [ class "title" ] [ text "글" ], projectsView]
+                 S프로젝트 -> [h1 [ class "title" ] [ text "프로젝트" ], projectsView model.projectFilter]
+                 S글       -> [h1 [ class "title" ] [ text "글" ], projectsView model.projectFilter]
                  S잡담     -> [h1 [ class "title" ] [ text "잡담" ], writingsView])]]]
 
 footerView : Model -> Html Msg
@@ -121,8 +128,8 @@ introView =
 
 """
 
-projectsView : Html Msg
-projectsView =
+projectsView : (Maybe String) -> Html Msg
+projectsView filter =
   let
     categoryColor: String -> String
     categoryColor cat =
@@ -131,6 +138,7 @@ projectsView =
         "취미" -> "is-info"
         "발표" -> "is-success"
         "번역" -> "is-primary"
+        "전체" -> "is-link"
         _ -> ""
     entryf : Projects.Project -> Html Msg
     entryf p =
@@ -148,17 +156,29 @@ projectsView =
                          Just url -> a [href url] [text p.title, span [class "icon"] [i [class "fas fa-link fa-sm"] []]]]
                      , markdown p.description]
                  ,div [class "tags"] (List.map (\t -> span [class "tag is-success"] [text t]) p.tags)]]]
-    colors = []
+    button : String -> Html Msg
+    button category =
+      case filter of
+        Just cat ->
+          span [ class ("button " ++ (if category == cat then (categoryColor cat) else ""))
+               , onClick (ProjectFilter (if category == "전체" then Nothing else Just category))]
+               [text category]
+        Nothing ->
+          span [ class ("button " ++ (if category == "전체" then "is-link" else ""))
+               , onClick (ProjectFilter (if category == "전체" then Nothing else Just category))]
+               [text category]
   in
     div []
       [div [class "buttons has-addons"]
-           [span [class "button is-info"] [text "전체"]
-           ,span [class "button"] [text "업무"]
-           ,span [class "button"] [text "취미"]
-           ,span [class "button"] [text "발표"]
-           ,span [class "button"] [text "번역"]
-           ,span [class "button"] [text "하이라이트"]]
+           [button "전체"
+           ,button "업무"
+           ,button "취미"
+           ,button "발표"
+           ,button "번역"]
       ,div [] (Projects.data
+               |> List.filter (\p -> case filter of
+                                       Just f -> p.category == f
+                                       Nothing -> True)
                |> List.sortBy (\p -> -p.year)
                |> List.map entryf)]
 

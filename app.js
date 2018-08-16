@@ -10681,7 +10681,15 @@ var _user$project$Projects$data = {
 																																	'Daum DevOn 컨퍼런스 - 사내 Git 저장소 개발사례',
 																																	_elm_lang$core$Maybe$Just('https://www.slideshare.net/hatemogi/devon2013-git'),
 																																	'개인',
-																																	{ctor: '[]'},
+																																	{
+																																		ctor: '::',
+																																		_0: 'Git',
+																																		_1: {
+																																			ctor: '::',
+																																			_0: 'Ruby',
+																																			_1: {ctor: '[]'}
+																																		}
+																																	},
 																																	'다음 사내 개발자용 Git 저장소 시스템을 개발했던 경험을 DevOn 컨퍼런스에서 발표했습니다.\n       제목링크를 누르면 발표슬라이드를 보실 수 있습니다.'),
 																																_1: {
 																																	ctor: '::',
@@ -10782,322 +10790,6 @@ var _user$project$Main$writingsView = A2(
 		_0: _elm_lang$html$Html$text('잡담'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Main$projectsView = function () {
-	var colors = {ctor: '[]'};
-	var categoryColor = function (cat) {
-		var _p0 = cat;
-		switch (_p0) {
-			case '업무':
-				return 'is-warning';
-			case '취미':
-				return 'is-info';
-			case '발표':
-				return 'is-success';
-			case '번역':
-				return 'is-primary';
-			default:
-				return '';
-		}
-	};
-	var entryf = function (p) {
-		return A2(
-			_elm_lang$html$Html$article,
-			{
-				ctor: '::',
-				_0: _elm_lang$html$Html_Attributes$class('media'),
-				_1: {ctor: '[]'}
-			},
-			{
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$class('media-left'),
-						_1: {ctor: '[]'}
-					},
-					{
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$div,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('tags has-addons'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$span,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('tag'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(
-											_elm_lang$core$Basics$toString(p.year)),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$span,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													'tag ',
-													categoryColor(p.category))),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text(p.category),
-											_1: {ctor: '[]'}
-										}),
-									_1: {ctor: '[]'}
-								}
-							}),
-						_1: {ctor: '[]'}
-					}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$div,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('media-content'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$p,
-								{ctor: '[]'},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$div,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('content'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: A2(
-												_elm_lang$html$Html$strong,
-												{ctor: '[]'},
-												{
-													ctor: '::',
-													_0: function () {
-														var _p1 = p.url;
-														if (_p1.ctor === 'Nothing') {
-															return _elm_lang$html$Html$text(p.title);
-														} else {
-															return A2(
-																_elm_lang$html$Html$a,
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html_Attributes$href(_p1._0),
-																	_1: {ctor: '[]'}
-																},
-																{
-																	ctor: '::',
-																	_0: _elm_lang$html$Html$text(p.title),
-																	_1: {
-																		ctor: '::',
-																		_0: A2(
-																			_elm_lang$html$Html$span,
-																			{
-																				ctor: '::',
-																				_0: _elm_lang$html$Html_Attributes$class('icon'),
-																				_1: {ctor: '[]'}
-																			},
-																			{
-																				ctor: '::',
-																				_0: A2(
-																					_elm_lang$html$Html$i,
-																					{
-																						ctor: '::',
-																						_0: _elm_lang$html$Html_Attributes$class('fas fa-link fa-sm'),
-																						_1: {ctor: '[]'}
-																					},
-																					{ctor: '[]'}),
-																				_1: {ctor: '[]'}
-																			}),
-																		_1: {ctor: '[]'}
-																	}
-																});
-														}
-													}(),
-													_1: {ctor: '[]'}
-												}),
-											_1: {
-												ctor: '::',
-												_0: _user$project$Main$markdown(p.description),
-												_1: {ctor: '[]'}
-											}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$div,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('tags'),
-												_1: {ctor: '[]'}
-											},
-											A2(
-												_elm_lang$core$List$map,
-												function (t) {
-													return A2(
-														_elm_lang$html$Html$span,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('tag is-success'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text(t),
-															_1: {ctor: '[]'}
-														});
-												},
-												p.tags)),
-										_1: {ctor: '[]'}
-									}
-								}),
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				}
-			});
-	};
-	return A2(
-		_elm_lang$html$Html$div,
-		{ctor: '[]'},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('buttons has-addons'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$span,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('button is-info'),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('전체'),
-							_1: {ctor: '[]'}
-						}),
-					_1: {
-						ctor: '::',
-						_0: A2(
-							_elm_lang$html$Html$span,
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('button'),
-								_1: {ctor: '[]'}
-							},
-							{
-								ctor: '::',
-								_0: _elm_lang$html$Html$text('업무'),
-								_1: {ctor: '[]'}
-							}),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$span,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('button'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('취미'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$span,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Attributes$class('button'),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('발표'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$span,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class('button'),
-											_1: {ctor: '[]'}
-										},
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html$text('번역'),
-											_1: {ctor: '[]'}
-										}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											_elm_lang$html$Html$span,
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html_Attributes$class('button'),
-												_1: {ctor: '[]'}
-											},
-											{
-												ctor: '::',
-												_0: _elm_lang$html$Html$text('하이라이트'),
-												_1: {ctor: '[]'}
-											}),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}),
-			_1: {
-				ctor: '::',
-				_0: A2(
-					_elm_lang$html$Html$div,
-					{ctor: '[]'},
-					A2(
-						_elm_lang$core$List$map,
-						entryf,
-						A2(
-							_elm_lang$core$List$sortBy,
-							function (p) {
-								return 0 - p.year;
-							},
-							_user$project$Projects$data))),
-				_1: {ctor: '[]'}
-			}
-		});
-}();
 var _user$project$Main$introView = _user$project$Main$markdown('소프트웨어 개발자.\n어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년\n정도 근무한 뒤, 지금은 1인 소프트웨어 개발사의 대표로 지내고 있습니다.\n\n## 다음 커뮤니케이션\n\n다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n백엔드 웹서비스를 개발했습니다.\n\n## 오후코드 (개인 개발자)\n\n개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n위한 서버 소프트웨어를 개발해 납품했습니다.\n\n\n');
 var _user$project$Main$profileView = A2(
 	_elm_lang$html$Html$div,
@@ -11244,6 +10936,374 @@ var _user$project$Main$footerView = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
+var _user$project$Main$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Go':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{section: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'MediumFeed':
+				if (_p0._0.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								medium: _elm_lang$core$Maybe$Just(_p0._0._0)
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{medium: _elm_lang$core$Maybe$Nothing}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{projectFilter: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$Main$Model = F3(
+	function (a, b, c) {
+		return {section: a, projectFilter: b, medium: c};
+	});
+var _user$project$Main$S잡담 = {ctor: 'S잡담'};
+var _user$project$Main$S글 = {ctor: 'S글'};
+var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
+var _user$project$Main$init = function (name) {
+	return {
+		ctor: '_Tuple2',
+		_0: {section: _user$project$Main$S프로젝트, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
+		_1: _user$project$Main$loadMediumFeed
+	};
+};
+var _user$project$Main$S소개 = {ctor: 'S소개'};
+var _user$project$Main$ProjectFilter = function (a) {
+	return {ctor: 'ProjectFilter', _0: a};
+};
+var _user$project$Main$projectsView = function (filter) {
+	var categoryColor = function (cat) {
+		var _p1 = cat;
+		switch (_p1) {
+			case '업무':
+				return 'is-warning';
+			case '취미':
+				return 'is-info';
+			case '발표':
+				return 'is-success';
+			case '번역':
+				return 'is-primary';
+			case '전체':
+				return 'is-link';
+			default:
+				return '';
+		}
+	};
+	var entryf = function (p) {
+		return A2(
+			_elm_lang$html$Html$article,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('media'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('media-left'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('tags has-addons'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$span,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$class('tag'),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											_elm_lang$core$Basics$toString(p.year)),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class(
+												A2(
+													_elm_lang$core$Basics_ops['++'],
+													'tag ',
+													categoryColor(p.category))),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(p.category),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('media-content'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('content'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$strong,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: function () {
+														var _p2 = p.url;
+														if (_p2.ctor === 'Nothing') {
+															return _elm_lang$html$Html$text(p.title);
+														} else {
+															return A2(
+																_elm_lang$html$Html$a,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$href(_p2._0),
+																	_1: {ctor: '[]'}
+																},
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html$text(p.title),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$span,
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html_Attributes$class('icon'),
+																				_1: {ctor: '[]'}
+																			},
+																			{
+																				ctor: '::',
+																				_0: A2(
+																					_elm_lang$html$Html$i,
+																					{
+																						ctor: '::',
+																						_0: _elm_lang$html$Html_Attributes$class('fas fa-link fa-sm'),
+																						_1: {ctor: '[]'}
+																					},
+																					{ctor: '[]'}),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {ctor: '[]'}
+																	}
+																});
+														}
+													}(),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _user$project$Main$markdown(p.description),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$div,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class('tags'),
+												_1: {ctor: '[]'}
+											},
+											A2(
+												_elm_lang$core$List$map,
+												function (t) {
+													return A2(
+														_elm_lang$html$Html$span,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$class('tag is-success'),
+															_1: {ctor: '[]'}
+														},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text(t),
+															_1: {ctor: '[]'}
+														});
+												},
+												p.tags)),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	};
+	var button = function (category) {
+		var _p3 = filter;
+		if (_p3.ctor === 'Just') {
+			var _p4 = _p3._0;
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'button ',
+							_elm_lang$core$Native_Utils.eq(category, _p4) ? categoryColor(_p4) : '')),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Main$ProjectFilter(
+								_elm_lang$core$Native_Utils.eq(category, '전체') ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(category))),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(category),
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$span,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'button ',
+							_elm_lang$core$Native_Utils.eq(category, '전체') ? 'is-link' : '')),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Main$ProjectFilter(
+								_elm_lang$core$Native_Utils.eq(category, '전체') ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(category))),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(category),
+					_1: {ctor: '[]'}
+				});
+		}
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('buttons has-addons'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: button('전체'),
+					_1: {
+						ctor: '::',
+						_0: button('업무'),
+						_1: {
+							ctor: '::',
+							_0: button('취미'),
+							_1: {
+								ctor: '::',
+								_0: button('발표'),
+								_1: {
+									ctor: '::',
+									_0: button('번역'),
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					A2(
+						_elm_lang$core$List$map,
+						entryf,
+						A2(
+							_elm_lang$core$List$sortBy,
+							function (p) {
+								return 0 - p.year;
+							},
+							A2(
+								_elm_lang$core$List$filter,
+								function (p) {
+									var _p5 = filter;
+									if (_p5.ctor === 'Just') {
+										return _elm_lang$core$Native_Utils.eq(p.category, _p5._0);
+									} else {
+										return true;
+									}
+								},
+								_user$project$Projects$data)))),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _user$project$Main$mainView = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -11290,8 +11350,8 @@ var _user$project$Main$mainView = function (model) {
 									_elm_lang$html$Html$div,
 									{ctor: '[]'},
 									function () {
-										var _p2 = model.section;
-										switch (_p2.ctor) {
+										var _p6 = model.section;
+										switch (_p6.ctor) {
 											case 'S소개':
 												return {
 													ctor: '::',
@@ -11330,7 +11390,7 @@ var _user$project$Main$mainView = function (model) {
 														}),
 													_1: {
 														ctor: '::',
-														_0: _user$project$Main$projectsView,
+														_0: _user$project$Main$projectsView(model.projectFilter),
 														_1: {ctor: '[]'}
 													}
 												};
@@ -11351,7 +11411,7 @@ var _user$project$Main$mainView = function (model) {
 														}),
 													_1: {
 														ctor: '::',
-														_0: _user$project$Main$projectsView,
+														_0: _user$project$Main$projectsView(model.projectFilter),
 														_1: {ctor: '[]'}
 													}
 												};
@@ -11386,54 +11446,6 @@ var _user$project$Main$mainView = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$Main$update = F2(
-	function (msg, model) {
-		var _p3 = msg;
-		if (_p3.ctor === 'Go') {
-			return {
-				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{section: _p3._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
-			};
-		} else {
-			if (_p3._0.ctor === 'Ok') {
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{
-							medium: _elm_lang$core$Maybe$Just(_p3._0._0)
-						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			} else {
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{medium: _elm_lang$core$Maybe$Nothing}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			}
-		}
-	});
-var _user$project$Main$Model = F2(
-	function (a, b) {
-		return {section: a, medium: b};
-	});
-var _user$project$Main$S잡담 = {ctor: 'S잡담'};
-var _user$project$Main$S글 = {ctor: 'S글'};
-var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
-var _user$project$Main$init = function (name) {
-	return {
-		ctor: '_Tuple2',
-		_0: {section: _user$project$Main$S프로젝트, medium: _elm_lang$core$Maybe$Nothing},
-		_1: _user$project$Main$loadMediumFeed
-	};
-};
-var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$MediumFeed = function (a) {
 	return {ctor: 'MediumFeed', _0: a};
 };
@@ -11442,8 +11454,8 @@ var _user$project$Main$Go = function (a) {
 };
 var _user$project$Main$menuView = function (model) {
 	var menu = F2(
-		function (section, _p4) {
-			var _p5 = _p4;
+		function (section, _p7) {
+			var _p8 = _p7;
 			return A2(
 				_elm_lang$html$Html$li,
 				{
@@ -11486,7 +11498,7 @@ var _user$project$Main$menuView = function (model) {
 										{
 											ctor: '::',
 											_0: _elm_lang$html$Html_Attributes$class(
-												A2(_elm_lang$core$Basics_ops['++'], 'fas ', _p5._0)),
+												A2(_elm_lang$core$Basics_ops['++'], 'fas ', _p8._0)),
 											_1: {ctor: '[]'}
 										},
 										{ctor: '[]'}),
@@ -11499,7 +11511,7 @@ var _user$project$Main$menuView = function (model) {
 									{ctor: '[]'},
 									{
 										ctor: '::',
-										_0: _elm_lang$html$Html$text(_p5._1),
+										_0: _elm_lang$html$Html$text(_p8._1),
 										_1: {ctor: '[]'}
 									}),
 								_1: {ctor: '[]'}

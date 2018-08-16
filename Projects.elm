@@ -160,7 +160,7 @@ data =
        [발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)로도 정리했습니다.
        제목링크를 누르시면 발표영상을 보실 수 있습니다."""
   , Project "발표" 2013 "Daum DevOn 컨퍼런스 - 사내 Git 저장소 개발사례"
-    (Just "https://www.slideshare.net/hatemogi/devon2013-git") "개인" []
+    (Just "https://www.slideshare.net/hatemogi/devon2013-git") "개인" ["Git", "Ruby"]
     """다음 사내 개발자용 Git 저장소 시스템을 개발했던 경험을 DevOn 컨퍼런스에서 발표했습니다.
        제목링크를 누르면 발표슬라이드를 보실 수 있습니다."""
   , Project "번역" 2015 "클로저 선문답 - Clojure Koans 한글 번역"
