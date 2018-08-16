@@ -158,7 +158,9 @@ projectsView =
            ,span [class "button"] [text "발표"]
            ,span [class "button"] [text "번역"]
            ,span [class "button"] [text "하이라이트"]]
-      ,div [] (List.map entryf Projects.data)]
+      ,div [] (Projects.data
+               |> List.sortBy (\p -> -p.year)
+               |> List.map entryf)]
 
 writingsView : Html Msg
 writingsView =

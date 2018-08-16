@@ -10621,7 +10621,7 @@ var _user$project$Projects$data = {
 																														_user$project$Projects$Project,
 																														'취미',
 																														1992,
-																														'MS-DOS 부팅 잠금 프로그램 개발',
+																														'MS-DOS 부팅 잠금 프로그램 개발 - 자물쇠',
 																														_elm_lang$core$Maybe$Nothing,
 																														'개인',
 																														{
@@ -10637,7 +10637,7 @@ var _user$project$Projects$data = {
 																																}
 																															}
 																														},
-																														''),
+																														'중학생 때, MS-DOS 부팅 패스워드 인증 시스템 소프트웨어 개발. 당시 IBM호환 PC의 주운영체제는 MS-DOS였는데, 이는 사용자 로그인 과정이 없어서,\n       컴퓨터를 켜면 곧바로 사용자의 시스템을 쓸 수 있었습니다. 여기에 하드디스크 부트섹터를 조작해서, 패스워드 인증프로그램을 거쳐야\n       정상 부트과정을 이어가는 프로그램을 만들어 하이텔에 공개했습니다. '),
 																													_1: {
 																														ctor: '::',
 																														_0: A7(
@@ -11085,7 +11085,15 @@ var _user$project$Main$projectsView = function () {
 				_0: A2(
 					_elm_lang$html$Html$div,
 					{ctor: '[]'},
-					A2(_elm_lang$core$List$map, entryf, _user$project$Projects$data)),
+					A2(
+						_elm_lang$core$List$map,
+						entryf,
+						A2(
+							_elm_lang$core$List$sortBy,
+							function (p) {
+								return 0 - p.year;
+							},
+							_user$project$Projects$data))),
 				_1: {ctor: '[]'}
 			}
 		});
