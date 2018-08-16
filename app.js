@@ -11553,21 +11553,7 @@ var _user$project$Main$menuView = function (model) {
 									menu,
 									_user$project$Main$S프로젝트,
 									{ctor: '_Tuple2', _0: 'fa-file-code', _1: '프로젝트'}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										menu,
-										_user$project$Main$S글,
-										{ctor: '_Tuple2', _0: 'fa-edit', _1: '글'}),
-									_1: {
-										ctor: '::',
-										_0: A2(
-											menu,
-											_user$project$Main$S잡담,
-											{ctor: '_Tuple2', _0: 'fa-comment', _1: '잡담'}),
-										_1: {ctor: '[]'}
-									}
-								}
+								_1: {ctor: '[]'}
 							}
 						}),
 					_1: {ctor: '[]'}

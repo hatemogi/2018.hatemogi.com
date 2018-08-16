@@ -67,8 +67,9 @@ menuView model =
         [ ul []
           [ menu S소개 ("fa-user-circle", "소개")
           , menu S프로젝트 ("fa-file-code", "프로젝트")
-          , menu S글 ("fa-edit", "글")
-          , menu S잡담 ("fa-comment", "잡담")]]]
+--          , menu S글 ("fa-edit", "글")
+--          , menu S잡담 ("fa-comment", "잡담")
+          ]]]
 
 mainView : Model -> Html Msg
 mainView model =
