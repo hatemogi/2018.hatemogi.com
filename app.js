@@ -9956,11 +9956,27 @@ var _evancz$elm_markdown$Markdown$Options = F4(
 		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
 	});
 
-var _user$project$Intro$data = {ctor: '[]'};
 var _user$project$Intro$Section = F3(
 	function (a, b, c) {
 		return {title: a, url: b, description: c};
 	});
+var _user$project$Intro$data = {
+	ctor: '::',
+	_0: A3(_user$project$Intro$Section, '', _elm_lang$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n       다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년 정도 근무한 뒤,\n       지금은 1인 소프트웨어 개발사의 대표로 지내고 있습니다.'),
+	_1: {
+		ctor: '::',
+		_0: A3(_user$project$Intro$Section, '다음커뮤니케이션', _elm_lang$core$Maybe$Nothing, '다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. '),
+		_1: {
+			ctor: '::',
+			_0: A3(_user$project$Intro$Section, '오후코드 대표', _elm_lang$core$Maybe$Nothing, '개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n       위한 서버 소프트웨어를 개발해 납품했습니다.'),
+			_1: {
+				ctor: '::',
+				_0: A3(_user$project$Intro$Section, '반갑습니다', _elm_lang$core$Maybe$Nothing, '여기는 제 개인을 다른분들깨 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 제 개인의 의견과 정리되지 않은 생각들이 널려있으니 너그러이 봐주시기 바랍니다.'),
+				_1: {ctor: '[]'}
+			}
+		}
+	}
+};
 
 var _user$project$Projects$Project = F7(
 	function (a, b, c, d, e, f, g) {
@@ -10790,7 +10806,6 @@ var _user$project$Main$writingsView = A2(
 		_0: _elm_lang$html$Html$text('잡담'),
 		_1: {ctor: '[]'}
 	});
-var _user$project$Main$introView = _user$project$Main$markdown('소프트웨어 개발자.\n어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년\n정도 근무한 뒤, 지금은 1인 소프트웨어 개발사의 대표로 지내고 있습니다.\n\n## 다음 커뮤니케이션\n\n다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n백엔드 웹서비스를 개발했습니다.\n\n## 오후코드 (개인 개발자)\n\n개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n위한 서버 소프트웨어를 개발해 납품했습니다.\n\n\n');
 var _user$project$Main$profileView = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -10929,8 +10944,19 @@ var _user$project$Main$footerView = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$markdown('Source code licensed [MIT](https://opensource.org/licenses/mit-license.php)<br/>\nWebsite content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)'),
-						_1: {ctor: '[]'}
+						_0: _user$project$Main$markdown('Source code licensed [MIT](https://opensource.org/licenses/mit-license.php)<br/>\n                        Website content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)'),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$p,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _user$project$Main$markdown('This site is created with Elm, Bulma, and FontAwesome.'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
 					}
 				}),
 			_1: {ctor: '[]'}
@@ -10985,14 +11011,14 @@ var _user$project$Main$Model = F3(
 var _user$project$Main$S잡담 = {ctor: 'S잡담'};
 var _user$project$Main$S글 = {ctor: 'S글'};
 var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
+var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$init = function (name) {
 	return {
 		ctor: '_Tuple2',
-		_0: {section: _user$project$Main$S프로젝트, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
+		_0: {section: _user$project$Main$S소개, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
 		_1: _user$project$Main$loadMediumFeed
 	};
 };
-var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$ProjectFilter = function (a) {
 	return {ctor: 'ProjectFilter', _0: a};
 };
@@ -11249,61 +11275,282 @@ var _user$project$Main$projectsView = function (filter) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$article,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('buttons has-addons'),
+					_0: _elm_lang$html$Html_Attributes$class('message'),
 					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
-					_0: button('전체'),
-					_1: {
-						ctor: '::',
-						_0: button('업무'),
-						_1: {
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
 							ctor: '::',
-							_0: button('취미'),
+							_0: _elm_lang$html$Html_Attributes$class('message-body'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$Main$markdown('제가 참여했던 프로젝트를 일일이 열거했습니다. 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,\n               저 스스로 어떤 일들을 해왔는지 참고로, 앞으로 할 일들을 고민해보려 합니다.\n               만약 그럴싸한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,\n               대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다.'),
 							_1: {
 								ctor: '::',
-								_0: button('발표'),
-								_1: {
-									ctor: '::',
-									_0: button('번역'),
-									_1: {ctor: '[]'}
-								}
+								_0: _user$project$Main$markdown('직업적으로 한일은 **업무**, 개인적 호기심으로 진행한 일은 **취미**, 외부 공개로 발표한 내용은 **발표**,\n               영문 문서를 한국어로 번역한 작업은 **번역**으로 꼬리표를 달았으며, 아래 탭을 누르면 추려서 보실 수 있습니다.'),
+								_1: {ctor: '[]'}
 							}
-						}
-					}
+						}),
+					_1: {ctor: '[]'}
 				}),
 			_1: {
 				ctor: '::',
 				_0: A2(
 					_elm_lang$html$Html$div,
-					{ctor: '[]'},
-					A2(
-						_elm_lang$core$List$map,
-						entryf,
-						A2(
-							_elm_lang$core$List$sortBy,
-							function (p) {
-								return 0 - p.year;
-							},
-							A2(
-								_elm_lang$core$List$filter,
-								function (p) {
-									var _p5 = filter;
-									if (_p5.ctor === 'Just') {
-										return _elm_lang$core$Native_Utils.eq(p.category, _p5._0);
-									} else {
-										return true;
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('buttons has-addons'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: button('전체'),
+						_1: {
+							ctor: '::',
+							_0: button('업무'),
+							_1: {
+								ctor: '::',
+								_0: button('취미'),
+								_1: {
+									ctor: '::',
+									_0: button('발표'),
+									_1: {
+										ctor: '::',
+										_0: button('번역'),
+										_1: {ctor: '[]'}
 									}
+								}
+							}
+						}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
+						A2(
+							_elm_lang$core$List$map,
+							entryf,
+							A2(
+								_elm_lang$core$List$sortBy,
+								function (p) {
+									return 0 - p.year;
 								},
-								_user$project$Projects$data)))),
-				_1: {ctor: '[]'}
+								A2(
+									_elm_lang$core$List$filter,
+									function (p) {
+										var _p5 = filter;
+										if (_p5.ctor === 'Just') {
+											return _elm_lang$core$Native_Utils.eq(p.category, _p5._0);
+										} else {
+											return true;
+										}
+									},
+									_user$project$Projects$data)))),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
+var _user$project$Main$MediumFeed = function (a) {
+	return {ctor: 'MediumFeed', _0: a};
+};
+var _user$project$Main$Go = function (a) {
+	return {ctor: 'Go', _0: a};
+};
+var _user$project$Main$menuView = function (model) {
+	var menu = F2(
+		function (section, _p6) {
+			var _p7 = _p6;
+			return A2(
+				_elm_lang$html$Html$li,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$classList(
+						{
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'is-active',
+								_1: _elm_lang$core$Native_Utils.eq(model.section, section)
+							},
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$a,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Main$Go(section)),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$span,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('icon is-small'),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$i,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class(
+												A2(_elm_lang$core$Basics_ops['++'], 'fas ', _p7._0)),
+											_1: {ctor: '[]'}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$span,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(_p7._1),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				});
+		});
+	return A2(
+		_elm_lang$html$Html$nav,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('tabs is-boxed is-fullwidth'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('container'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$ul,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								menu,
+								_user$project$Main$S소개,
+								{ctor: '_Tuple2', _0: 'fa-user-circle', _1: '소개'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									menu,
+									_user$project$Main$S프로젝트,
+									{ctor: '_Tuple2', _0: 'fa-file-code', _1: '프로젝트'}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$introView = function () {
+	var sectionf = function (section) {
+		return A2(
+			_elm_lang$html$Html$article,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('media'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('media-content'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$h2,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(section.title),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$markdown(section.description),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			A2(_elm_lang$core$List$map, sectionf, _user$project$Intro$data),
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('media'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('button is-primary'),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Main$Go(_user$project$Main$S프로젝트)),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('프로젝트 보기'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}));
+}();
 var _user$project$Main$mainView = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
@@ -11350,8 +11597,8 @@ var _user$project$Main$mainView = function (model) {
 									_elm_lang$html$Html$div,
 									{ctor: '[]'},
 									function () {
-										var _p6 = model.section;
-										switch (_p6.ctor) {
+										var _p8 = model.section;
+										switch (_p8.ctor) {
 											case 'S소개':
 												return {
 													ctor: '::',
@@ -11442,121 +11689,6 @@ var _user$project$Main$mainView = function (model) {
 							}),
 						_1: {ctor: '[]'}
 					}
-				}),
-			_1: {ctor: '[]'}
-		});
-};
-var _user$project$Main$MediumFeed = function (a) {
-	return {ctor: 'MediumFeed', _0: a};
-};
-var _user$project$Main$Go = function (a) {
-	return {ctor: 'Go', _0: a};
-};
-var _user$project$Main$menuView = function (model) {
-	var menu = F2(
-		function (section, _p7) {
-			var _p8 = _p7;
-			return A2(
-				_elm_lang$html$Html$li,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$classList(
-						{
-							ctor: '::',
-							_0: {
-								ctor: '_Tuple2',
-								_0: 'is-active',
-								_1: _elm_lang$core$Native_Utils.eq(model.section, section)
-							},
-							_1: {ctor: '[]'}
-						}),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$a,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onClick(
-								_user$project$Main$Go(section)),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$span,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$class('icon is-small'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: A2(
-										_elm_lang$html$Html$i,
-										{
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class(
-												A2(_elm_lang$core$Basics_ops['++'], 'fas ', _p8._0)),
-											_1: {ctor: '[]'}
-										},
-										{ctor: '[]'}),
-									_1: {ctor: '[]'}
-								}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$span,
-									{ctor: '[]'},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text(_p8._1),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
-				});
-		});
-	return A2(
-		_elm_lang$html$Html$nav,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('tabs is-boxed is-fullwidth'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('container'),
-					_1: {ctor: '[]'}
-				},
-				{
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$ul,
-						{ctor: '[]'},
-						{
-							ctor: '::',
-							_0: A2(
-								menu,
-								_user$project$Main$S소개,
-								{ctor: '_Tuple2', _0: 'fa-user-circle', _1: '소개'}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									menu,
-									_user$project$Main$S프로젝트,
-									{ctor: '_Tuple2', _0: 'fa-file-code', _1: '프로젝트'}),
-								_1: {ctor: '[]'}
-							}
-						}),
-					_1: {ctor: '[]'}
 				}),
 			_1: {ctor: '[]'}
 		});

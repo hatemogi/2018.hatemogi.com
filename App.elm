@@ -23,7 +23,7 @@ type alias Model =
 
 init : String -> (Model, Cmd Msg)
 init name =
-  ({ section = S프로젝트, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
+  ({ section = S소개, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
 
 -- UPDATE
 
@@ -90,7 +90,8 @@ footerView model =
     [ div [ class "content has-text-centered" ]
           [ p [] [ text "hatemogi.com" ]
           , markdown """Source code licensed [MIT](https://opensource.org/licenses/mit-license.php)<br/>
-Website content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)""" ] ]
+                        Website content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)"""
+          , p [] [markdown """This site is created with Elm, Bulma, and FontAwesome.""" ]]]
 
 profileView : Html Msg
 profileView =
@@ -108,26 +109,19 @@ profileView =
 
 introView : Html Msg
 introView =
-  markdown
-    """소프트웨어 개발자.
-어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자
-직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,
-다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년
-정도 근무한 뒤, 지금은 1인 소프트웨어 개발사의 대표로 지내고 있습니다.
-
-## 다음 커뮤니케이션
-
-다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에
-참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로
-백엔드 웹서비스를 개발했습니다.
-
-## 오후코드 (개인 개발자)
-
-개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를
-위한 서버 소프트웨어를 개발해 납품했습니다.
-
-
-"""
+  let
+    sectionf : Intro.Section -> Html Msg
+    sectionf section =
+      article [class "media"]
+        [div [class "media-content"]
+          [h2 [] [text section.title]
+          ,markdown section.description]]
+  in
+    div []
+      ((List.map sectionf Intro.data)
+      ++
+      [div [class "media"]
+        [button [class "button is-primary", onClick (Go S프로젝트)] [text "프로젝트 보기"]]])
 
 projectsView : (Maybe String) -> Html Msg
 projectsView filter =
@@ -170,12 +164,18 @@ projectsView filter =
                [text category]
   in
     div []
-      [div [class "buttons has-addons"]
-           [button "전체"
-           ,button "업무"
-           ,button "취미"
-           ,button "발표"
-           ,button "번역"]
+      [article [class "message"]
+        [div [class "message-body"]
+          [markdown
+            """제가 참여했던 프로젝트를 일일이 열거했습니다. 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,
+               저 스스로 어떤 일들을 해왔는지 참고로, 앞으로 할 일들을 고민해보려 합니다.
+               만약 그럴싸한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,
+               대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다."""
+          ,markdown
+            """직업적으로 한일은 **업무**, 개인적 호기심으로 진행한 일은 **취미**, 외부 공개로 발표한 내용은 **발표**,
+               영문 문서를 한국어로 번역한 작업은 **번역**으로 꼬리표를 달았으며, 아래 탭을 누르면 추려서 보실 수 있습니다."""]]
+      ,div [class "buttons has-addons"]
+           [button "전체", button "업무", button "취미", button "발표", button "번역"]
       ,div [] (Projects.data
                |> List.filter (\p -> case filter of
                                        Just f -> p.category == f
