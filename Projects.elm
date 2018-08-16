@@ -119,20 +119,33 @@ data =
     """변수, 함수, 객체 이름 지을 때, 콩글리시 영작 그만하고, 한글로 코딩하자는 주장을 담은 웹사이트 오픈.
        관련해서 PyCon 2016에서 라이트닝토크도 발표자로 참여했습니다."""
   , Project "취미" 2014 "AewolInputMethod - macOS용 한글 입력기 개발"
-    (Just "https://medium.com/happyprogrammer-in-jeju/dvorak과-한글-입력기-개발-8940bc4714a1")
+    (Just "https://github.com/hatemogi/AewolInput")
     "개인" ["Objective-C", "C"]
-    "Dvorak 자판과 한글 두벌식 자판을 함께 쓰기 편한 macOS용 한글 입력기"
+    """Dvorak 자판과 한글 두벌식 자판을 함께 쓰기 편한 macOS용 한글 입력기 개발 및 공개. 한글 두벌식 자판과 영문 드보락 자판을
+       함께 사용할 때 macOS에서 단축키 입력이 불편해지는 문제를 해결하는 입력기 애플리케이션을 개발해서 공개했습니다.
+       한글 입력 오토마타는 기존 오픈소스 라이브러리인 libhangul을 써서 개발했고, 저는 macOS의 IMKit 프레임워크를 사용해서
+       애플리케이션으로 만드는 작업을 했습니다.
+       [개발한 이야기](https://medium.com/happyprogrammer-in-jeju/dvorak과-한글-입력기-개발-8940bc4714a1)도 적어두었습니다."""
   , Project "취미" 2010 "귀여운 우주선 게임, xkobo for macOS"
     (Just "https://github.com/hatemogi/xkobo")
     "개인" ["GNU C", "X Window System"]
-    "UNIX용 아케이드 게임을 macOS에서도 실행되게끔 수정해서 오픈소스 공개"
+    """UNIX용 아케이드 게임을 macOS에서도 실행되게끔 수정해서 오픈소스 공개. 아쉽게도 현재 macOS는 X 윈도우 시스템이 포함되지 않은채로
+       배포되어, 그대로 빌드되지는 않을 것 같습니다."""
   , Project "취미" 1998 "귀여운 우주선 게임, xkobo for Win32" Nothing
     "개인" ["Delphi", "Win32"]
-    "대학시절 학과 동호회방에서 유행하던 UNIX X Window용 아케이드 게임을 윈도우용 Delphi로 재개발(포팅)해서 공개했습니다."
+    """대학시절 학과 동호회방에서 유행하던 UNIX X Window용 아케이드 게임을 윈도우용 Delphi로 재개발(포팅)해서 공개했습니다. 이 프로젝트로
+     저는 X윈도우 시스템과 Win32 시스템에 대한 이해도를 높히며 개발에 몰입할 수 있었고, 학과 동기들은 동호회방에서만 해볼 수 있던 게임을
+     각자 집에서도 해볼 수 있게되었습니다."""
   , Project "취미" 1995 "3인용 테트리스 게임"
     (Just "http://blog.naver.com/PostView.nhn?blogId=taksangs&logNo=60050324463")
     "개인" ["Borland Pascal", "Assembly", "MS-DOS"]
-    """직접 개발한 VESA 한글 그래픽 라이브러리를 이용한 게임 개발"""
+    """직접 개발한 VESA 한글 그래픽 라이브러리를 이용한 테트리스 게임 개발. 고등학교 시절에 직접 개발한 한글 그래픽 라이브러리를 이용해
+       데모로 테트리스 게임을 만들어 공개했습니다. 배경 이미지와 음악을 변경할 수 있는 확장팩 기능을 넣어 하이텔과 나우누리에 공개했는데,
+       제 오리지날 버전도 **월간 마이크로소프트웨어 1995년 5월호** 180p에 소개가 실렸습니다만, 어떤 분이 당시 유행하던 일본만화를 주제로 테마를 입힌 버전이 원판보다
+       더 널리 알려져서, 사람들은 "**오 나의 여신님 테트리스**"라고 알고 있는 경우가 있습니다. """
+  , Project "취미" 1992 "MS-DOS 부팅 잠금 프로그램 개발" Nothing
+    "개인" ["Turbo Pascal", "Assembly", "MS-DOS"]
+    """"""
   , Project "발표" 2017 "한글 코딩 도구 비지니스 피칭"
     (Just "https://medium.com/happyprogrammer-in-jeju/한글-코딩-도구-비지니스-피칭-a7727fd99663") "개인" ["Clojure"]
     """한글로 코딩하는 언어와 웹플랫폼을 만들어 코딩교육에 활용해보자는 사업화 아이디어를
@@ -140,19 +153,23 @@ data =
        프로그래밍 언어로 공략하면 유효하겠다는 평가를 받았습니다. 슬라이드 내용은 제목 링크 참조."""
   , Project "발표" 2016 "PyCon 라이트닝토크 - 한글코딩 5분 발표"
     (Just "https://youtu.be/46UkzB-3z3Y") "개인" ["Python", "Clojure"]
-    "한글코딩.org 사이트의 내용을 [발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)"
+    """한글코딩.org 사이트의 내용을 코믹 컨셉으로 파이콘 2016에서 발표했습니다. 파이콘 첫날 다른 사람들의 라이트닝토크 발표를 듣고
+       동기부여받아서 즉흥적으로 준비해 둘째날 발표했고, 내용 자체 전달과 설득은 어떨지 몰라도, 적어도 웃음은 유발했습니다.
+       [발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)로도 정리했습니다.
+       제목링크를 누르시면 발표영상을 보실 수 있습니다."""
   , Project "발표" 2013 "Daum DevOn 컨퍼런스 - 사내 Git 저장소 개발사례"
     (Just "https://www.slideshare.net/hatemogi/devon2013-git") "개인" []
-    """"""
+    """다음 사내 개발자용 Git 저장소 시스템을 개발했던 경험을 DevOn 컨퍼런스에서 발표했습니다.
+       제목링크를 누르면 발표슬라이드를 보실 수 있습니다."""
   , Project "번역" 2015 "클로저 선문답 - Clojure Koans 한글 번역"
     (Just "https://clojurekoans.hatemogi.com") "개인" []
-    """"""
+    """Clojure 프로그래밍 언어 기초 문법을 연습하는 내용의 웹페이지를 한국어로 번역해서 공개했습니다."""
   , Project "번역" 2015 "Ring - 클로저 웹서버 인터페이스 스펙 및 라이브러리 문서 번역"
     (Just "https://github.com/hatemogi/ring/wiki") "개인" []
-    """"""
+    """클로저 프로그래밍 환경의 웹서비스 인터페이스인 Ring의 문서를 한국어로 번역했습니다. 클로저 Ring은 자바로 치자면 서블릿스펙과 비슷합니다."""
   , Project "번역" 2014 "유의미 버전 SemVer 한글 번역"
     (Just "https://semver.org/lang/ko") "개인" []
-    """"""
+    """제품 버전 체계를 의미있게 잡아서 사용하자는 **Semantic Versioning** 스펙 문서를 한국어로 번역했습니다."""
   ]
 
 tags = data
