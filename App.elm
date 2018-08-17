@@ -61,7 +61,8 @@ menuView model =
   let
     menu section (icon, label) =
       li [ classList [("is-active", model.section == section)]]
-         [a [onClick (Go section)] [span [class "icon is-small"] [i [class ("fas " ++ icon)] []], span [] [text label] ]]
+         [a [onClick (Go section)]
+           [span [class "icon is-small"] [i [class "fas", class icon] []], span [] [text label] ]]
   in
     nav [ class "tabs is-boxed is-medium is-fullwidth" ]
         [ ul []
@@ -124,9 +125,8 @@ introView =
   in
     div []
       ((List.map sectionf Intro.data)
-      ++
-      [div [class "media"]
-        [button [class "button is-primary", onClick (Go S프로젝트)] [text "프로젝트 보기"]]])
+      ++ [div [class "media"]
+           [button [class "button is-info", onClick (Go S프로젝트)] [text "프로젝트 보기"]]])
 
 projectsView : (Maybe String) -> Html Msg
 projectsView filter =
@@ -146,7 +146,7 @@ projectsView filter =
               [div [class "media-left"]
                    [div [class "tags has-addons"]
                         [span [class "tag"] [text (toString p.year)]
-                        ,span [class ("tag " ++ (categoryColor p.category))] [text p.category]]]
+                        ,span [class "tag", class (categoryColor p.category)] [text p.category]]]
               ,div [class "media-content"]
                  [Html.p []
                    [div [class "content"]
@@ -160,11 +160,13 @@ projectsView filter =
     button category =
       case filter of
         Just cat ->
-          span [ class ("button " ++ (if category == cat then (categoryColor cat) else ""))
+          span [ class "button"
+               , class (if category == cat then (categoryColor cat) else "")
                , onClick (ProjectFilter (if category == "전체" then Nothing else Just category))]
                [text category]
         Nothing ->
-          span [ class ("button " ++ (if category == "전체" then "is-link" else ""))
+          span [ class "button"
+               , class (if category == "전체" then "is-link" else "")
                , onClick (ProjectFilter (if category == "전체" then Nothing else Just category))]
                [text category]
   in

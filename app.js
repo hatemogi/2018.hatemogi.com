@@ -11227,12 +11227,13 @@ var _user$project$Main$projectsView = function (filter) {
 										_elm_lang$html$Html$span,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class(
-												A2(
-													_elm_lang$core$Basics_ops['++'],
-													'tag ',
-													categoryColor(p.category))),
-											_1: {ctor: '[]'}
+											_0: _elm_lang$html$Html_Attributes$class('tag'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class(
+													categoryColor(p.category)),
+												_1: {ctor: '[]'}
+											}
 										},
 										{
 											ctor: '::',
@@ -11366,17 +11367,18 @@ var _user$project$Main$projectsView = function (filter) {
 				_elm_lang$html$Html$span,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'button ',
-							_elm_lang$core$Native_Utils.eq(category, _p4) ? categoryColor(_p4) : '')),
+					_0: _elm_lang$html$Html_Attributes$class('button'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(
-							_user$project$Main$ProjectFilter(
-								_elm_lang$core$Native_Utils.eq(category, '전체') ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(category))),
-						_1: {ctor: '[]'}
+						_0: _elm_lang$html$Html_Attributes$class(
+							_elm_lang$core$Native_Utils.eq(category, _p4) ? categoryColor(_p4) : ''),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Main$ProjectFilter(
+									_elm_lang$core$Native_Utils.eq(category, '전체') ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(category))),
+							_1: {ctor: '[]'}
+						}
 					}
 				},
 				{
@@ -11389,17 +11391,18 @@ var _user$project$Main$projectsView = function (filter) {
 				_elm_lang$html$Html$span,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class(
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'button ',
-							_elm_lang$core$Native_Utils.eq(category, '전체') ? 'is-link' : '')),
+					_0: _elm_lang$html$Html_Attributes$class('button'),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onClick(
-							_user$project$Main$ProjectFilter(
-								_elm_lang$core$Native_Utils.eq(category, '전체') ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(category))),
-						_1: {ctor: '[]'}
+						_0: _elm_lang$html$Html_Attributes$class(
+							_elm_lang$core$Native_Utils.eq(category, '전체') ? 'is-link' : ''),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Main$ProjectFilter(
+									_elm_lang$core$Native_Utils.eq(category, '전체') ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(category))),
+							_1: {ctor: '[]'}
+						}
 					}
 				},
 				{
@@ -11547,9 +11550,12 @@ var _user$project$Main$menuView = function (model) {
 										_elm_lang$html$Html$i,
 										{
 											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$class(
-												A2(_elm_lang$core$Basics_ops['++'], 'fas ', _p7._0)),
-											_1: {ctor: '[]'}
+											_0: _elm_lang$html$Html_Attributes$class('fas'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$class(_p7._0),
+												_1: {ctor: '[]'}
+											}
 										},
 										{ctor: '[]'}),
 									_1: {ctor: '[]'}
@@ -11665,7 +11671,7 @@ var _user$project$Main$introView = function () {
 							_elm_lang$html$Html$button,
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('button is-primary'),
+								_0: _elm_lang$html$Html_Attributes$class('button is-info'),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$html$Html_Events$onClick(
