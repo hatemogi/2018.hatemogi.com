@@ -11150,15 +11150,15 @@ var _user$project$Main$Model = F3(
 	});
 var _user$project$Main$S잡담 = {ctor: 'S잡담'};
 var _user$project$Main$S글 = {ctor: 'S글'};
+var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
+var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$init = function (name) {
 	return {
 		ctor: '_Tuple2',
-		_0: {section: _user$project$Main$S글, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
+		_0: {section: _user$project$Main$S소개, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
 		_1: _user$project$Main$loadMediumFeed
 	};
 };
-var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
-var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$ProjectFilter = function (a) {
 	return {ctor: 'ProjectFilter', _0: a};
 };

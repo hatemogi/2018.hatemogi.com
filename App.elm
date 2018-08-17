@@ -23,7 +23,7 @@ type alias Model =
 
 init : String -> (Model, Cmd Msg)
 init name =
-  ({ section = S글, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
+  ({ section = S소개, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
 
 -- UPDATE
 
