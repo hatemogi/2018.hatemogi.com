@@ -11788,22 +11788,29 @@ var _user$project$Main$mainView = function (model) {
 var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
+		{ctor: '[]'},
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('wrap'),
-			_1: {ctor: '[]'}
-		},
-		{
-			ctor: '::',
-			_0: _user$project$Main$menuView(model),
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('wrap'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: _user$project$Main$menuView(model),
+					_1: {
+						ctor: '::',
+						_0: _user$project$Main$mainView(model),
+						_1: {ctor: '[]'}
+					}
+				}),
 			_1: {
 				ctor: '::',
-				_0: _user$project$Main$mainView(model),
-				_1: {
-					ctor: '::',
-					_0: _user$project$Main$footerView(model),
-					_1: {ctor: '[]'}
-				}
+				_0: _user$project$Main$footerView(model),
+				_1: {ctor: '[]'}
 			}
 		});
 };

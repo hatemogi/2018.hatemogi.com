@@ -50,9 +50,10 @@ update msg model =
 
 view : Model -> Html Msg
 view model =
-  div [ class "wrap" ]
-    [ menuView model
-    , mainView model
+  div []
+    [div [ class "wrap" ]
+      [ menuView model
+      , mainView model ]
     , footerView model ]
 
 menuView : Model -> Html Msg
