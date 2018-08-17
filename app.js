@@ -9956,6 +9956,36 @@ var _evancz$elm_markdown$Markdown$Options = F4(
 		return {githubFlavored: a, defaultHighlighting: b, sanitize: c, smartypants: d};
 	});
 
+var _user$project$Article$Article = F3(
+	function (a, b, c) {
+		return {title: a, url: b, summary: c};
+	});
+var _user$project$Article$data = {
+	ctor: '::',
+	_0: A3(_user$project$Article$Article, '다음 캘린더 서비스 개발 비하인드 스토리', 'https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05', '이 글은, 다음 캘린더 서비스 개발자가 개인적으로 적은 뒷이야기입니다. 오래전 부정확한 기억에\n               기반했기에 사실과 다른 주관적인 내용이 포함돼 있을 수 있으니, 심각하게 읽지는 않으셨으면 좋겠습니다.\n               관련해서 떠오르는 다양한 주제의 산만한 생각을 정리했습니다. 일관된 주제 없이 개인적 회고에 불과하지만,\n               다른 서비스 개발자분들에게 도움이 될만한 경험이 전달되기를 기대합니다.'),
+	_1: {
+		ctor: '::',
+		_0: A3(_user$project$Article$Article, '스타벅스 연결러 앱 공개 & 개발 후기', 'https://medium.com/happyprogrammer-in-jeju/스타벅스-연결러-앱-공개-개발-후기-c0c5f88a86e8', '올해 초 진행하다 중단한 프로젝트를 뒤늦게 계속해서 마무리지었습니다. 스타벅스에서 무료 WiFi를 연결할 때\n               거치는 번거로운 과정을 자동화해주는 macOS 앱을 만들려는 프로젝트였고, 그 개발 과정을 친절히 남겨보겠다는\n               의욕과 함께 시작했으나, 이내 흐지부지됐더랍니다. 중간 과정은 건너뛰고, 드디어 앱만 후딱 개발해서 공개한\n               과정 이야기와 후기를 남깁니다. 여러분이 개발자라면, 자신도 겪었을 만한 비슷한 상황을 공감할 수 있는 내용일\n               테고, 개발자가 아니시라면, 개발자들은 어떤 고민을 하면서 뭔가를 만드는지 조금은 알게 되실만한 내용이리라\n               기대합니다.'),
+		_1: {
+			ctor: '::',
+			_0: A3(_user$project$Article$Article, '개알못인 당신이 웹개발을 시작한다면 (1)', 'https://medium.com/happyprogrammer-in-jeju/개알못인-당신이-웹개발을-시작한다면-1-9415c014a130', '\'개\'발을 \'알\'지 \'못\'하는 당신이 웹 개발을 시작한다면, 어디서부터 무얼 공부해야 할지라는 주제의 글입니다.\n               감히 누구도 편하게 얘기하기 어려운 주제입니다. 무능한 저 한 개인이 올바른 가이드를 제시해 드릴 수 없는\n               일입니다만, 무책임하게나마 감히 적어보겠습니다. 너무 신뢰하지 마시고 가벼이 읽어 주시고, 이렇게 생각하는\n               사람도 있구나 정도로 넘기시면 좋은 주제입니다.'),
+			_1: {
+				ctor: '::',
+				_0: A3(_user$project$Article$Article, '한글코딩.org 개발기 (실패기?)', 'https://medium.com/happyprogrammer-in-jeju/한글코딩-org-개발기-실패기-f69bd4bc55c6', '개발자가 쓰는 말은 한국어인데, 소스코드는 영문으로 작성합니다. 나랏말쌈이 코드와 다른 상황입니다.\n               이제껏 무심코 영문으로만 개발해 왔습니다. 그러다 불현듯 한글로 쓰면 안 되는 이유가 뭘까 궁금해졌습니다.\n               그러다 흘러 흘러 <http://한글코딩.org>를 만들게 된 이야기입니다. 사이트를 만든지는 오래됐는데,\n               이제야 Draft에 묵혀놨던 후기를 꺼내서 마무리 지어 올립니다.'),
+				_1: {
+					ctor: '::',
+					_0: A3(_user$project$Article$Article, '3/8 판교 긴급 출장 24시', 'https://medium.com/happyprogrammer-in-jeju/3-8-판교-긴급-출장-24시-3bad70af3176', '전 제주에 사는 원격근무 프리랜서 프로그래머입니다. 십수 년 월급쟁이 생활을 하다가,\n               여차여차해서 프리랜서가 됐어요. 처음에는 직장인이 아니라는 데서 생기는 이런저런 상황들이 어색했는데,\n               이제는 그럭저럭 관찰하고 반응하며 지내고 익숙해진 것 같습니다. 이 글은, 어쩌다 갑작스레 판교로 출장을\n               다녀오고 나서 적는 이런저런 개인적 이야기입니다. 별다른 지식의 공유나 일관된 주제는 없겠지만,\n               남의 일기 읽어보는 재미는 있을지도 모르겠군요.'),
+					_1: {
+						ctor: '::',
+						_0: A3(_user$project$Article$Article, '스타트업에서 시니어 개발자를 구하기 어려운 이유', 'https://medium.com/happyprogrammer-in-jeju/스타트업에서-시니어-개발자를-구하기-어려운-이유-cd123f779052', '일부 소프트웨어 개발 인력 시장에서, 제가 근무했던 D사 같은 회사에 다니는 인력의 가치를 높게 평가하고\n               있는 듯합니다. 그래서인지, 종종 인재를 소개해 달라는 부탁을 받고는 했고, 그럴 때 들었던 생각을 차마\n               직접 얘기하지는 못하고 맘속에 담아뒀다가 이제야 풀어 보았습니다.'),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	}
+};
+
 var _user$project$Intro$Section = F3(
 	function (a, b, c) {
 		return {title: a, url: b, description: c};
@@ -9971,7 +10001,7 @@ var _user$project$Intro$data = {
 			_0: A3(_user$project$Intro$Section, '오후코드 대표', _elm_lang$core$Maybe$Nothing, '개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n       위한 서버 소프트웨어를 개발해 납품했습니다.'),
 			_1: {
 				ctor: '::',
-				_0: A3(_user$project$Intro$Section, '반갑습니다', _elm_lang$core$Maybe$Nothing, '여기는 제 개인을 다른분들깨 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 제 개인의 의견과 정리되지 않은 생각들이 널려있으니 너그러이 봐주시기 바랍니다.'),
+				_0: A3(_user$project$Intro$Section, '반갑습니다', _elm_lang$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.'),
 				_1: {ctor: '[]'}
 			}
 		}
@@ -10798,14 +10828,124 @@ var _user$project$Main$markdown = function (content) {
 		{ctor: '[]'},
 		content);
 };
-var _user$project$Main$writingsView = A2(
-	_elm_lang$html$Html$div,
-	{ctor: '[]'},
-	{
-		ctor: '::',
-		_0: _elm_lang$html$Html$text('잡담'),
-		_1: {ctor: '[]'}
-	});
+var _user$project$Main$rantsView = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('잡담'),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$Main$articlesView = function (model) {
+	var articlef = function (a) {
+		return A2(
+			_elm_lang$html$Html$article,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('media'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('media-content'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$a,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$href(a.url),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$strong,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(a.title),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$span,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$class('icon'),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$i,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$class('fas fa-link fa-sm'),
+													_1: {ctor: '[]'}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _user$project$Main$markdown(a.summary),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			});
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$article,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('message'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('message-body'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$Main$markdown('부족하나마 나름의 생각을 정리한 글들을 주로 [미디엄](https://medium.com/happyprogrammer-in-jeju)에 올리고 있습니다.\n               아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다.'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$div,
+					{ctor: '[]'},
+					A2(_elm_lang$core$List$map, articlef, _user$project$Article$data)),
+				_1: {ctor: '[]'}
+			}
+		});
+};
 var _user$project$Main$profileView = A2(
 	_elm_lang$html$Html$div,
 	{
@@ -10929,7 +11069,7 @@ var _user$project$Main$footerView = function (model) {
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('content has-text-centered'),
+					_0: _elm_lang$html$Html_Attributes$class('content has-text-justified'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -10944,7 +11084,7 @@ var _user$project$Main$footerView = function (model) {
 						}),
 					_1: {
 						ctor: '::',
-						_0: _user$project$Main$markdown('Source code licensed [MIT](https://opensource.org/licenses/mit-license.php)<br/>\n                        Website content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)'),
+						_0: _user$project$Main$markdown('이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는\n                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. <br/>\n                        그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다.'),
 						_1: {
 							ctor: '::',
 							_0: A2(
@@ -10952,7 +11092,7 @@ var _user$project$Main$footerView = function (model) {
 								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _user$project$Main$markdown('This site is created with Elm, Bulma, and FontAwesome.'),
+									_0: _user$project$Main$markdown('이 웹사이트는 Elm, Bulma, FontAwesome를 써서 만들었습니다.'),
 									_1: {ctor: '[]'}
 								}),
 							_1: {ctor: '[]'}
@@ -11010,15 +11150,15 @@ var _user$project$Main$Model = F3(
 	});
 var _user$project$Main$S잡담 = {ctor: 'S잡담'};
 var _user$project$Main$S글 = {ctor: 'S글'};
-var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
-var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$init = function (name) {
 	return {
 		ctor: '_Tuple2',
-		_0: {section: _user$project$Main$S소개, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
+		_0: {section: _user$project$Main$S글, medium: _elm_lang$core$Maybe$Nothing, projectFilter: _elm_lang$core$Maybe$Nothing},
 		_1: _user$project$Main$loadMediumFeed
 	};
 };
+var _user$project$Main$S프로젝트 = {ctor: 'S프로젝트'};
+var _user$project$Main$S소개 = {ctor: 'S소개'};
 var _user$project$Main$ProjectFilter = function (a) {
 	return {ctor: 'ProjectFilter', _0: a};
 };
@@ -11292,12 +11432,8 @@ var _user$project$Main$projectsView = function (filter) {
 						},
 						{
 							ctor: '::',
-							_0: _user$project$Main$markdown('제가 참여했던 프로젝트를 일일이 열거했습니다. 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,\n               저 스스로 어떤 일들을 해왔는지 참고로, 앞으로 할 일들을 고민해보려 합니다.\n               만약 그럴싸한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,\n               대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다.'),
-							_1: {
-								ctor: '::',
-								_0: _user$project$Main$markdown('직업적으로 한일은 **업무**, 개인적 호기심으로 진행한 일은 **취미**, 외부 공개로 발표한 내용은 **발표**,\n               영문 문서를 한국어로 번역한 작업은 **번역**으로 꼬리표를 달았으며, 아래 탭을 누르면 추려서 보실 수 있습니다.'),
-								_1: {ctor: '[]'}
-							}
+							_0: _user$project$Main$markdown('아래 일일이 열거한 것은 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,\n               저 스스로 어떤 일들을 해왔는지 참고해서 앞으로 할 일들을 고민해보려 합니다.\n               만약 그럴듯한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,\n               나머지 대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다.'),
+							_1: {ctor: '[]'}
 						}),
 					_1: {ctor: '[]'}
 				}),
@@ -11467,7 +11603,14 @@ var _user$project$Main$menuView = function (model) {
 									menu,
 									_user$project$Main$S프로젝트,
 									{ctor: '_Tuple2', _0: 'fa-file-code', _1: '프로젝트'}),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: A2(
+										menu,
+										_user$project$Main$S글,
+										{ctor: '_Tuple2', _0: 'fa-edit', _1: '글'}),
+									_1: {ctor: '[]'}
+								}
 							}
 						}),
 					_1: {ctor: '[]'}
@@ -11552,6 +11695,29 @@ var _user$project$Main$introView = function () {
 			}));
 }();
 var _user$project$Main$mainView = function (model) {
+	var titlef = F2(
+		function (title, content) {
+			return {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h1,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('title'),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(title),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: content,
+					_1: {ctor: '[]'}
+				}
+			};
+		});
 	return A2(
 		_elm_lang$html$Html$div,
 		{
@@ -11600,89 +11766,22 @@ var _user$project$Main$mainView = function (model) {
 										var _p8 = model.section;
 										switch (_p8.ctor) {
 											case 'S소개':
-												return {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h1,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('title'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('김대현'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _user$project$Main$introView,
-														_1: {ctor: '[]'}
-													}
-												};
+												return A2(titlef, '김대현', _user$project$Main$introView);
 											case 'S프로젝트':
-												return {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h1,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('title'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('프로젝트'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _user$project$Main$projectsView(model.projectFilter),
-														_1: {ctor: '[]'}
-													}
-												};
+												return A2(
+													titlef,
+													'프로젝트',
+													_user$project$Main$projectsView(model.projectFilter));
 											case 'S글':
-												return {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h1,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('title'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('글'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _user$project$Main$projectsView(model.projectFilter),
-														_1: {ctor: '[]'}
-													}
-												};
+												return A2(
+													titlef,
+													'글',
+													_user$project$Main$articlesView(model));
 											default:
-												return {
-													ctor: '::',
-													_0: A2(
-														_elm_lang$html$Html$h1,
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html_Attributes$class('title'),
-															_1: {ctor: '[]'}
-														},
-														{
-															ctor: '::',
-															_0: _elm_lang$html$Html$text('잡담'),
-															_1: {ctor: '[]'}
-														}),
-													_1: {
-														ctor: '::',
-														_0: _user$project$Main$writingsView,
-														_1: {ctor: '[]'}
-													}
-												};
+												return A2(
+													titlef,
+													'잡담',
+													_user$project$Main$rantsView(model));
 										}
 									}()),
 								_1: {ctor: '[]'}

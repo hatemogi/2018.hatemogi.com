@@ -4,9 +4,9 @@ import Html.Attributes exposing (..)
 import Http
 import Markdown
 import Xml.Decode
-import Projects
 import Intro
-import Dict
+import Projects
+import Article
 import Set
 
 main =
@@ -23,7 +23,7 @@ type alias Model =
 
 init : String -> (Model, Cmd Msg)
 init name =
-  ({ section = S소개, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
+  ({ section = S글, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
 
 -- UPDATE
 
@@ -67,31 +67,37 @@ menuView model =
         [ ul []
           [ menu S소개 ("fa-user-circle", "소개")
           , menu S프로젝트 ("fa-file-code", "프로젝트")
---          , menu S글 ("fa-edit", "글")
+          , menu S글 ("fa-edit", "글")
 --          , menu S잡담 ("fa-comment", "잡담")
           ]]]
 
 mainView : Model -> Html Msg
 mainView model =
- div [ class "container" ]
-   [ div [ class "has-text-centered columns"]
-      [ div [ class "column is-narrow" ] [ profileView ]
-      , main_ [ class "column has-text-justified" ]
-          [ div []
-              (case model.section of
-                 S소개     -> [h1 [ class "title" ] [ text "김대현" ], introView]
-                 S프로젝트 -> [h1 [ class "title" ] [ text "프로젝트" ], projectsView model.projectFilter]
-                 S글       -> [h1 [ class "title" ] [ text "글" ], projectsView model.projectFilter]
-                 S잡담     -> [h1 [ class "title" ] [ text "잡담" ], writingsView])]]]
+  let
+    titlef : String -> Html Msg -> List (Html Msg)
+    titlef title content =
+      [h1 [ class "title" ] [ text title ], content]
+  in
+    div [ class "container" ]
+      [ div [ class "has-text-centered columns"]
+         [ div [ class "column is-narrow" ] [ profileView ]
+         , main_ [ class "column has-text-justified" ]
+             [ div []
+                (case model.section of
+                   S소개     -> titlef "김대현" introView
+                   S프로젝트 -> titlef "프로젝트" (projectsView model.projectFilter)
+                   S글       -> titlef "글" (articlesView model)
+                   S잡담     -> titlef "잡담" (rantsView model)) ]]]
 
 footerView : Model -> Html Msg
 footerView model =
   footer [ class "footer" ]
-    [ div [ class "content has-text-centered" ]
+    [ div [ class "content has-text-justified" ]
           [ p [] [ text "hatemogi.com" ]
-          , markdown """Source code licensed [MIT](https://opensource.org/licenses/mit-license.php)<br/>
-                        Website content licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)"""
-          , p [] [markdown """This site is created with Elm, Bulma, and FontAwesome.""" ]]]
+          , markdown """이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는
+                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. <br/>
+                        그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다."""
+          , p [] [markdown """이 웹사이트는 Elm, Bulma, FontAwesome를 써서 만들었습니다.""" ]]]
 
 profileView : Html Msg
 profileView =
@@ -167,13 +173,11 @@ projectsView filter =
       [article [class "message"]
         [div [class "message-body"]
           [markdown
-            """제가 참여했던 프로젝트를 일일이 열거했습니다. 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,
-               저 스스로 어떤 일들을 해왔는지 참고로, 앞으로 할 일들을 고민해보려 합니다.
-               만약 그럴싸한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,
-               대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다."""
-          ,markdown
-            """직업적으로 한일은 **업무**, 개인적 호기심으로 진행한 일은 **취미**, 외부 공개로 발표한 내용은 **발표**,
-               영문 문서를 한국어로 번역한 작업은 **번역**으로 꼬리표를 달았으며, 아래 탭을 누르면 추려서 보실 수 있습니다."""]]
+            """아래 일일이 열거한 것은 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,
+               저 스스로 어떤 일들을 해왔는지 참고해서 앞으로 할 일들을 고민해보려 합니다.
+               만약 그럴듯한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,
+               나머지 대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다."""
+            ]]
       ,div [class "buttons has-addons"]
            [button "전체", button "업무", button "취미", button "발표", button "번역"]
       ,div [] (Projects.data
@@ -183,8 +187,27 @@ projectsView filter =
                |> List.sortBy (\p -> -p.year)
                |> List.map entryf)]
 
-writingsView : Html Msg
-writingsView =
+articlesView : Model -> Html Msg
+articlesView model =
+  let
+    articlef : Article.Article -> Html Msg
+    articlef a =
+      article [class "media"]
+        [div [class "media-content"]
+          [Html.a [href a.url] [strong [] [text a.title], span [class "icon"] [i [class "fas fa-link fa-sm"] []]]
+          , markdown a.summary]]
+  in
+    div []
+      [article [class "message"]
+        [div [class "message-body"]
+          [markdown
+            """부족하나마 나름의 생각을 정리한 글들을 주로 [미디엄](https://medium.com/happyprogrammer-in-jeju)에 올리고 있습니다.
+               아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다."""
+          ]]
+      , div [] (Article.data |> List.map articlef)]
+
+rantsView : Model -> Html Msg
+rantsView model =
   div [] [text "잡담"]
 
 markdown : String -> Html Msg
