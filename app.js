@@ -11731,7 +11731,7 @@ var _user$project$Main$mainView = function (model) {
 				_elm_lang$html$Html$div,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('has-text-centered columns'),
+					_0: _elm_lang$html$Html_Attributes$class('columns is-centered'),
 					_1: {ctor: '[]'}
 				},
 				{
@@ -11740,7 +11740,7 @@ var _user$project$Main$mainView = function (model) {
 						_elm_lang$html$Html$div,
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$class('column is-narrow'),
+							_0: _elm_lang$html$Html_Attributes$class('column is-narrow is-hidden-mobile'),
 							_1: {ctor: '[]'}
 						},
 						{
@@ -11757,35 +11757,28 @@ var _user$project$Main$mainView = function (model) {
 								_0: _elm_lang$html$Html_Attributes$class('column has-text-justified'),
 								_1: {ctor: '[]'}
 							},
-							{
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$div,
-									{ctor: '[]'},
-									function () {
-										var _p8 = model.section;
-										switch (_p8.ctor) {
-											case 'S소개':
-												return A2(titlef, '김대현', _user$project$Main$introView);
-											case 'S프로젝트':
-												return A2(
-													titlef,
-													'프로젝트',
-													_user$project$Main$projectsView(model.projectFilter));
-											case 'S글':
-												return A2(
-													titlef,
-													'글',
-													_user$project$Main$articlesView(model));
-											default:
-												return A2(
-													titlef,
-													'잡담',
-													_user$project$Main$rantsView(model));
-										}
-									}()),
-								_1: {ctor: '[]'}
-							}),
+							function () {
+								var _p8 = model.section;
+								switch (_p8.ctor) {
+									case 'S소개':
+										return A2(titlef, '김대현', _user$project$Main$introView);
+									case 'S프로젝트':
+										return A2(
+											titlef,
+											'프로젝트',
+											_user$project$Main$projectsView(model.projectFilter));
+									case 'S글':
+										return A2(
+											titlef,
+											'글',
+											_user$project$Main$articlesView(model));
+									default:
+										return A2(
+											titlef,
+											'잡담',
+											_user$project$Main$rantsView(model));
+								}
+							}()),
 						_1: {ctor: '[]'}
 					}
 				}),
