@@ -11574,46 +11574,35 @@ var _user$project$Main$menuView = function (model) {
 		_elm_lang$html$Html$nav,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html_Attributes$class('tabs is-boxed is-fullwidth'),
+			_0: _elm_lang$html$Html_Attributes$class('tabs is-boxed is-medium is-fullwidth'),
 			_1: {ctor: '[]'}
 		},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('container'),
-					_1: {ctor: '[]'}
-				},
+				_elm_lang$html$Html$ul,
+				{ctor: '[]'},
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$ul,
-						{ctor: '[]'},
-						{
+						menu,
+						_user$project$Main$S소개,
+						{ctor: '_Tuple2', _0: 'fa-user-circle', _1: '소개'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							menu,
+							_user$project$Main$S프로젝트,
+							{ctor: '_Tuple2', _0: 'fa-file-code', _1: '프로젝트'}),
+						_1: {
 							ctor: '::',
 							_0: A2(
 								menu,
-								_user$project$Main$S소개,
-								{ctor: '_Tuple2', _0: 'fa-user-circle', _1: '소개'}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									menu,
-									_user$project$Main$S프로젝트,
-									{ctor: '_Tuple2', _0: 'fa-file-code', _1: '프로젝트'}),
-								_1: {
-									ctor: '::',
-									_0: A2(
-										menu,
-										_user$project$Main$S글,
-										{ctor: '_Tuple2', _0: 'fa-edit', _1: '글'}),
-									_1: {ctor: '[]'}
-								}
-							}
-						}),
-					_1: {ctor: '[]'}
+								_user$project$Main$S글,
+								{ctor: '_Tuple2', _0: 'fa-edit', _1: '글'}),
+							_1: {ctor: '[]'}
+						}
+					}
 				}),
 			_1: {ctor: '[]'}
 		});

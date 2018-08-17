@@ -63,14 +63,13 @@ menuView model =
       li [ classList [("is-active", model.section == section)]]
          [a [onClick (Go section)] [span [class "icon is-small"] [i [class ("fas " ++ icon)] []], span [] [text label] ]]
   in
-    nav [ class "tabs is-boxed is-fullwidth" ]
-      [ div [ class "container" ]
+    nav [ class "tabs is-boxed is-medium is-fullwidth" ]
         [ ul []
           [ menu S소개 ("fa-user-circle", "소개")
           , menu S프로젝트 ("fa-file-code", "프로젝트")
           , menu S글 ("fa-edit", "글")
 --          , menu S잡담 ("fa-comment", "잡담")
-          ]]]
+        ]]
 
 mainView : Model -> Html Msg
 mainView model =
