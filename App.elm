@@ -1,13 +1,10 @@
 import Html exposing (..)
 import Html.Events exposing (onClick)
 import Html.Attributes exposing (..)
-import Http
 import Markdown
-import Xml.Decode
 import Intro
 import Projects
 import Article
-import Set
 
 main =
   Html.program { init = init "테스트", view = view,
@@ -19,16 +16,15 @@ type Section = S소개 | S프로젝트 | S글 | S잡담
 type alias Model =
   { section : Section
   , projectFilter: Maybe String
-  , medium : Maybe String }
+  }
 
 init : String -> (Model, Cmd Msg)
 init name =
-  ({ section = S소개, medium = Nothing, projectFilter = Nothing }, loadMediumFeed)
+  ({ section = S소개, projectFilter = Nothing }, Cmd.none)
 
 -- UPDATE
 
 type Msg = Go Section |
-           MediumFeed (Result Http.Error String) |
            ProjectFilter (Maybe String)
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -36,12 +32,6 @@ update msg model =
   case msg of
     Go section ->
       ({model | section = section}, Cmd.none)
-
-    MediumFeed (Ok content) ->
-      ({model | medium = Just content}, Cmd.none)
-
-    MediumFeed (Err _) ->
-      ({model | medium = Nothing}, Cmd.none)
 
     ProjectFilter filter ->
       ({model | projectFilter = filter}, Cmd.none)
@@ -51,9 +41,7 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div []
-    [div [ class "wrap" ]
-      [ menuView model
-      , mainView model ]
+    [div [ class "wrap" ] [ menuView model, mainView model ]
     , footerView model ]
 
 menuView : Model -> Html Msg
@@ -70,7 +58,8 @@ menuView model =
           , menu S프로젝트 ("fa-file-code", "프로젝트")
           , menu S글 ("fa-edit", "글")
 --          , menu S잡담 ("fa-comment", "잡담")
-        ]]
+          ]
+        ]
 
 mainView : Model -> Html Msg
 mainView model =
@@ -141,7 +130,7 @@ projectsView filter =
         "발표" -> "is-success"
         "번역" -> "is-primary"
         "전체" -> "is-link"
-        _ -> ""
+        _      -> ""
     entryf : Projects.Project -> Html Msg
     entryf p =
       article [class "media"]
@@ -222,11 +211,3 @@ markdown content =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
-
--- HTTP
-
-loadMediumFeed : Cmd Msg
-loadMediumFeed =
-  -- CORS 해결 필요
-  -- Http.send MediumFeed (Http.getString "https://medium.com/feed/happyprogrammer-in-jeju")
-  Cmd.none
