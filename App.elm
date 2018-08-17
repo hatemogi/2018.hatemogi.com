@@ -77,17 +77,19 @@ mainView model =
   let
     titlef : String -> Html Msg -> List (Html Msg)
     titlef title content =
-      [h1 [ class "title" ] [ text title ], content]
+      [ h1 [ class "title" ] [ text title ], content ]
   in
     div [ class "container" ]
-      [ div [ class "columns is-centered"]
-         [ div [ class "column is-narrow is-hidden-mobile" ] [profileView]
+      [ div [ class "columns is-centered" ]
+         [ div [ class "column is-narrow is-hidden-mobile" ] [ profileView ]
          , main_ [ class "column has-text-justified" ]
-                (case model.section of
-                   S소개     -> titlef "김대현" introView
-                   S프로젝트 -> titlef "프로젝트" (projectsView model.projectFilter)
-                   S글       -> titlef "글" (articlesView model)
-                   S잡담     -> titlef "잡담" (rantsView model)) ]]
+            (case model.section of
+              S소개     -> titlef "김대현"   introView
+              S프로젝트 -> titlef "프로젝트" (projectsView model.projectFilter)
+              S글       -> titlef "글"       (articlesView model)
+              S잡담     -> titlef "잡담"     (rantsView model))
+         ]
+      ]
 
 footerView : Model -> Html Msg
 footerView model =
