@@ -1,8 +1,8 @@
 build:
-	elm make App.elm --output=app.js
+	elm make src/App.elm --output=app.js
 
 live:
-	elm live app.elm --output=app.js --open
+	elm live src/App.elm --output=app.js --open
 
 clean:
 	rm app.js
