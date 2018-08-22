@@ -122,8 +122,8 @@ footerView model =
         [ div [ class "content has-text-justified" ]
             [ p [] [ text "hatemogi.com" ]
             , markdown """이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는
-                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. <br/>
-                        그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다."""
+                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. """
+            , markdown """그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다."""
             , p [] [ markdown """이 웹사이트는 Elm, Bulma, FontAwesome를 써서 만들었습니다.""" ]
             ]
         ]

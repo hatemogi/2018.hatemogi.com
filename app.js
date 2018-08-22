@@ -4950,7 +4950,8 @@ var author$project$Main$footerView = function (model) {
 							[
 								elm$html$Html$text('hatemogi.com')
 							])),
-						author$project$Main$markdown('이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는\n                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. <br/>\n                        그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다.'),
+						author$project$Main$markdown('이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는\n                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. '),
+						author$project$Main$markdown('그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다.'),
 						A2(
 						elm$html$Html$p,
 						_List_Nil,
