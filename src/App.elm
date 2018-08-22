@@ -6,6 +6,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Html.Keyed as Keyed
+import Html.Lazy exposing (lazy)
 import Intro
 import Markdown
 import Projects
@@ -195,10 +196,14 @@ projectsView filter =
                 _ ->
                     ""
 
-        entryf : Projects.Project -> ( String, Html Msg )
+        keyedEntryf : Projects.Project -> ( String, Html Msg )
+        keyedEntryf p =
+            ( p.title, lazy entryf p )
+
+        entryf : Projects.Project -> Html Msg
         entryf p =
-            ( p.title
-            , article [ class "media" ]
+            article
+                [ class "media" ]
                 [ div [ class "media-left" ]
                     [ div [ class "tags has-addons" ]
                         [ span [ class "tag" ] [ text (String.fromInt p.year) ]
@@ -222,7 +227,6 @@ projectsView filter =
                         ]
                     ]
                 ]
-            )
 
         button : String -> Html Msg
         button category =
@@ -296,7 +300,7 @@ projectsView filter =
                                 True
                     )
                 |> List.sortBy (\p -> -p.year)
-                |> List.map entryf
+                |> List.map keyedEntryf
             )
         ]
 
