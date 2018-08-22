@@ -1,8 +1,8 @@
 build:
-	elm make src/App.elm --output=app.js
+	elm make src/App.elm --output=app.js --optimize
 
-live:
-	elm live src/App.elm --output=app.js --open
+reactor:
+	elm reactor
 
 clean:
 	rm app.js

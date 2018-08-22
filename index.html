@@ -7,9 +7,10 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
 	<link rel="stylesheet" href="app.css">
   <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
+	<script src="app.js"></script>
 </head>
 <body>
-	<script type="text/javascript" src="app.js"></script>
-	<script type="text/javascript">Elm.Main.fullscreen();</script>
+  <div id="elm-app"></div>
+	<script>var app = Elm.Main.init({node: document.getElementById("elm-app")});</script>
 </body>
 </html>
