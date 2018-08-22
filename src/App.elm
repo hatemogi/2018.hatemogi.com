@@ -5,6 +5,7 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
+import Html.Keyed as Keyed
 import Intro
 import Markdown
 import Projects
@@ -194,9 +195,10 @@ projectsView filter =
                 _ ->
                     ""
 
-        entryf : Projects.Project -> Html Msg
+        entryf : Projects.Project -> ( String, Html Msg )
         entryf p =
-            article [ class "media" ]
+            ( p.title
+            , article [ class "media" ]
                 [ div [ class "media-left" ]
                     [ div [ class "tags has-addons" ]
                         [ span [ class "tag" ] [ text (String.fromInt p.year) ]
@@ -220,6 +222,7 @@ projectsView filter =
                         ]
                     ]
                 ]
+            )
 
         button : String -> Html Msg
         button category =
@@ -280,7 +283,8 @@ projectsView filter =
             ]
         , div [ class "buttons has-addons" ]
             [ button "전체", button "업무", button "취미", button "발표", button "번역" ]
-        , div []
+        , Keyed.node "div"
+            []
             (Projects.data
                 |> List.filter
                     (\p ->

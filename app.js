@@ -5689,6 +5689,11 @@ var elm$core$List$filter = F2(
 			list);
 	});
 var elm$core$List$sortBy = _List_sortBy;
+var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
+	return _VirtualDom_keyedNode(
+		_VirtualDom_noScript(tag));
+};
+var elm$html$Html$Keyed$node = elm$virtual_dom$VirtualDom$keyedNode;
 var author$project$Main$projectsView = function (filter) {
 	var categoryColor = function (cat) {
 		switch (cat) {
@@ -5707,142 +5712,144 @@ var author$project$Main$projectsView = function (filter) {
 		}
 	};
 	var entryf = function (p) {
-		return A2(
-			elm$html$Html$article,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$class('media')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('media-left')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$html$Html$div,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('tags has-addons')
-								]),
-							_List_fromArray(
-								[
-									A2(
-									elm$html$Html$span,
-									_List_fromArray(
-										[
-											elm$html$Html$Attributes$class('tag')
-										]),
-									_List_fromArray(
-										[
-											elm$html$Html$text(
-											elm$core$String$fromInt(p.ap))
-										])),
-									A2(
-									elm$html$Html$span,
-									_List_fromArray(
-										[
-											elm$html$Html$Attributes$class('tag'),
-											elm$html$Html$Attributes$class(
-											categoryColor(p.J))
-										]),
-									_List_fromArray(
-										[
-											elm$html$Html$text(p.J)
-										]))
-								]))
-						])),
-					A2(
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('media-content')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$html$Html$p,
-							_List_Nil,
-							_List_fromArray(
-								[
-									A2(
-									elm$html$Html$div,
-									_List_fromArray(
-										[
-											elm$html$Html$Attributes$class('content')
-										]),
-									_List_fromArray(
-										[
-											A2(
-											elm$html$Html$strong,
-											_List_Nil,
-											_List_fromArray(
-												[
-													function () {
-													var _n2 = p.aN;
-													if (_n2.$ === 1) {
-														return elm$html$Html$text(p.aL);
-													} else {
-														var url = _n2.a;
-														return A2(
-															elm$html$Html$a,
-															_List_fromArray(
-																[
-																	elm$html$Html$Attributes$href(url)
-																]),
-															_List_fromArray(
-																[
-																	elm$html$Html$text(p.aL),
-																	A2(
-																	elm$html$Html$span,
-																	_List_fromArray(
-																		[
-																			elm$html$Html$Attributes$class('icon')
-																		]),
-																	_List_fromArray(
-																		[
-																			A2(
-																			elm$html$Html$i,
-																			_List_fromArray(
-																				[
-																					elm$html$Html$Attributes$class('fas fa-link fa-sm')
-																				]),
-																			_List_Nil)
-																		]))
-																]));
-													}
-												}()
-												])),
-											author$project$Main$markdown(p.au)
-										])),
-									A2(
-									elm$html$Html$div,
-									_List_fromArray(
-										[
-											elm$html$Html$Attributes$class('tags')
-										]),
-									A2(
-										elm$core$List$map,
-										function (t) {
-											return A2(
-												elm$html$Html$span,
+		return _Utils_Tuple2(
+			p.aL,
+			A2(
+				elm$html$Html$article,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('media')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$div,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('media-left')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$div,
+								_List_fromArray(
+									[
+										elm$html$Html$Attributes$class('tags has-addons')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$span,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$class('tag')
+											]),
+										_List_fromArray(
+											[
+												elm$html$Html$text(
+												elm$core$String$fromInt(p.ap))
+											])),
+										A2(
+										elm$html$Html$span,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$class('tag'),
+												elm$html$Html$Attributes$class(
+												categoryColor(p.J))
+											]),
+										_List_fromArray(
+											[
+												elm$html$Html$text(p.J)
+											]))
+									]))
+							])),
+						A2(
+						elm$html$Html$div,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('media-content')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$p,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$div,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$class('content')
+											]),
+										_List_fromArray(
+											[
+												A2(
+												elm$html$Html$strong,
+												_List_Nil,
 												_List_fromArray(
 													[
-														elm$html$Html$Attributes$class('tag')
-													]),
-												_List_fromArray(
-													[
-														elm$html$Html$text(t)
-													]));
-										},
-										p.aK))
-								]))
-						]))
-				]));
+														function () {
+														var _n2 = p.aN;
+														if (_n2.$ === 1) {
+															return elm$html$Html$text(p.aL);
+														} else {
+															var url = _n2.a;
+															return A2(
+																elm$html$Html$a,
+																_List_fromArray(
+																	[
+																		elm$html$Html$Attributes$href(url)
+																	]),
+																_List_fromArray(
+																	[
+																		elm$html$Html$text(p.aL),
+																		A2(
+																		elm$html$Html$span,
+																		_List_fromArray(
+																			[
+																				elm$html$Html$Attributes$class('icon')
+																			]),
+																		_List_fromArray(
+																			[
+																				A2(
+																				elm$html$Html$i,
+																				_List_fromArray(
+																					[
+																						elm$html$Html$Attributes$class('fas fa-link fa-sm')
+																					]),
+																				_List_Nil)
+																			]))
+																	]));
+														}
+													}()
+													])),
+												author$project$Main$markdown(p.au)
+											])),
+										A2(
+										elm$html$Html$div,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$class('tags')
+											]),
+										A2(
+											elm$core$List$map,
+											function (t) {
+												return A2(
+													elm$html$Html$span,
+													_List_fromArray(
+														[
+															elm$html$Html$Attributes$class('tag')
+														]),
+													_List_fromArray(
+														[
+															elm$html$Html$text(t)
+														]));
+											},
+											p.aK))
+									]))
+							]))
+					])));
 	};
 	var button = function (category) {
 		if (!filter.$) {
@@ -5918,8 +5925,9 @@ var author$project$Main$projectsView = function (filter) {
 						button('발표'),
 						button('번역')
 					])),
-				A2(
-				elm$html$Html$div,
+				A3(
+				elm$html$Html$Keyed$node,
+				'div',
 				_List_Nil,
 				A2(
 					elm$core$List$map,
