@@ -1,8 +1,5 @@
 {
     "type": "application",
-    "name": "hatemogi.com",
-    "summury": "개인 홈 페이지",
-    "license": "MIT",
     "source-directories": [
         "src"
     ],
@@ -12,12 +9,12 @@
             "elm/browser": "1.0.0",
             "elm/core": "1.0.0",
             "elm/html": "1.0.0",
+            "elm/url": "1.0.0",
             "elm-explorations/markdown": "1.0.0"
         },
         "indirect": {
             "elm/json": "1.0.0",
             "elm/time": "1.0.0",
-            "elm/url": "1.0.0",
             "elm/virtual-dom": "1.0.0"
         }
     },

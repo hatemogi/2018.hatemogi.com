@@ -2,6 +2,8 @@ module Main exposing (main)
 
 import Article
 import Browser
+import Browser.Navigation as Nav
+import Debug
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -10,32 +12,35 @@ import Html.Lazy exposing (lazy)
 import Intro
 import Markdown
 import Projects
+import Url
 
 
+main : Program () Model Msg
 main =
-    Browser.sandbox { init = init, view = view, update = update }
+    Browser.application
+        { init = init
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
+        , subscriptions = subscriptions
+        , view = view
+        , update = update
+        }
 
 
 
 -- MODEL
 
 
-type Section
-    = S소개
-    | S프로젝트
-    | S글
-    | S잡담
-
-
 type alias Model =
-    { section : Section
+    { key : Nav.Key
+    , url : Url.Url
     , projectFilter : Maybe String
     }
 
 
-init : Model
-init =
-    { section = S소개, projectFilter = Nothing }
+init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init flags url key =
+    ( Model key url Nothing, Cmd.none )
 
 
 
@@ -43,46 +48,76 @@ init =
 
 
 type Msg
-    = Go Section
+    = LinkClicked Browser.UrlRequest
+    | UrlChanged Url.Url
     | ProjectFilter (Maybe String)
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        Go section ->
-            { model | section = section }
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.key (Url.toString url) )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
+        UrlChanged url ->
+            Debug.log "urlChanged" ( { model | url = url }, Cmd.none )
 
         ProjectFilter filter ->
-            { model | projectFilter = filter }
+            ( { model | projectFilter = filter }, Cmd.none )
 
 
 
 -- VIEW
 
 
-view : Model -> Html Msg
+urlToToken : Url.Url -> Maybe String
+urlToToken url =
+    url.path
+        |> String.split "/"
+        |> List.reverse
+        |> List.head
+        |> Maybe.andThen Url.percentDecode
+
+
+urlToTitle : Url.Url -> String
+urlToTitle url =
+    case urlToToken url of
+        Just token ->
+            " - " ++ token
+
+        Nothing ->
+            ""
+
+
+view : Model -> Browser.Document Msg
 view model =
-    div []
+    { title = "hatemogic.com" ++ urlToTitle model.url
+    , body =
         [ div [ class "wrap" ] [ menuView model, mainView model ]
         , footerView model
         ]
+    }
 
 
 menuView : Model -> Html Msg
 menuView model =
     let
-        menu section ( icon, label ) =
-            li [ classList [ ( "is-active", model.section == section ) ] ]
-                [ a [ onClick (Go section) ]
+        menu url ( icon, label ) =
+            li [ classList [ ( "is-active", model.url.path == url ) ] ]
+                [ a [ href url ]
                     [ span [ class "icon is-small" ] [ i [ class "fas", class icon ] [] ], span [] [ text label ] ]
                 ]
     in
     nav [ class "tabs is-boxed is-medium is-fullwidth" ]
         [ ul []
-            [ menu S소개 ( "fa-user-circle", "소개" )
-            , menu S프로젝트 ( "fa-file-code", "프로젝트" )
-            , menu S글 ( "fa-edit", "글" )
+            [ menu "/소개" ( "fa-user-circle", "소개" )
+            , menu "/프로젝트" ( "fa-file-code", "프로젝트" )
+            , menu "/글" ( "fa-edit", "글" )
 
             --          , menu S잡담 ("fa-comment", "잡담")
             ]
@@ -100,18 +135,24 @@ mainView model =
         [ div [ class "columns is-centered" ]
             [ div [ class "column is-narrow is-hidden-mobile" ] [ profileView ]
             , main_ [ class "column has-text-justified" ]
-                (case model.section of
-                    S소개 ->
+                (case urlToToken model.url of
+                    Just "소개" ->
                         titlef "김대현" introView
 
-                    S프로젝트 ->
+                    Nothing ->
+                        titlef "김대현" introView
+
+                    Just "프로젝트" ->
                         titlef "프로젝트" (projectsView model.projectFilter)
 
-                    S글 ->
+                    Just "글" ->
                         titlef "글" (articlesView model)
 
-                    S잡담 ->
+                    Just "잡담" ->
                         titlef "잡담" (rantsView model)
+
+                    Just _ ->
+                        titlef "404 찾을 수 없습니다" notFoundView
                 )
             ]
         ]
@@ -128,6 +169,11 @@ footerView model =
             , p [] [ markdown """이 웹사이트는 Elm, Bulma, FontAwesome를 써서 만들었습니다.""" ]
             ]
         ]
+
+
+notFoundView : Html Msg
+notFoundView =
+    text "404 찾을 수 없습니다"
 
 
 profileView : Html Msg
@@ -167,7 +213,7 @@ introView =
     div []
         (List.map sectionf Intro.data
             ++ [ div [ class "media" ]
-                    [ button [ class "button is-info", onClick (Go S프로젝트) ] [ text "프로젝트 보기" ] ]
+                    [ a [ class "button is-info", href "/프로젝트" ] [ text "프로젝트 보기" ] ]
                ]
         )
 
