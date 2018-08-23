@@ -1,5 +1,8 @@
 {
     "type": "application",
+    "name": "hatemogi.com",
+    "summury": "개인 홈 페이지",
+    "license": "MIT",
     "source-directories": [
         "src"
     ],

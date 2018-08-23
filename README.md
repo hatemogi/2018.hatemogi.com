@@ -5,7 +5,7 @@
 ## 준비
 
     $ elm install
-    $ npm install --global elm elm-live
+    $ npm install -g elm-format uglify-js
 
 ## 빌드
 
