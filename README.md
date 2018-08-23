@@ -9,8 +9,4 @@
 
 ## 빌드
 
-    $ elm make app.elm --output=app.js
-
-## 라이브
-
-    $ elm live app.elm --output=app.js --open
+    $ make
