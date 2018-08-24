@@ -9,7 +9,7 @@ import Html.Events exposing (onClick)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy)
 import Intro
-import List exposing (filter, map)
+import List exposing (filter, map, sortBy)
 import Markdown
 import Projects
 import Url
@@ -75,8 +75,8 @@ update msg model =
         UrlChanged url ->
             ( { model | url = url, route = urlToRoute url }, Cmd.none )
 
-        ProjectFilter filter ->
-            ( { model | projectFilter = filter }, Cmd.none )
+        ProjectFilter f ->
+            ( { model | projectFilter = f }, Cmd.none )
 
 
 
@@ -183,7 +183,7 @@ mainView model =
                         titlef "김대현" introView
 
                     R프로젝트 ->
-                        titlef "프로젝트" (projectsView model.projectFilter)
+                        titlef "프로젝트" (projectsView model)
 
                     R글 ->
                         titlef "글" (articlesView model)
@@ -249,15 +249,15 @@ introView =
                 ]
     in
     div []
-        (List.map sectionf Intro.data
+        (map sectionf Intro.data
             ++ [ div [ class "media" ]
                     [ a [ class "button is-info", href "/프로젝트" ] [ text "프로젝트 보기" ] ]
                ]
         )
 
 
-projectsView : Maybe String -> Html Msg
-projectsView filter =
+projectsView : Model -> Html Msg
+projectsView model =
     let
         categoryColor : String -> String
         categoryColor cat =
@@ -307,14 +307,14 @@ projectsView filter =
                                 ]
                             , markdown p.description
                             ]
-                        , div [ class "tags" ] (List.map (\t -> span [ class "tag" ] [ text t ]) p.tags)
+                        , div [ class "tags" ] (map (\t -> span [ class "tag" ] [ text t ]) p.tags)
                         ]
                     ]
                 ]
 
         button : String -> Html Msg
         button category =
-            case filter of
+            case model.projectFilter of
                 Just cat ->
                     span
                         [ class "button"
@@ -374,17 +374,17 @@ projectsView filter =
         , Keyed.node "div"
             []
             (Projects.data
-                |> List.filter
+                |> filter
                     (\p ->
-                        case filter of
+                        case model.projectFilter of
                             Just f ->
                                 p.category == f
 
                             Nothing ->
                                 True
                     )
-                |> List.sortBy (\p -> -p.year)
-                |> List.map keyedEntryf
+                |> sortBy (\p -> -p.year)
+                |> map keyedEntryf
             )
         ]
 
@@ -409,7 +409,7 @@ articlesView model =
                아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다."""
                 ]
             ]
-        , div [] (Article.data |> List.map articlef)
+        , div [] (Article.data |> map articlef)
         ]
 
 

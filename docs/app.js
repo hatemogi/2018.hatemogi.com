@@ -2662,7 +2662,7 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 	return {
 		k: func(record.k),
 		O: record.O,
-		L: record.L
+		M: record.M
 	}
 });
 
@@ -2934,7 +2934,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.O;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.L) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.M) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -4181,8 +4181,8 @@ function _Browser_getViewport()
 	return {
 		aj: _Browser_getScene(),
 		an: {
-			G: _Browser_window.pageXOffset,
-			H: _Browser_window.pageYOffset,
+			H: _Browser_window.pageXOffset,
+			I: _Browser_window.pageYOffset,
 			x: _Browser_doc.documentElement.clientWidth,
 			s: _Browser_doc.documentElement.clientHeight
 		}
@@ -4223,8 +4223,8 @@ function _Browser_getViewportOf(id)
 				s: node.scrollHeight
 			},
 			an: {
-				G: node.scrollLeft,
-				H: node.scrollTop,
+				H: node.scrollLeft,
+				I: node.scrollTop,
 				x: node.clientWidth,
 				s: node.clientHeight
 			}
@@ -4258,14 +4258,14 @@ function _Browser_getElement(id)
 		return {
 			aj: _Browser_getScene(),
 			an: {
-				G: x,
-				H: y,
+				H: x,
+				I: y,
 				x: _Browser_doc.documentElement.clientWidth,
 				s: _Browser_doc.documentElement.clientHeight
 			},
 			au: {
-				G: x + rect.left,
-				H: y + rect.top,
+				H: x + rect.left,
+				I: y + rect.top,
 				x: rect.width,
 				s: rect.height
 			}
@@ -4409,7 +4409,7 @@ var author$project$Main$UrlChanged = function (a) {
 };
 var author$project$Main$Model = F4(
 	function (key, url, route, projectFilter) {
-		return {Y: key, M: projectFilter, B: route, aN: url};
+		return {Y: key, G: projectFilter, B: route, aN: url};
 	});
 var author$project$Main$R404 = 3;
 var author$project$Main$R글 = 2;
@@ -5354,11 +5354,11 @@ var author$project$Main$update = F2(
 						}),
 					elm$core$Platform$Cmd$none);
 			default:
-				var filter = msg.a;
+				var f = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{M: filter}),
+						{G: f}),
 					elm$core$Platform$Cmd$none);
 		}
 	});
@@ -5695,7 +5695,7 @@ var author$project$Main$ProjectFilter = function (a) {
 };
 var author$project$Projects$Project = F7(
 	function (category, year, title, url, role, tags, description) {
-		return {I: category, at: description, aG: role, aK: tags, aL: title, aN: url, ao: year};
+		return {J: category, at: description, aG: role, aK: tags, aL: title, aN: url, ao: year};
 	});
 var author$project$Projects$data = _List_fromArray(
 	[
@@ -6075,7 +6075,7 @@ var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
 var elm$html$Html$Keyed$node = elm$virtual_dom$VirtualDom$keyedNode;
 var elm$virtual_dom$VirtualDom$lazy = _VirtualDom_lazy;
 var elm$html$Html$Lazy$lazy = elm$virtual_dom$VirtualDom$lazy;
-var author$project$Main$projectsView = function (filter) {
+var author$project$Main$projectsView = function (model) {
 	var categoryColor = function (cat) {
 		switch (cat) {
 			case '업무':
@@ -6134,11 +6134,11 @@ var author$project$Main$projectsView = function (filter) {
 										[
 											elm$html$Html$Attributes$class('tag'),
 											elm$html$Html$Attributes$class(
-											categoryColor(p.I))
+											categoryColor(p.J))
 										]),
 									_List_fromArray(
 										[
-											elm$html$Html$text(p.I)
+											elm$html$Html$text(p.J)
 										]))
 								]))
 						])),
@@ -6236,8 +6236,9 @@ var author$project$Main$projectsView = function (filter) {
 			A2(elm$html$Html$Lazy$lazy, entryf, p));
 	};
 	var button = function (category) {
-		if (!filter.$) {
-			var cat = filter.a;
+		var _n1 = model.G;
+		if (!_n1.$) {
+			var cat = _n1.a;
 			return A2(
 				elm$html$Html$span,
 				_List_fromArray(
@@ -6324,9 +6325,10 @@ var author$project$Main$projectsView = function (filter) {
 						A2(
 							elm$core$List$filter,
 							function (p) {
-								if (!filter.$) {
-									var f = filter.a;
-									return _Utils_eq(p.I, f);
+								var _n0 = model.G;
+								if (!_n0.$) {
+									var f = _n0.a;
+									return _Utils_eq(p.J, f);
 								} else {
 									return true;
 								}
@@ -6393,7 +6395,7 @@ var author$project$Main$mainView = function (model) {
 									return A2(
 										titlef,
 										'프로젝트',
-										author$project$Main$projectsView(model.M));
+										author$project$Main$projectsView(model));
 								case 2:
 									return A2(
 										titlef,
