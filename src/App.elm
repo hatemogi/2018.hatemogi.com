@@ -203,7 +203,8 @@ footerView model =
             , markdown """이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는
                         [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. """
             , markdown """그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다."""
-            , p [] [ markdown """이 웹사이트는 Elm, Bulma, FontAwesome를 써서 만들었습니다.""" ]
+            , markdown """이 웹사이트는 [Elm, Bulma, FontAwesome를 써서
+                          만들었습니다](https://medium.com/happyprogrammer-in-jeju/elm-순수-함수형-언어로-개인-홈-개편-45734486678c)."""
             ]
         ]
 
