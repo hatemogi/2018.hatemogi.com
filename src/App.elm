@@ -136,7 +136,7 @@ routeToUrl route =
 
 view : Model -> Browser.Document Msg
 view model =
-    { title = "hatemogic.com - " ++ routeToTitle model.route
+    { title = "hatemogi.com - " ++ routeToTitle model.route
     , body =
         [ div [ class "wrap" ] [ menuView model, mainView model ]
         , footerView model

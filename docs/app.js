@@ -5719,7 +5719,7 @@ var author$project$Projects$data = _List_fromArray(
 		'개인프로젝트',
 		_List_fromArray(
 			['TypeScript', 'Vue', 'HTML5 Canvas', '한글']),
-		'한 달의 여유시간 동안 뭘 할까 고민하다가 재미삼아 타자 연습 웹 앱을 만들었습니다. 초성, 중성, 종성 자소별 색상을 따로\n        보이려 한글 비트맵 폰트를 그린 이야기와 입력 오토마타를 구현한 이야기도 정리해 두었습니다. 만든 결과물은\n        <http://typing.hatemogi.com/>에서 볼 수 있습니다.'),
+		'한 달의 여유시간 동안 뭘 할까 고민하다가 재미삼아 타자 연습 웹 앱을 만들었습니다. 초성, 중성, 종성 자소별 색상을 따로\n        보이려 한글 비트맵 폰트를 그린 이야기와 입력 오토마타를 구현한 이야기도 정리해 두었습니다. 만든 결과물은\n        <http://type.hatemogi.com/>에서 볼 수 있습니다.'),
 		A7(
 		author$project$Projects$Project,
 		'업무',
@@ -6551,7 +6551,7 @@ var author$project$Main$view = function (model) {
 					])),
 				author$project$Main$footerView(model)
 			]),
-		aL: 'hatemogic.com - ' + author$project$Main$routeToTitle(model.B)
+		aL: 'hatemogi.com - ' + author$project$Main$routeToTitle(model.B)
 	};
 };
 var elm$browser$Browser$application = _Browser_application;
