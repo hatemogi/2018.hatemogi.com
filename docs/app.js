@@ -5539,9 +5539,10 @@ var author$project$Intro$Section = F3(
 	});
 var author$project$Intro$data = _List_fromArray(
 	[
-		A3(author$project$Intro$Section, '', elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n       다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년 정도 근무한 뒤,\n       지금은 1인 소프트웨어 개발사의 대표로 지내고 있습니다.'),
+		A3(author$project$Intro$Section, '', elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n       다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년 정도 근무한 뒤,\n       잠시 프리랜서로 일하다, 다시 판교의 대기업에 입사하여 근무하고 있습니다.'),
 		A3(author$project$Intro$Section, '다음커뮤니케이션', elm$core$Maybe$Nothing, '다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. '),
 		A3(author$project$Intro$Section, '오후코드 대표', elm$core$Maybe$Nothing, '개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n       위한 서버 소프트웨어를 개발해 납품했습니다.'),
+		A3(author$project$Intro$Section, '판교의 직장인', elm$core$Maybe$Nothing, '다시 대기업의 직원이 되어, Java, Kotlin으로 웹서비스 백엔드 개발을 담당하고 있습니다.\n       혹시나 제 개인적 발언이 회사 입장에서 불편하지 않도록, 사명은 밝히지 않고 있습니다.'),
 		A3(author$project$Intro$Section, '반갑습니다', elm$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.')
 	]);
 var elm$html$Html$h2 = _VirtualDom_node('h2');
@@ -5699,6 +5700,26 @@ var author$project$Projects$Project = F7(
 	});
 var author$project$Projects$data = _List_fromArray(
 	[
+		A7(
+		author$project$Projects$Project,
+		'업무',
+		2019,
+		'메신저 메시징 서버와 웹서비스 개발',
+		elm$core$Maybe$Nothing,
+		'수석',
+		_List_fromArray(
+			['Java', 'Kotlin', 'Ktor', 'Exposed']),
+		'사내외에서 운영하고 있는 메신저 서비스의 메시징 서버를 Akka로 개발하여 운영하며, 자바와 코틀린으로 백엔드 웹서비스를\n        개발 운영하고 있습니다.'),
+		A7(
+		author$project$Projects$Project,
+		'취미',
+		2019,
+		'당신의 타자 실력을 알려주는 웹 앱',
+		elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/7e0c0e44b37c'),
+		'개인프로젝트',
+		_List_fromArray(
+			['TypeScript', 'Vue', 'HTML5 Canvas', '한글']),
+		'한 달의 여유시간 동안 뭘 할까 고민하다가 재미삼아 타자 연습 웹 앱을 만들었습니다. 초성, 중성, 종성 자소별 색상을 따로\n        보이려 한글 비트맵 폰트를 그린 이야기와 입력 오토마타를 구현한 이야기도 정리해 두었습니다. 만든 결과물은\n        <http://typing.hatemogi.com/>에서 볼 수 있습니다.'),
 		A7(
 		author$project$Projects$Project,
 		'업무',

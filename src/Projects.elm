@@ -16,6 +16,24 @@ type alias Project =
 
 data =
     [ Project "업무"
+        2019
+        "메신저 메시징 서버와 웹서비스 개발"
+        Nothing
+        "수석"
+        [ "Java", "Kotlin", "Ktor", "Exposed" ]
+        """사내외에서 운영하고 있는 메신저 서비스의 메시징 서버를 Akka로 개발하여 운영하며, 자바와 코틀린으로 백엔드 웹서비스를
+        개발 운영하고 있습니다."""
+
+    , Project "취미"
+        2019
+        "당신의 타자 실력을 알려주는 웹 앱"
+        (Just "https://medium.com/happyprogrammer-in-jeju/7e0c0e44b37c")
+        "개인프로젝트"
+        [ "TypeScript", "Vue", "HTML5 Canvas", "한글" ]
+        """한 달의 여유시간 동안 뭘 할까 고민하다가 재미삼아 타자 연습 웹 앱을 만들었습니다. 초성, 중성, 종성 자소별 색상을 따로
+        보이려 한글 비트맵 폰트를 그린 이야기와 입력 오토마타를 구현한 이야기도 정리해 두었습니다. 만든 결과물은
+        <http://type.hatemogi.com/>에서 볼 수 있습니다."""
+    , Project "업무"
         2018
         "ProtoPie 엔터프라이즈 서버 백엔드 개발"
         Nothing
