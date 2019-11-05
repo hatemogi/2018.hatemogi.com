@@ -5702,6 +5702,16 @@ var author$project$Projects$data = _List_fromArray(
 	[
 		A7(
 		author$project$Projects$Project,
+		'취미',
+		2019,
+		'GitHub.com 한글화 크롬 확장프로그램',
+		elm$core$Maybe$Just('https://chrome.google.com/webstore/detail/github-%ED%95%9C%EA%B8%80%ED%99%94/phhgannnkapemfnciphmbpenaflbngmm'),
+		'개인프로젝트',
+		_List_fromArray(
+			['TypeScript', 'chrome', '한글']),
+		'GitHub.com의 주요 화면을 한글로 번역하여 보여주는 크롬 확장 프로그램. 크롬 브라우저로 깃헙에 방문한 경우,\n        확장 프로그램이 주요 영문을 한국어도 번역 표기합니다.\n        '),
+		A7(
+		author$project$Projects$Project,
 		'업무',
 		2019,
 		'메신저 메시징 서버와 웹서비스 개발',
