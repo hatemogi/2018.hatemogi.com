@@ -9,7 +9,7 @@ import Html.Events exposing (onClick)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy)
 import Intro
-import List exposing (filter, map, sortBy)
+import List as L exposing (filter, map, sortBy)
 import Markdown
 import Projects
 import Url
@@ -89,8 +89,8 @@ urlToRoute url =
         paths =
             url.path
                 |> String.split "/"
-                |> map Url.percentDecode
-                |> map (Maybe.withDefault "")
+                |> L.map Url.percentDecode
+                |> L.map (Maybe.withDefault "")
                 |> filter (String.isEmpty >> not)
     in
     case paths of
@@ -249,7 +249,7 @@ introView =
                 ]
     in
     div []
-        (map sectionf Intro.data
+        (L.map sectionf Intro.data
             ++ [ div [ class "media" ]
                     [ a [ class "button is-info", href "/프로젝트" ] [ text "프로젝트 보기" ] ]
                ]
@@ -307,7 +307,7 @@ projectsView model =
                                 ]
                             , markdown p.description
                             ]
-                        , div [ class "tags" ] (map (\t -> span [ class "tag" ] [ text t ]) p.tags)
+                        , div [ class "tags" ] (L.map (\t -> span [ class "tag" ] [ text t ]) p.tags)
                         ]
                     ]
                 ]
@@ -384,7 +384,7 @@ projectsView model =
                                 True
                     )
                 |> sortBy (\p -> -p.year)
-                |> map keyedEntryf
+                |> L.map keyedEntryf
             )
         ]
 
@@ -409,7 +409,7 @@ articlesView model =
                아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다."""
                 ]
             ]
-        , div [] (Article.data |> map articlef)
+        , div [] (Article.data |> L.map articlef)
         ]
 
 
