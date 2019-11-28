@@ -8,6 +8,7 @@ type alias Article =
     }
 
 
+data : List Article
 data =
     [ Article "다음 캘린더 서비스 개발 비하인드 스토리"
         "https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05"

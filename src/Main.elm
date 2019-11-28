@@ -3,6 +3,8 @@ module Main exposing (main)
 import Article
 import Browser
 import Browser.Navigation as Nav
+import Essay
+import KotlinStudy as Kt
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -43,6 +45,7 @@ type Route
     = R소개
     | R프로젝트
     | R글
+    | R코틀린
     | R404
 
 
@@ -109,6 +112,9 @@ urlToRoute url =
         [ "글" ] ->
             R글
 
+        [ "코틀린" ] ->
+            R코틀린
+
         _ ->
             R404
 
@@ -124,6 +130,9 @@ routeToTitle route =
 
         R글 ->
             "글"
+
+        R코틀린 ->
+            "코틀린"
 
         R404 ->
             "404"
@@ -161,7 +170,7 @@ menuView model =
             [ menu R소개 "fa-user-circle"
             , menu R프로젝트 "fa-file-code"
             , menu R글 "fa-edit"
-
+            -- , menu R코틀린 "fa-school"
             --          , menu S잡담 ("fa-comment", "잡담")
             ]
         ]
@@ -187,6 +196,9 @@ mainView model =
 
                     R글 ->
                         titlef "글" (articlesView model)
+
+                    R코틀린 ->
+                        titlef "코틀린" (kotlinStudyView model)
 
                     R404 ->
                         titlef "404 찾을 수 없습니다" notFoundView
@@ -412,6 +424,10 @@ articlesView model =
         , div [] (Article.data |> L.map articlef)
         ]
 
+
+kotlinStudyView : Model -> Html Msg
+kotlinStudyView model =
+    Kt.articlesView (Kt.Model model.key)
 
 rantsView : Model -> Html Msg
 rantsView model =

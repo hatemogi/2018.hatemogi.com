@@ -1858,9 +1858,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.az,
+		impl.aD,
+		impl.aR,
 		impl.aM,
-		impl.aH,
 		function() { return function() {} }
 	);
 });
@@ -3880,11 +3880,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.az,
+		impl.aD,
+		impl.aR,
 		impl.aM,
-		impl.aH,
 		function(sendToApp, initialModel) {
-			var view = impl.aO;
+			var view = impl.aT;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3916,12 +3916,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.az,
+		impl.aD,
+		impl.aR,
 		impl.aM,
-		impl.aH,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.C && impl.C(sendToApp)
-			var view = impl.aO;
+			var view = impl.aT;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3934,7 +3934,7 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aL) && (_VirtualDom_doc.title = title = doc.aL);
+				(title !== doc.aQ) && (_VirtualDom_doc.title = title = doc.aQ);
 			});
 		}
 	);
@@ -3985,8 +3985,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aB;
-	var onUrlRequest = impl.aC;
+	var onUrlChange = impl.aF;
+	var onUrlRequest = impl.aG;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4016,13 +4016,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		az: function(flags)
+		aD: function(flags)
 		{
-			return A3(impl.az, flags, _Browser_getUrl(), key);
+			return A3(impl.aD, flags, _Browser_getUrl(), key);
 		},
-		aO: impl.aO,
-		aM: impl.aM,
-		aH: impl.aH
+		aT: impl.aT,
+		aR: impl.aR,
+		aM: impl.aM
 	});
 }
 
@@ -4088,17 +4088,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { ax: 'hidden', z: 'visibilitychange' }
+		? { aA: 'hidden', z: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { ax: 'mozHidden', z: 'mozvisibilitychange' }
+		? { aA: 'mozHidden', z: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { ax: 'msHidden', z: 'msvisibilitychange' }
+		? { aA: 'msHidden', z: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { ax: 'webkitHidden', z: 'webkitvisibilitychange' }
-		: { ax: 'hidden', z: 'visibilitychange' };
+		? { aA: 'webkitHidden', z: 'webkitvisibilitychange' }
+		: { aA: 'hidden', z: 'visibilitychange' };
 }
 
 
@@ -4263,7 +4263,7 @@ function _Browser_getElement(id)
 				x: _Browser_doc.documentElement.clientWidth,
 				s: _Browser_doc.documentElement.clientHeight
 			},
-			au: {
+			ax: {
 				H: x + rect.left,
 				I: y + rect.top,
 				x: rect.width,
@@ -4395,7 +4395,7 @@ function _Markdown_formatOptions(options)
 	return {
 		highlight: toHighlight,
 		gfm: gfm,
-		tables: gfm && gfm.aJ,
+		tables: gfm && gfm.aO,
 		breaks: gfm && gfm.ar,
 		sanitize: options.ai,
 		smartypants: options.ak
@@ -4409,11 +4409,12 @@ var author$project$Main$UrlChanged = function (a) {
 };
 var author$project$Main$Model = F4(
 	function (key, url, route, projectFilter) {
-		return {Y: key, G: projectFilter, B: route, aN: url};
+		return {Y: key, G: projectFilter, B: route, aS: url};
 	});
-var author$project$Main$R404 = 3;
+var author$project$Main$R404 = 4;
 var author$project$Main$R글 = 2;
 var author$project$Main$R소개 = 0;
+var author$project$Main$R코틀린 = 3;
 var author$project$Main$R프로젝트 = 1;
 var elm$core$Basics$apR = F2(
 	function (x, f) {
@@ -4642,8 +4643,8 @@ var author$project$Main$urlToRoute = function (url) {
 			A2(
 				elm$core$List$map,
 				elm$url$Url$percentDecode,
-				A2(elm$core$String$split, '/', url.aE))));
-	_n0$5:
+				A2(elm$core$String$split, '/', url.aI))));
+	_n0$6:
 	while (true) {
 		if (!paths.b) {
 			return 0;
@@ -4658,15 +4659,17 @@ var author$project$Main$urlToRoute = function (url) {
 						return 1;
 					case '글':
 						return 2;
+					case 'kotlin':
+						return 3;
 					default:
-						break _n0$5;
+						break _n0$6;
 				}
 			} else {
-				break _n0$5;
+				break _n0$6;
 			}
 		}
 	}
-	return 3;
+	return 4;
 };
 var elm$core$Basics$False = 1;
 var elm$core$Basics$True = 0;
@@ -5174,7 +5177,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {V: fragment, X: host, aE: path, ab: port_, ae: protocol, af: query};
+		return {V: fragment, X: host, aI: path, ab: port_, ae: protocol, af: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -5322,7 +5325,7 @@ var elm$url$Url$toString = function (url) {
 					elm$url$Url$addPort,
 					url.ab,
 					_Utils_ap(http, url.X)),
-				url.aE)));
+				url.aI)));
 };
 var author$project$Main$update = F2(
 	function (msg, model) {
@@ -5350,7 +5353,7 @@ var author$project$Main$update = F2(
 						model,
 						{
 							B: author$project$Main$urlToRoute(url),
-							aN: url
+							aS: url
 						}),
 					elm$core$Platform$Cmd$none);
 			default:
@@ -5365,7 +5368,7 @@ var author$project$Main$update = F2(
 var elm_explorations$markdown$Markdown$defaultOptions = {
 	S: elm$core$Maybe$Nothing,
 	W: elm$core$Maybe$Just(
-		{ar: false, aJ: false}),
+		{ar: false, aO: false}),
 	ai: true,
 	ak: false
 };
@@ -5427,7 +5430,7 @@ var author$project$Main$footerView = function (model) {
 };
 var author$project$Article$Article = F3(
 	function (title, url, summary) {
-		return {aI: summary, aL: title, aN: url};
+		return {aN: summary, aQ: title, aS: url};
 	});
 var author$project$Article$data = _List_fromArray(
 	[
@@ -5471,7 +5474,7 @@ var author$project$Main$articlesView = function (model) {
 							elm$html$Html$a,
 							_List_fromArray(
 								[
-									elm$html$Html$Attributes$href(a.aN)
+									elm$html$Html$Attributes$href(a.aS)
 								]),
 							_List_fromArray(
 								[
@@ -5480,7 +5483,7 @@ var author$project$Main$articlesView = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text(a.aL)
+											elm$html$Html$text(a.aQ)
 										])),
 									A2(
 									elm$html$Html$span,
@@ -5499,7 +5502,7 @@ var author$project$Main$articlesView = function (model) {
 											_List_Nil)
 										]))
 								])),
-							author$project$Main$markdown(a.aI)
+							author$project$Main$markdown(a.aN)
 						]))
 				]));
 	};
@@ -5535,11 +5538,11 @@ var author$project$Main$articlesView = function (model) {
 };
 var author$project$Intro$Section = F3(
 	function (title, url, description) {
-		return {at: description, aL: title, aN: url};
+		return {aw: description, aQ: title, aS: url};
 	});
 var author$project$Intro$data = _List_fromArray(
 	[
-		A3(author$project$Intro$Section, '', elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n       다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년 정도 근무한 뒤,\n       잠시 프리랜서로 일하다, 다시 판교의 대기업에 입사하여 근무하고 있습니다.'),
+		A3(author$project$Intro$Section, '', elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n       다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년 정도 근무한 뒤,\n       잠시 프리랜서로 일하다, 다시 판교의 대기업에 입사하여 백엔드 개발을 담당하고 있습니다.'),
 		A3(author$project$Intro$Section, '다음커뮤니케이션', elm$core$Maybe$Nothing, '다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. '),
 		A3(author$project$Intro$Section, '오후코드 대표', elm$core$Maybe$Nothing, '개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n       위한 서버 소프트웨어를 개발해 납품했습니다.'),
 		A3(author$project$Intro$Section, '판교의 직장인', elm$core$Maybe$Nothing, '다시 대기업의 직원이 되어, Java, Kotlin으로 웹서비스 백엔드 개발을 담당하고 있습니다.\n       혹시나 제 개인적 발언이 회사 입장에서 불편하지 않도록, 사명은 밝히지 않고 있습니다.'),
@@ -5569,9 +5572,9 @@ var author$project$Main$introView = function () {
 							_List_Nil,
 							_List_fromArray(
 								[
-									elm$html$Html$text(section.aL)
+									elm$html$Html$text(section.aQ)
 								])),
-							author$project$Main$markdown(section.at)
+							author$project$Main$markdown(section.aw)
 						]))
 				]));
 	};
@@ -5604,6 +5607,15 @@ var author$project$Main$introView = function () {
 						]))
 				])));
 }();
+var author$project$Main$kotlinStudyView = function (model) {
+	return A2(
+		elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				elm$html$Html$text('코틀린 스터디 노트')
+			]));
+};
 var author$project$Main$notFoundView = elm$html$Html$text('404 찾을 수 없습니다');
 var elm$html$Html$img = _VirtualDom_node('img');
 var elm$html$Html$Attributes$src = function (url) {
@@ -5696,7 +5708,7 @@ var author$project$Main$ProjectFilter = function (a) {
 };
 var author$project$Projects$Project = F7(
 	function (category, year, title, url, role, tags, description) {
-		return {J: category, at: description, aG: role, aK: tags, aL: title, aN: url, ao: year};
+		return {J: category, aw: description, aK: role, aP: tags, aQ: title, aS: url, ao: year};
 	});
 var author$project$Projects$data = _List_fromArray(
 	[
@@ -6200,9 +6212,9 @@ var author$project$Main$projectsView = function (model) {
 											_List_fromArray(
 												[
 													function () {
-													var _n2 = p.aN;
+													var _n2 = p.aS;
 													if (_n2.$ === 1) {
-														return elm$html$Html$text(p.aL);
+														return elm$html$Html$text(p.aQ);
 													} else {
 														var url = _n2.a;
 														return A2(
@@ -6213,7 +6225,7 @@ var author$project$Main$projectsView = function (model) {
 																]),
 															_List_fromArray(
 																[
-																	elm$html$Html$text(p.aL),
+																	elm$html$Html$text(p.aQ),
 																	A2(
 																	elm$html$Html$span,
 																	_List_fromArray(
@@ -6234,7 +6246,7 @@ var author$project$Main$projectsView = function (model) {
 													}
 												}()
 												])),
-											author$project$Main$markdown(p.at)
+											author$project$Main$markdown(p.aw)
 										])),
 									A2(
 									elm$html$Html$div,
@@ -6256,14 +6268,14 @@ var author$project$Main$projectsView = function (model) {
 														elm$html$Html$text(t)
 													]));
 										},
-										p.aK))
+										p.aP))
 								]))
 						]))
 				]));
 	};
 	var keyedEntryf = function (p) {
 		return _Utils_Tuple2(
-			p.aL,
+			p.aQ,
 			A2(elm$html$Html$Lazy$lazy, entryf, p));
 	};
 	var button = function (category) {
@@ -6432,6 +6444,11 @@ var author$project$Main$mainView = function (model) {
 										titlef,
 										'글',
 										author$project$Main$articlesView(model));
+								case 3:
+									return A2(
+										titlef,
+										'코틀린',
+										author$project$Main$kotlinStudyView(model));
 								default:
 									return A2(titlef, '404 찾을 수 없습니다', author$project$Main$notFoundView);
 							}
@@ -6447,6 +6464,8 @@ var author$project$Main$routeToTitle = function (route) {
 			return '프로젝트';
 		case 2:
 			return '글';
+		case 3:
+			return '코틀린';
 		default:
 			return '404';
 	}
@@ -6540,7 +6559,8 @@ var author$project$Main$menuView = function (model) {
 					[
 						A2(menu, 0, 'fa-user-circle'),
 						A2(menu, 1, 'fa-file-code'),
-						A2(menu, 2, 'fa-edit')
+						A2(menu, 2, 'fa-edit'),
+						A2(menu, 3, 'fa-school')
 					]))
 			]));
 };
@@ -6561,11 +6581,11 @@ var author$project$Main$view = function (model) {
 					])),
 				author$project$Main$footerView(model)
 			]),
-		aL: 'hatemogi.com - ' + author$project$Main$routeToTitle(model.B)
+		aQ: 'hatemogi.com - ' + author$project$Main$routeToTitle(model.B)
 	};
 };
 var elm$browser$Browser$application = _Browser_application;
 var author$project$Main$main = elm$browser$Browser$application(
-	{az: author$project$Main$init, aB: author$project$Main$UrlChanged, aC: author$project$Main$LinkClicked, aH: author$project$Main$subscriptions, aM: author$project$Main$update, aO: author$project$Main$view});
+	{aD: author$project$Main$init, aF: author$project$Main$UrlChanged, aG: author$project$Main$LinkClicked, aM: author$project$Main$subscriptions, aR: author$project$Main$update, aT: author$project$Main$view});
 _Platform_export({'Main':{'init':author$project$Main$main(
 	elm$json$Json$Decode$succeed(0))(0)}});}(this));
