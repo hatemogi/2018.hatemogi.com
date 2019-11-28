@@ -1,0 +1,32 @@
+{
+  "name": "2018.hatemogi.com",
+  "version": "0.1.0",
+  "description": "hatemogi's personal website",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hatemogi/2018.hatemogi.com.git"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "Daehyun Kim (hatemogi at gmail.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hatemogi/2018.hatemogi.com/issues"
+  },
+  "homepage": "https://github.com/hatemogi/2018.hatemogi.com#readme",
+  "devDependencies": {
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "monaco-editor": "^0.18.1"
+  }
+}
