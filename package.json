@@ -2,7 +2,7 @@
   "name": "2018.hatemogi.com",
   "version": "0.1.0",
   "description": "hatemogi's personal website",
-  "main": "index.js",
+  "main": "index.ts",
   "directories": {
     "doc": "docs"
   },
@@ -17,6 +17,7 @@
     "blog"
   ],
   "author": "Daehyun Kim (hatemogi at gmail.com)",
+  "private": true,
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/hatemogi/2018.hatemogi.com/issues"
