@@ -15,3 +15,7 @@ h2 {
 footer {
   margin-top: 2rem;
 }
+
+code-editor {
+  display: block;
+}

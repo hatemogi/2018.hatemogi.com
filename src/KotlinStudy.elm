@@ -3,9 +3,15 @@ module KotlinStudy exposing (Article, Block, Model, Span, articlesView)
 import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
+import Html.Attributes as Attr exposing (..)
+import Json.Decode as D exposing (Decoder, Value, decodeString, field, string)
+import Json.Encode as E
+import String as S
+
 
 type alias Model =
     { key : Nav.Key }
+
 
 type Span
     = T String
@@ -65,7 +71,7 @@ study00 =
         }
 
         // 결과: 나이가 가장 많은 사람: Person(name=철수, age=29)
-      """
+  """
             ]
         ]
 
@@ -73,33 +79,73 @@ study00 =
 articleView : Article -> Html msg
 articleView article =
     Html.article []
-    ((h1 [] [text article.title])
-    :: List.map sectionView article.sections)
+        (h1 [] [ text article.title ]
+            :: List.map sectionView article.sections
+        )
+
 
 sectionView : Section -> Html msg
 sectionView section =
     Html.section []
-    ((h2 [] [text section.title])
-    :: List.map blockView section.content)
+        (h2 [] [ text section.title ]
+            :: List.map blockView section.content
+        )
+
 
 blockView : Block -> Html msg
 blockView block =
     let
         li : Span -> Html msg
-        li = (Html.li []) << List.singleton << spanView
+        li =
+            Html.li [] << List.singleton << spanView
     in
     case block of
-        S spans -> div [] (List.map spanView spans)
-        UL spans -> Html.ul [] (List.map li spans)
-        OL spans -> Html.ol [] (List.map li spans)
-        Kotlin title code -> Html.pre [] [text code]
-        Java title code -> Html.pre [] [text code]
+        S spans ->
+            div [] (List.map spanView spans)
+
+        UL spans ->
+            Html.ul [] (List.map li spans)
+
+        OL spans ->
+            Html.ol [] (List.map li spans)
+
+        Kotlin title code ->
+            Html.node "code-editor"
+                [ Attr.property "editorValue" <| E.string <| codeIndent code
+                , Attr.property "language" <| E.string "kotlin"
+                , Attr.style "width" "600px"
+                , Attr.style "height" "300px"
+                , Attr.attribute "id" "kotlin-example"
+                ]
+                []
+
+        Java title code ->
+            Html.pre [] [ text code ]
+
+
+codeIndent : String -> String
+codeIndent code =
+    let
+        lines =
+            S.lines code
+        nonEmptyLines =
+            List.filter (not << S.isEmpty << S.trim) lines
+        leftSpace =
+            \s -> (S.length s) - (S.length <| S.trimLeft s)
+        minLeft =
+            Maybe.withDefault 20 <| List.minimum <| List.map leftSpace nonEmptyLines
+    in
+    S.join "\n" <| List.map (S.dropLeft minLeft) lines
+
 
 spanView : Span -> Html msg
 spanView span =
     case span of
-        T text -> Html.text text
-        _ -> Html.span [] []
+        T text ->
+            Html.text text
+
+        _ ->
+            Html.span [] []
 
 
 articlesView : Model -> Html msg
