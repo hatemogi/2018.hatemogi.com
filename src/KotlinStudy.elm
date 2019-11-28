@@ -61,17 +61,17 @@ study00 =
             ]
         , Section "코틀린 맛보기"
             [ Kotlin "첫 예제" """
-        data class Person(val name: String,
-                          val age: Int? = null)
-        fun main(args: Array<String>) {
-            val people = listOf(Person("영희"),
-                                Person("철수", age = 29))
-            val oldest = people.maxBy { it.age ?: 0 }
-            println("나이가 가장 많은 사람: $oldest")
-        }
+              data class Person(val name: String,
+                                val age: Int? = null)
+              fun main(args: Array<String>) {
+                  val people = listOf(Person("영희"),
+                                      Person("철수", age = 29))
+                  val oldest = people.maxBy { it.age ?: 0 }
+                  println("나이가 가장 많은 사람: $oldest")
+               }
 
-        // 결과: 나이가 가장 많은 사람: Person(name=철수, age=29)
-  """
+               // 결과: 나이가 가장 많은 사람: Person(name=철수, age=29)
+               """
             ]
         ]
 

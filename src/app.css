@@ -17,5 +17,8 @@ footer {
 }
 
 code-editor {
+  margin: 0.5em;
   display: block;
+  border-radius: 3px;
+  background-color: black;
 }

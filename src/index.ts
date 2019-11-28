@@ -26,6 +26,7 @@ class MonacoEditorElement extends HTMLElement {
     _editor: monaco.editor.IStandaloneCodeEditor
     _editorValue: string
     _editorLanguage: string
+    _editorReadOnly: boolean
 
     get editorValue() {
         return this._editorValue || "";
@@ -43,13 +44,23 @@ class MonacoEditorElement extends HTMLElement {
         this._editorLanguage = l;
     }
 
+    get readOnly() {
+        return this._editorReadOnly || false;
+    }
+
+    set readOnly(r: boolean) {
+        this._editorReadOnly = r;
+    }
+
     connectedCallback() {
         this._editor = monaco.editor.create(this, {
             value: this.editorValue,
             language: this.language,
+            readOnly: this.readOnly,
             fontLigatures: true,
             fontSize: 14,
             renderLineHighlight: "none",
+            theme: 'vs-dark',
             minimap: { enabled: false },
             matchBrackets: false,
         });
