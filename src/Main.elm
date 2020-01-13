@@ -13,7 +13,7 @@ import Html.Lazy exposing (lazy)
 import Intro
 import List as L exposing (filter, map, sortBy)
 import Markdown
-import Projects
+import Projects as P
 import Url
 
 
@@ -37,7 +37,7 @@ type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , route : Route
-    , projectFilter : Maybe String
+    , projectOption : ProjectFilter
     }
 
 
@@ -51,17 +51,20 @@ type Route
 
 init : () -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init flags url key =
-    ( Model key url (urlToRoute url) Nothing, Cmd.none )
+    ( Model key url (urlToRoute url) (Filtered P.Work), Cmd.none )
 
 
 
 -- UPDATE
 
+type ProjectFilter
+    = Filtered P.ProjectCategory
+    | AllProjects
 
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
-    | ProjectFilter (Maybe String)
+    | ProjectOption ProjectFilter
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -78,8 +81,8 @@ update msg model =
         UrlChanged url ->
             ( { model | url = url, route = urlToRoute url }, Cmd.none )
 
-        ProjectFilter f ->
-            ( { model | projectFilter = f }, Cmd.none )
+        ProjectOption filter ->
+            ( { model | projectOption = filter }, Cmd.none )
 
 
 
@@ -232,8 +235,8 @@ profileView =
         [ div [ class "card-image" ] [ img [ src "img/profile.jpg" ] [] ]
         , div [ class "card-content has-text-left" ]
             [ markdown
-                """백엔드 개발자. **이상적 Clojure**와 **현실적 Java**를 오가며 **실용 프로그래밍**.
-            개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새."""
+                """백엔드 개발자. 취미로 시작한 개발이 전공과 직업이 되었고,
+                여전히 개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 백발 개발자가 될 모양새."""
             ]
         , footer [ class "card-footer" ]
             [ p [ class "card-footer-item" ]
@@ -271,39 +274,33 @@ introView =
 projectsView : Model -> Html Msg
 projectsView model =
     let
-        categoryColor : String -> String
-        categoryColor cat =
-            case cat of
-                "업무" ->
-                    "is-warning"
+        categoryColor : P.ProjectCategory -> String
+        categoryColor category =
+            case category of
+                P.Work -> "is-warning"
+                P.Personal -> "is-info"
+                P.Presentation -> "is-success"
+                P.Translation -> "is-primary"
 
-                "취미" ->
-                    "is-info"
-
-                "발표" ->
-                    "is-success"
-
-                "번역" ->
-                    "is-primary"
-
-                "전체" ->
-                    "is-link"
-
-                _ ->
-                    ""
-
-        keyedEntryf : Projects.Project -> ( String, Html Msg )
+        filterColor : ProjectFilter -> String
+        filterColor filter =
+            case filter of
+                Filtered category -> categoryColor category
+                AllProjects -> "is-link"
+        keyedEntryf : P.Project -> ( String, Html Msg )
         keyedEntryf p =
             ( p.title, lazy entryf p )
 
-        entryf : Projects.Project -> Html Msg
+        entryf : P.Project -> Html Msg
         entryf p =
             article
                 [ class "media" ]
                 [ div [ class "media-left" ]
                     [ div [ class "tags has-addons" ]
                         [ span [ class "tag" ] [ text (String.fromInt p.year) ]
-                        , span [ class "tag", class (categoryColor p.category) ] [ text p.category ]
+                        , span
+                            [ class "tag", class (filterColor (Filtered p.category)) ]
+                            [ text (P.categoryName p.category) ]
                         ]
                     ]
                 , div [ class "media-content" ]
@@ -324,52 +321,20 @@ projectsView model =
                     ]
                 ]
 
-        button : String -> Html Msg
-        button category =
-            case model.projectFilter of
-                Just cat ->
-                    span
-                        [ class "button"
-                        , class
-                            (if category == cat then
-                                categoryColor cat
-
-                             else
-                                ""
-                            )
-                        , onClick
-                            (ProjectFilter
-                                (if category == "전체" then
-                                    Nothing
-
-                                 else
-                                    Just category
-                                )
-                            )
-                        ]
-                        [ text category ]
-
-                Nothing ->
-                    span
-                        [ class "button"
-                        , class
-                            (if category == "전체" then
-                                "is-link"
-
-                             else
-                                ""
-                            )
-                        , onClick
-                            (ProjectFilter
-                                (if category == "전체" then
-                                    Nothing
-
-                                 else
-                                    Just category
-                                )
-                            )
-                        ]
-                        [ text category ]
+        button : ProjectFilter -> Html Msg
+        button filter =
+            span
+                [ class "button"
+                , class (case (filter == model.projectOption) of
+                           True -> (filterColor filter)
+                           False -> "")
+                , onClick (ProjectOption filter)
+                ]
+                [ text (case filter of
+                            Filtered category -> P.categoryName category
+                            AllProjects -> "전체"
+                        )
+                ]
     in
     div []
         [ article [ class "message" ]
@@ -382,17 +347,19 @@ projectsView model =
                 ]
             ]
         , div [ class "buttons has-addons" ]
-            [ button "전체", button "업무", button "취미", button "발표", button "번역" ]
+            [ button AllProjects, button (Filtered P.Work), button (Filtered P.Personal)
+            , button (Filtered P.Presentation), button (Filtered P.Translation)
+            ]
         , Keyed.node "div"
             []
-            (Projects.data
+            (P.data
                 |> filter
                     (\p ->
-                        case model.projectFilter of
-                            Just f ->
+                        case model.projectOption of
+                            Filtered f ->
                                 p.category == f
 
-                            Nothing ->
+                            AllProjects ->
                                 True
                     )
                 |> sortBy (\p -> -p.year)
