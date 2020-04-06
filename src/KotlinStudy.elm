@@ -4,8 +4,10 @@ import Browser
 import Browser.Navigation as Nav
 import Html exposing (..)
 
+
 type alias Model =
     { key : Nav.Key }
+
 
 type Span
     = T String
@@ -73,33 +75,51 @@ study00 =
 articleView : Article -> Html msg
 articleView article =
     Html.article []
-    ((h1 [] [text article.title])
-    :: List.map sectionView article.sections)
+        (h1 [] [ text article.title ]
+            :: List.map sectionView article.sections
+        )
+
 
 sectionView : Section -> Html msg
 sectionView section =
     Html.section []
-    ((h2 [] [text section.title])
-    :: List.map blockView section.content)
+        (h2 [] [ text section.title ]
+            :: List.map blockView section.content
+        )
+
 
 blockView : Block -> Html msg
 blockView block =
     let
         li : Span -> Html msg
-        li = (Html.li []) << List.singleton << spanView
+        li =
+            Html.li [] << List.singleton << spanView
     in
     case block of
-        S spans -> div [] (List.map spanView spans)
-        UL spans -> Html.ul [] (List.map li spans)
-        OL spans -> Html.ol [] (List.map li spans)
-        Kotlin title code -> Html.pre [] [text code]
-        Java title code -> Html.pre [] [text code]
+        S spans ->
+            div [] (List.map spanView spans)
+
+        UL spans ->
+            Html.ul [] (List.map li spans)
+
+        OL spans ->
+            Html.ol [] (List.map li spans)
+
+        Kotlin title code ->
+            Html.pre [] [ text code ]
+
+        Java title code ->
+            Html.pre [] [ text code ]
+
 
 spanView : Span -> Html msg
 spanView span =
     case span of
-        T text -> Html.text text
-        _ -> Html.span [] []
+        T text ->
+            Html.text text
+
+        _ ->
+            Html.span [] []
 
 
 articlesView : Model -> Html msg

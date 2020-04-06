@@ -4,13 +4,13 @@ import Article
 import Browser
 import Browser.Navigation as Nav
 import Essay
-import KotlinStudy as Kt
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Html.Keyed as Keyed
 import Html.Lazy exposing (lazy)
 import Intro
+import KotlinStudy as Kt
 import List as L exposing (filter, map, sortBy)
 import Markdown
 import Projects
@@ -170,6 +170,7 @@ menuView model =
             [ menu R소개 "fa-user-circle"
             , menu R프로젝트 "fa-file-code"
             , menu R글 "fa-edit"
+
             -- , menu R코틀린 "fa-school"
             --          , menu S잡담 ("fa-comment", "잡담")
             ]
@@ -232,8 +233,7 @@ profileView =
         [ div [ class "card-image" ] [ img [ src "img/profile.jpg" ] [] ]
         , div [ class "card-content has-text-left" ]
             [ markdown
-                """백엔드 개발자. **이상적 Clojure**와 **현실적 Java**를 오가며 **실용 프로그래밍**.
-            개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새."""
+                """**백엔드 개발자**. 개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새."""
             ]
         , footer [ class "card-footer" ]
             [ p [ class "card-footer-item" ]
@@ -255,7 +255,16 @@ introView =
         sectionf section =
             article [ class "media" ]
                 [ div [ class "media-content" ]
-                    [ h2 [] [ text section.title ]
+                    [ h2 []
+                        ([ text section.title ]
+                            ++ (case section.timeline of
+                                    Just timeline ->
+                                        [ small [ class "timeline" ] [ text timeline ] ]
+
+                                    Nothing ->
+                                        []
+                               )
+                        )
                     , markdown section.description
                     ]
                 ]
@@ -428,6 +437,7 @@ articlesView model =
 kotlinStudyView : Model -> Html Msg
 kotlinStudyView model =
     Kt.articlesView (Kt.Model model.key)
+
 
 rantsView : Model -> Html Msg
 rantsView model =

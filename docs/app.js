@@ -770,11 +770,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.N.A === region.T.A)
+	if (region.N.A === region.U.A)
 	{
 		return 'on line ' + region.N.A;
 	}
-	return 'on lines ' + region.N.A + ' through ' + region.T.A;
+	return 'on lines ' + region.N.A + ' through ' + region.U.A;
 }
 
 
@@ -1859,7 +1859,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 		flagDecoder,
 		args,
 		impl.aD,
-		impl.aR,
+		impl.aS,
 		impl.aM,
 		function() { return function() {} }
 	);
@@ -3881,10 +3881,10 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 		flagDecoder,
 		args,
 		impl.aD,
-		impl.aR,
+		impl.aS,
 		impl.aM,
 		function(sendToApp, initialModel) {
-			var view = impl.aT;
+			var view = impl.aU;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3917,11 +3917,11 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 		flagDecoder,
 		args,
 		impl.aD,
-		impl.aR,
+		impl.aS,
 		impl.aM,
 		function(sendToApp, initialModel) {
 			var divertHrefToApp = impl.C && impl.C(sendToApp)
-			var view = impl.aT;
+			var view = impl.aU;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3929,12 +3929,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aq);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ar);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aQ) && (_VirtualDom_doc.title = title = doc.aQ);
+				(title !== doc.aR) && (_VirtualDom_doc.title = title = doc.aR);
 			});
 		}
 	);
@@ -3985,8 +3985,8 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aF;
-	var onUrlRequest = impl.aG;
+	var onUrlChange = impl.aG;
+	var onUrlRequest = impl.aH;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
@@ -4007,7 +4007,7 @@ function _Browser_application(impl)
 					sendToApp(onUrlRequest(
 						(next
 							&& curr.ae === next.ae
-							&& curr.X === next.X
+							&& curr.Y === next.Y
 							&& curr.ab.a === next.ab.a
 						)
 							? elm$browser$Browser$Internal(next)
@@ -4020,8 +4020,8 @@ function _Browser_application(impl)
 		{
 			return A3(impl.aD, flags, _Browser_getUrl(), key);
 		},
-		aT: impl.aT,
-		aR: impl.aR,
+		aU: impl.aU,
+		aS: impl.aS,
 		aM: impl.aM
 	});
 }
@@ -4180,7 +4180,7 @@ function _Browser_getViewport()
 {
 	return {
 		aj: _Browser_getScene(),
-		an: {
+		ao: {
 			H: _Browser_window.pageXOffset,
 			I: _Browser_window.pageYOffset,
 			x: _Browser_doc.documentElement.clientWidth,
@@ -4222,7 +4222,7 @@ function _Browser_getViewportOf(id)
 				x: node.scrollWidth,
 				s: node.scrollHeight
 			},
-			an: {
+			ao: {
 				H: node.scrollLeft,
 				I: node.scrollTop,
 				x: node.clientWidth,
@@ -4257,7 +4257,7 @@ function _Browser_getElement(id)
 		var y = _Browser_window.pageYOffset;
 		return {
 			aj: _Browser_getScene(),
-			an: {
+			ao: {
 				H: x,
 				I: y,
 				x: _Browser_doc.documentElement.clientWidth,
@@ -4377,9 +4377,9 @@ function _Markdown_formatOptions(options)
 {
 	function toHighlight(code, lang)
 	{
-		if (!lang && elm$core$Maybe$isJust(options.S))
+		if (!lang && elm$core$Maybe$isJust(options.T))
 		{
-			lang = options.S.a;
+			lang = options.T.a;
 		}
 
 		if (typeof hljs !== 'undefined' && lang && hljs.listLanguages().indexOf(lang) >= 0)
@@ -4390,15 +4390,15 @@ function _Markdown_formatOptions(options)
 		return code;
 	}
 
-	var gfm = options.W.a;
+	var gfm = options.X.a;
 
 	return {
 		highlight: toHighlight,
 		gfm: gfm,
 		tables: gfm && gfm.aO,
-		breaks: gfm && gfm.ar,
+		breaks: gfm && gfm.as,
 		sanitize: options.ai,
-		smartypants: options.ak
+		smartypants: options.al
 	};
 }
 var author$project$Main$LinkClicked = function (a) {
@@ -4409,7 +4409,7 @@ var author$project$Main$UrlChanged = function (a) {
 };
 var author$project$Main$Model = F4(
 	function (key, url, route, projectFilter) {
-		return {Y: key, G: projectFilter, B: route, aS: url};
+		return {aE: key, G: projectFilter, B: route, aT: url};
 	});
 var author$project$Main$R404 = 4;
 var author$project$Main$R글 = 2;
@@ -4643,7 +4643,7 @@ var author$project$Main$urlToRoute = function (url) {
 			A2(
 				elm$core$List$map,
 				elm$url$Url$percentDecode,
-				A2(elm$core$String$split, '/', url.aI))));
+				A2(elm$core$String$split, '/', url.aJ))));
 	_n0$6:
 	while (true) {
 		if (!paths.b) {
@@ -4659,7 +4659,7 @@ var author$project$Main$urlToRoute = function (url) {
 						return 1;
 					case '글':
 						return 2;
-					case 'kotlin':
+					case '코틀린':
 						return 3;
 					default:
 						break _n0$6;
@@ -5177,7 +5177,7 @@ var elm$core$String$contains = _String_contains;
 var elm$core$String$toInt = _String_toInt;
 var elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {V: fragment, X: host, aI: path, ab: port_, ae: protocol, af: query};
+		return {W: fragment, Y: host, aJ: path, ab: port_, ae: protocol, af: query};
 	});
 var elm$url$Url$chompBeforePath = F5(
 	function (protocol, path, params, frag, str) {
@@ -5315,7 +5315,7 @@ var elm$url$Url$toString = function (url) {
 	return A3(
 		elm$url$Url$addPrefixed,
 		'#',
-		url.V,
+		url.W,
 		A3(
 			elm$url$Url$addPrefixed,
 			'?',
@@ -5324,8 +5324,8 @@ var elm$url$Url$toString = function (url) {
 				A2(
 					elm$url$Url$addPort,
 					url.ab,
-					_Utils_ap(http, url.X)),
-				url.aI)));
+					_Utils_ap(http, url.Y)),
+				url.aJ)));
 };
 var author$project$Main$update = F2(
 	function (msg, model) {
@@ -5338,7 +5338,7 @@ var author$project$Main$update = F2(
 						model,
 						A2(
 							elm$browser$Browser$Navigation$pushUrl,
-							model.Y,
+							model.aE,
 							elm$url$Url$toString(url)));
 				} else {
 					var href = urlRequest.a;
@@ -5353,7 +5353,7 @@ var author$project$Main$update = F2(
 						model,
 						{
 							B: author$project$Main$urlToRoute(url),
-							aS: url
+							aT: url
 						}),
 					elm$core$Platform$Cmd$none);
 			default:
@@ -5366,11 +5366,11 @@ var author$project$Main$update = F2(
 		}
 	});
 var elm_explorations$markdown$Markdown$defaultOptions = {
-	S: elm$core$Maybe$Nothing,
-	W: elm$core$Maybe$Just(
-		{ar: false, aO: false}),
+	T: elm$core$Maybe$Nothing,
+	X: elm$core$Maybe$Just(
+		{as: false, aO: false}),
 	ai: true,
-	ak: false
+	al: false
 };
 var elm$core$Maybe$isJust = function (maybe) {
 	if (!maybe.$) {
@@ -5430,7 +5430,7 @@ var author$project$Main$footerView = function (model) {
 };
 var author$project$Article$Article = F3(
 	function (title, url, summary) {
-		return {aN: summary, aQ: title, aS: url};
+		return {aN: summary, aR: title, aT: url};
 	});
 var author$project$Article$data = _List_fromArray(
 	[
@@ -5474,7 +5474,7 @@ var author$project$Main$articlesView = function (model) {
 							elm$html$Html$a,
 							_List_fromArray(
 								[
-									elm$html$Html$Attributes$href(a.aS)
+									elm$html$Html$Attributes$href(a.aT)
 								]),
 							_List_fromArray(
 								[
@@ -5483,7 +5483,7 @@ var author$project$Main$articlesView = function (model) {
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text(a.aQ)
+											elm$html$Html$text(a.aR)
 										])),
 									A2(
 									elm$html$Html$span,
@@ -5536,19 +5536,41 @@ var author$project$Main$articlesView = function (model) {
 				A2(elm$core$List$map, articlef, author$project$Article$data))
 			]));
 };
-var author$project$Intro$Section = F3(
-	function (title, url, description) {
-		return {aw: description, aQ: title, aS: url};
+var author$project$Intro$Section = F4(
+	function (title, timeline, url, description) {
+		return {aw: description, aQ: timeline, aR: title, aT: url};
 	});
 var author$project$Intro$data = _List_fromArray(
 	[
-		A3(author$project$Intro$Section, '', elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 홍익대에서 컴퓨터공학을 전공하고,\n       다음커뮤니케이션(현재 카카오)에서 클라우드기술팀 팀장을 거치며 만 10년 정도 근무한 뒤,\n       잠시 프리랜서로 일하다, 다시 판교의 대기업에 입사하여 백엔드 개발을 담당하고 있습니다.'),
-		A3(author$project$Intro$Section, '다음커뮤니케이션', elm$core$Maybe$Nothing, '다음커뮤니케이션에서는 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. '),
-		A3(author$project$Intro$Section, '오후코드 대표', elm$core$Maybe$Nothing, '개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n       위한 서버 소프트웨어를 개발해 납품했습니다.'),
-		A3(author$project$Intro$Section, '판교의 직장인', elm$core$Maybe$Nothing, '다시 대기업의 직원이 되어, Java, Kotlin으로 웹서비스 백엔드 개발을 담당하고 있습니다.\n       혹시나 제 개인적 발언이 회사 입장에서 불편하지 않도록, 사명은 밝히지 않고 있습니다.'),
-		A3(author$project$Intro$Section, '반갑습니다', elm$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.')
+		A4(author$project$Intro$Section, '', elm$core$Maybe$Nothing, elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 모 IT기업에서 백엔드 개발자로 일하고 있습니다.\n       오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,\n       Clojure, Haskell, Scala 같은 함수형 프로그래밍 언어를 공부하고 있습니다.'),
+		A4(
+		author$project$Intro$Section,
+		'카카오',
+		elm$core$Maybe$Just('2004-2015'),
+		elm$core$Maybe$Nothing,
+		'지금은 카카오가 된 다음커뮤니케이션에서 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. '),
+		A4(
+		author$project$Intro$Section,
+		'오후코드 프리랜서',
+		elm$core$Maybe$Just('2015-2017'),
+		elm$core$Maybe$Nothing,
+		'개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n       위한 서버 소프트웨어를 개발해 납품했습니다.'),
+		A4(
+		author$project$Intro$Section,
+		'NHN',
+		elm$core$Maybe$Just('2017-2019'),
+		elm$core$Maybe$Nothing,
+		'NHN Dooray개발실에서 메신저 백엔드 개발을 담당하며, Akka로 메시징 서버를 개발 운영하고, Kotlin으로 웹서비스를\n       개발하였습니다. '),
+		A4(
+		author$project$Intro$Section,
+		'모 IT기업',
+		elm$core$Maybe$Just('2019-현재'),
+		elm$core$Maybe$Nothing,
+		'모 대형 IT기업으로 이직해서 백엔드 개발자로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n      혹시나 제 개인적 발언이 회사 입장에서 불편하지 않도록, 사명은 밝히지 않고 있습니다.'),
+		A4(author$project$Intro$Section, '반갑습니다', elm$core$Maybe$Nothing, elm$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.')
 	]);
 var elm$html$Html$h2 = _VirtualDom_node('h2');
+var elm$html$Html$small = _VirtualDom_node('small');
 var author$project$Main$introView = function () {
 	var sectionf = function (section) {
 		return A2(
@@ -5570,10 +5592,32 @@ var author$project$Main$introView = function () {
 							A2(
 							elm$html$Html$h2,
 							_List_Nil,
-							_List_fromArray(
-								[
-									elm$html$Html$text(section.aQ)
-								])),
+							_Utils_ap(
+								_List_fromArray(
+									[
+										elm$html$Html$text(section.aR)
+									]),
+								function () {
+									var _n0 = section.aQ;
+									if (!_n0.$) {
+										var timeline = _n0.a;
+										return _List_fromArray(
+											[
+												A2(
+												elm$html$Html$small,
+												_List_fromArray(
+													[
+														elm$html$Html$Attributes$class('timeline')
+													]),
+												_List_fromArray(
+													[
+														elm$html$Html$text(timeline)
+													]))
+											]);
+									} else {
+										return _List_Nil;
+									}
+								}())),
 							author$project$Main$markdown(section.aw)
 						]))
 				]));
@@ -5607,14 +5651,163 @@ var author$project$Main$introView = function () {
 						]))
 				])));
 }();
-var author$project$Main$kotlinStudyView = function (model) {
+var author$project$KotlinStudy$Model = function (key) {
+	return {aE: key};
+};
+var author$project$KotlinStudy$spanView = function (span) {
+	if (!span.$) {
+		var text = span.a;
+		return elm$html$Html$text(text);
+	} else {
+		return A2(elm$html$Html$span, _List_Nil, _List_Nil);
+	}
+};
+var elm$core$Basics$composeL = F3(
+	function (g, f, x) {
+		return g(
+			f(x));
+	});
+var elm$core$List$singleton = function (value) {
+	return _List_fromArray(
+		[value]);
+};
+var elm$html$Html$li = _VirtualDom_node('li');
+var elm$html$Html$ol = _VirtualDom_node('ol');
+var elm$html$Html$pre = _VirtualDom_node('pre');
+var elm$html$Html$ul = _VirtualDom_node('ul');
+var author$project$KotlinStudy$blockView = function (block) {
+	var li = A2(
+		elm$core$Basics$composeL,
+		A2(
+			elm$core$Basics$composeL,
+			elm$html$Html$li(_List_Nil),
+			elm$core$List$singleton),
+		author$project$KotlinStudy$spanView);
+	switch (block.$) {
+		case 0:
+			var spans = block.a;
+			return A2(
+				elm$html$Html$div,
+				_List_Nil,
+				A2(elm$core$List$map, author$project$KotlinStudy$spanView, spans));
+		case 1:
+			var spans = block.a;
+			return A2(
+				elm$html$Html$ul,
+				_List_Nil,
+				A2(elm$core$List$map, li, spans));
+		case 2:
+			var spans = block.a;
+			return A2(
+				elm$html$Html$ol,
+				_List_Nil,
+				A2(elm$core$List$map, li, spans));
+		case 3:
+			var title = block.a;
+			var code = block.b;
+			return A2(
+				elm$html$Html$pre,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text(code)
+					]));
+		default:
+			var title = block.a;
+			var code = block.b;
+			return A2(
+				elm$html$Html$pre,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text(code)
+					]));
+	}
+};
+var elm$html$Html$section = _VirtualDom_node('section');
+var author$project$KotlinStudy$sectionView = function (section) {
 	return A2(
-		elm$html$Html$div,
+		elm$html$Html$section,
 		_List_Nil,
-		_List_fromArray(
-			[
-				elm$html$Html$text('코틀린 스터디 노트')
-			]));
+		A2(
+			elm$core$List$cons,
+			A2(
+				elm$html$Html$h2,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text(section.aR)
+					])),
+			A2(elm$core$List$map, author$project$KotlinStudy$blockView, section.R)));
+};
+var elm$html$Html$h1 = _VirtualDom_node('h1');
+var author$project$KotlinStudy$articleView = function (article) {
+	return A2(
+		elm$html$Html$article,
+		_List_Nil,
+		A2(
+			elm$core$List$cons,
+			A2(
+				elm$html$Html$h1,
+				_List_Nil,
+				_List_fromArray(
+					[
+						elm$html$Html$text(article.aR)
+					])),
+			A2(elm$core$List$map, author$project$KotlinStudy$sectionView, article.ak)));
+};
+var author$project$KotlinStudy$Article = F3(
+	function (id, title, sections) {
+		return {aB: id, ak: sections, aR: title};
+	});
+var author$project$KotlinStudy$Kotlin = F2(
+	function (a, b) {
+		return {$: 3, a: a, b: b};
+	});
+var author$project$KotlinStudy$Section = F2(
+	function (title, content) {
+		return {R: content, aR: title};
+	});
+var author$project$KotlinStudy$T = function (a) {
+	return {$: 0, a: a};
+};
+var author$project$KotlinStudy$UL = function (a) {
+	return {$: 1, a: a};
+};
+var author$project$KotlinStudy$study00 = A3(
+	author$project$KotlinStudy$Article,
+	'intro',
+	'코틀린 소개',
+	_List_fromArray(
+		[
+			A2(
+			author$project$KotlinStudy$Section,
+			'코틀린이란 무엇인가?',
+			_List_fromArray(
+				[
+					author$project$KotlinStudy$UL(
+					_List_fromArray(
+						[
+							author$project$KotlinStudy$T('자바 플랫폼에서 돌아가는 프로그래밍 언어'),
+							author$project$KotlinStudy$T('간결하고 실용적'),
+							author$project$KotlinStudy$T('자바와의 상호운용성을 중시'),
+							author$project$KotlinStudy$T('성능도 자바와 같은 수준')
+						]))
+				])),
+			A2(
+			author$project$KotlinStudy$Section,
+			'코틀린 맛보기',
+			_List_fromArray(
+				[
+					A2(author$project$KotlinStudy$Kotlin, '첫 예제', '\n        data class Person(val name: String,\n                          val age: Int? = null)\n        fun main(args: Array<String>) {\n            val people = listOf(Person("영희"),\n                                Person("철수", age = 29))\n            val oldest = people.maxBy { it.age ?: 0 }\n            println("나이가 가장 많은 사람: $oldest")\n        }\n\n        // 결과: 나이가 가장 많은 사람: Person(name=철수, age=29)\n      ')
+				]))
+		]));
+var author$project$KotlinStudy$articlesView = function (model) {
+	return author$project$KotlinStudy$articleView(author$project$KotlinStudy$study00);
+};
+var author$project$Main$kotlinStudyView = function (model) {
+	return author$project$KotlinStudy$articlesView(
+		author$project$KotlinStudy$Model(model.aE));
 };
 var author$project$Main$notFoundView = elm$html$Html$text('404 찾을 수 없습니다');
 var elm$html$Html$img = _VirtualDom_node('img');
@@ -5659,7 +5852,7 @@ var author$project$Main$profileView = A2(
 				]),
 			_List_fromArray(
 				[
-					author$project$Main$markdown('백엔드 개발자. **이상적 Clojure**와 **현실적 Java**를 오가며 **실용 프로그래밍**.\n            개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새.')
+					author$project$Main$markdown('**백엔드 개발자**. 개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새.')
 				])),
 			A2(
 			elm$html$Html$footer,
@@ -5708,7 +5901,7 @@ var author$project$Main$ProjectFilter = function (a) {
 };
 var author$project$Projects$Project = F7(
 	function (category, year, title, url, role, tags, description) {
-		return {J: category, aw: description, aK: role, aP: tags, aQ: title, aS: url, ao: year};
+		return {J: category, aw: description, aL: role, aP: tags, aR: title, aT: url, ap: year};
 	});
 var author$project$Projects$data = _List_fromArray(
 	[
@@ -6169,7 +6362,7 @@ var author$project$Main$projectsView = function (model) {
 									_List_fromArray(
 										[
 											elm$html$Html$text(
-											elm$core$String$fromInt(p.ao))
+											elm$core$String$fromInt(p.ap))
 										])),
 									A2(
 									elm$html$Html$span,
@@ -6212,9 +6405,9 @@ var author$project$Main$projectsView = function (model) {
 											_List_fromArray(
 												[
 													function () {
-													var _n2 = p.aS;
+													var _n2 = p.aT;
 													if (_n2.$ === 1) {
-														return elm$html$Html$text(p.aQ);
+														return elm$html$Html$text(p.aR);
 													} else {
 														var url = _n2.a;
 														return A2(
@@ -6225,7 +6418,7 @@ var author$project$Main$projectsView = function (model) {
 																]),
 															_List_fromArray(
 																[
-																	elm$html$Html$text(p.aQ),
+																	elm$html$Html$text(p.aR),
 																	A2(
 																	elm$html$Html$span,
 																	_List_fromArray(
@@ -6275,7 +6468,7 @@ var author$project$Main$projectsView = function (model) {
 	};
 	var keyedEntryf = function (p) {
 		return _Utils_Tuple2(
-			p.aQ,
+			p.aR,
 			A2(elm$html$Html$Lazy$lazy, entryf, p));
 	};
 	var button = function (category) {
@@ -6363,7 +6556,7 @@ var author$project$Main$projectsView = function (model) {
 					A2(
 						elm$core$List$sortBy,
 						function (p) {
-							return -p.ao;
+							return -p.ap;
 						},
 						A2(
 							elm$core$List$filter,
@@ -6379,7 +6572,6 @@ var author$project$Main$projectsView = function (model) {
 							author$project$Projects$data))))
 			]));
 };
-var elm$html$Html$h1 = _VirtualDom_node('h1');
 var elm$html$Html$main_ = _VirtualDom_node('main');
 var author$project$Main$mainView = function (model) {
 	var titlef = F2(
@@ -6473,9 +6665,7 @@ var author$project$Main$routeToTitle = function (route) {
 var author$project$Main$routeToUrl = function (route) {
 	return '/' + author$project$Main$routeToTitle(route);
 };
-var elm$html$Html$li = _VirtualDom_node('li');
 var elm$html$Html$nav = _VirtualDom_node('nav');
-var elm$html$Html$ul = _VirtualDom_node('ul');
 var elm$core$Tuple$second = function (_n0) {
 	var y = _n0.b;
 	return y;
@@ -6559,14 +6749,13 @@ var author$project$Main$menuView = function (model) {
 					[
 						A2(menu, 0, 'fa-user-circle'),
 						A2(menu, 1, 'fa-file-code'),
-						A2(menu, 2, 'fa-edit'),
-						A2(menu, 3, 'fa-school')
+						A2(menu, 2, 'fa-edit')
 					]))
 			]));
 };
 var author$project$Main$view = function (model) {
 	return {
-		aq: _List_fromArray(
+		ar: _List_fromArray(
 			[
 				A2(
 				elm$html$Html$div,
@@ -6581,11 +6770,11 @@ var author$project$Main$view = function (model) {
 					])),
 				author$project$Main$footerView(model)
 			]),
-		aQ: 'hatemogi.com - ' + author$project$Main$routeToTitle(model.B)
+		aR: 'hatemogi.com - ' + author$project$Main$routeToTitle(model.B)
 	};
 };
 var elm$browser$Browser$application = _Browser_application;
 var author$project$Main$main = elm$browser$Browser$application(
-	{aD: author$project$Main$init, aF: author$project$Main$UrlChanged, aG: author$project$Main$LinkClicked, aM: author$project$Main$subscriptions, aR: author$project$Main$update, aT: author$project$Main$view});
+	{aD: author$project$Main$init, aG: author$project$Main$UrlChanged, aH: author$project$Main$LinkClicked, aM: author$project$Main$subscriptions, aS: author$project$Main$update, aU: author$project$Main$view});
 _Platform_export({'Main':{'init':author$project$Main$main(
 	elm$json$Json$Decode$succeed(0))(0)}});}(this));
