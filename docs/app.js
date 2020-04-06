@@ -5546,19 +5546,19 @@ var author$project$Intro$data = _List_fromArray(
 		A4(
 		author$project$Intro$Section,
 		'모 IT기업',
-		elm$core$Maybe$Just('2019-현재'),
+		elm$core$Maybe$Just('2020-현재'),
 		elm$core$Maybe$Nothing,
-		'경기도 소재 모 IT기업에서 백엔드 개발자로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n             혹시나 제 개인적 발언이 회사 입장에서 불편하지 않도록, 사명은 밝히지 않고 있습니다.'),
+		'경기도 소재 모 IT기업에서 백엔드 개발자로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n             혹시라도 제 개인적 발언이 회사 입장에서 불편하지 않도록, 재직중인 회사의 사명은 밝히지 않고 있습니다.'),
 		A4(
 		author$project$Intro$Section,
 		'NHN',
-		elm$core$Maybe$Just('2017-2019'),
+		elm$core$Maybe$Just('2018-2020'),
 		elm$core$Maybe$Just('https://www.nhn.com/'),
-		'NHN Dooray개발실에서 메신저 백엔드 개발을 담당하며, Akka로 메시징 서버를 개발 운영하고, Kotlin으로 웹서비스를\n             개발하였습니다. '),
+		'NHN Dooray개발실에서 업무용 메신저 서비스 개발을 담당하며, Akka로 메시징 서버를 구축했고,\n        Java와 Kotlin으로 API 서버를 개발했습니다. '),
 		A4(
 		author$project$Intro$Section,
 		'오후코드 프리랜서',
-		elm$core$Maybe$Just('2015-2017'),
+		elm$core$Maybe$Just('2015-2018'),
 		elm$core$Maybe$Just('http://ohucode.com/'),
 		'개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n             위한 서버 소프트웨어를 개발해 납품했습니다.'),
 		A4(
@@ -5566,7 +5566,7 @@ var author$project$Intro$data = _List_fromArray(
 		'카카오',
 		elm$core$Maybe$Just('2004-2015'),
 		elm$core$Maybe$Just('https://kakaocorp.com'),
-		'지금은 카카오가 된 다음커뮤니케이션에서 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. '),
+		'지금은 카카오가 된 다음커뮤니케이션에서 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. 아, 초반에 1.5년 동안 일본 도쿄 지사에서 근무하는 행운을 누렸습니다. '),
 		A4(author$project$Intro$Section, '반갑습니다', elm$core$Maybe$Nothing, elm$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.')
 	]);
 var elm$html$Html$h2 = _VirtualDom_node('h2');
