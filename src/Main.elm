@@ -251,13 +251,22 @@ profileView =
 introView : Html Msg
 introView =
     let
+        headingf : Intro.Section -> Html Msg
+        headingf section =
+            case section.url of
+                Just url ->
+                    a [ href url ] [ text section.title ]
+
+                Nothing ->
+                    text section.title
+
         sectionf : Intro.Section -> Html Msg
         sectionf section =
             article [ class "media" ]
                 [ div [ class "media-content" ]
                     [ h2 []
-                        ([ text section.title ]
-                            ++ (case section.timeline of
+                        (headingf section
+                            :: (case section.timeline of
                                     Just timeline ->
                                         [ small [ class "timeline" ] [ text timeline ] ]
 
