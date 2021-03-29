@@ -318,8 +318,7 @@ projectsView model =
 
         entryf : Projects.Project -> Html Msg
         entryf p =
-            article
-                [ class "media" ]
+            article [ class "media" ]
                 [ div [ class "media-left" ]
                     [ div [ class "tags has-addons" ]
                         [ span [ class "tag" ] [ text (String.fromInt p.year) ]
@@ -346,50 +345,26 @@ projectsView model =
 
         button : String -> Html Msg
         button category =
-            case model.projectFilter of
-                Just cat ->
-                    span
-                        [ class "button"
-                        , class
-                            (if category == cat then
-                                categoryColor cat
+            span
+                [ class "button"
+                , class
+                    (if category == Maybe.withDefault "전체" model.projectFilter then
+                        categoryColor category
 
-                             else
-                                ""
-                            )
-                        , onClick
-                            (ProjectFilter
-                                (if category == "전체" then
-                                    Nothing
+                     else
+                        ""
+                    )
+                , onClick
+                    (ProjectFilter
+                        (if category == "전체" then
+                            Nothing
 
-                                 else
-                                    Just category
-                                )
-                            )
-                        ]
-                        [ text category ]
-
-                Nothing ->
-                    span
-                        [ class "button"
-                        , class
-                            (if category == "전체" then
-                                "is-link"
-
-                             else
-                                ""
-                            )
-                        , onClick
-                            (ProjectFilter
-                                (if category == "전체" then
-                                    Nothing
-
-                                 else
-                                    Just category
-                                )
-                            )
-                        ]
-                        [ text category ]
+                         else
+                            Just category
+                        )
+                    )
+                ]
+                [ text category ]
     in
     div []
         [ article [ class "message" ]
@@ -441,7 +416,7 @@ articlesView model =
                아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다."""
                 ]
             ]
-        , div [] (Article.data |> L.map articlef)
+        , div [] (L.map articlef Article.data)
         ]
 
 
@@ -453,7 +428,7 @@ kotlinStudyView model =
 certificatesView : Model -> Html Msg
 certificatesView model =
     div [ class "container" ]
-        ( article [ class "message" ]
+        (article [ class "message" ]
             [ div [ class "message-body" ]
                 [ p []
                     [ text """모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다. 
@@ -462,7 +437,7 @@ certificatesView model =
                     ]
                 ]
             ]
-        :: List.map certificateView Certs.data
+            :: L.map certificateView Certs.data
         )
 
 
