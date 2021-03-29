@@ -14,6 +14,7 @@ type alias Project =
     }
 
 
+data : List Project
 data =
     [ Project "취미"
         2019

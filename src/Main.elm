@@ -3,6 +3,7 @@ module Main exposing (main)
 import Article
 import Browser
 import Browser.Navigation as Nav
+import Certs
 import Essay
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -45,7 +46,7 @@ type Route
     = R소개
     | R프로젝트
     | R글
-    | R코틀린
+    | R수료증
     | R404
 
 
@@ -112,8 +113,8 @@ urlToRoute url =
         [ "글" ] ->
             R글
 
-        [ "코틀린" ] ->
-            R코틀린
+        [ "수료증" ] ->
+            R수료증
 
         _ ->
             R404
@@ -131,8 +132,8 @@ routeToTitle route =
         R글 ->
             "글"
 
-        R코틀린 ->
-            "코틀린"
+        R수료증 ->
+            "수료증"
 
         R404 ->
             "404"
@@ -170,6 +171,7 @@ menuView model =
             [ menu R소개 "fa-user-circle"
             , menu R프로젝트 "fa-file-code"
             , menu R글 "fa-edit"
+            , menu R수료증 "fa-certificate"
 
             -- , menu R코틀린 "fa-school"
             --          , menu S잡담 ("fa-comment", "잡담")
@@ -198,8 +200,8 @@ mainView model =
                     R글 ->
                         titlef "글" (articlesView model)
 
-                    R코틀린 ->
-                        titlef "코틀린" (kotlinStudyView model)
+                    R수료증 ->
+                        titlef "수료증" (certificatesView model)
 
                     R404 ->
                         titlef "404 찾을 수 없습니다" notFoundView
@@ -446,6 +448,28 @@ articlesView model =
 kotlinStudyView : Model -> Html Msg
 kotlinStudyView model =
     Kt.articlesView (Kt.Model model.key)
+
+
+certificatesView : Model -> Html Msg
+certificatesView model =
+    div [ class "container" ]
+        ( article [ class "message" ]
+            [ div [ class "message-body" ]
+                [ p []
+                    [ text """모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다. 
+                    하지만 제게는 그런 장식품이 없었지요. 그 부러웠던 마음을 이제라도 달래려, 
+                    그간 받은 수료증이라도 이렇게 온라인에 걸어두렵니다. """
+                    ]
+                ]
+            ]
+        :: List.map certificateView Certs.data
+        )
+
+
+certificateView : Certs.Certificate -> Html Msg
+certificateView cert =
+    div [ class "box" ]
+        [ article [ class "media" ] [ text cert.title ] ]
 
 
 rantsView : Model -> Html Msg
