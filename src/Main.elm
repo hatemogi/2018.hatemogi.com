@@ -235,7 +235,8 @@ profileView =
         [ div [ class "card-image" ] [ img [ src "img/profile.jpg" ] [] ]
         , div [ class "card-content has-text-left" ]
             [ markdown
-                """**백엔드 개발자**. 개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새."""
+                """소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자
+               직업으로 삼았습니다. 모 IT기업에서 백엔드 개발자로 일하고 있습니다."""
             ]
         , footer [ class "card-footer" ]
             [ p [ class "card-footer-item" ]
@@ -281,7 +282,14 @@ introView =
                 ]
     in
     div []
-        (L.map sectionf Intro.data
+        (article [ class "message" ]
+            [ div [ class "message-body" ]
+                [ text """어딘가에서 백엔드 개발자로 일하고 있습니다.
+                       오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,
+                       Clojure, Scala, Haskell 같은 함수형 프로그래밍 언어를 공부하고 있습니다."""
+                ]
+            ]
+            :: L.map sectionf Intro.data
             ++ [ div [ class "media" ]
                     [ a [ class "button is-info", href "/프로젝트" ] [ text "프로젝트 보기" ] ]
                ]
@@ -427,7 +435,7 @@ kotlinStudyView model =
 
 certificatesView : Model -> Html Msg
 certificatesView model =
-    div [ class "container" ]
+    div []
         (article [ class "message" ]
             [ div [ class "message-body" ]
                 [ p []
@@ -444,7 +452,28 @@ certificatesView model =
 certificateView : Certs.Certificate -> Html Msg
 certificateView cert =
     div [ class "box" ]
-        [ article [ class "media" ] [ text cert.title ] ]
+        [ article [ class "media" ]
+            [ div [ class "media-left is-hidden-mobile" ]
+                [ figure [ class "image" ]
+                    [ a [ href cert.url ]
+                        [ img
+                            [ src ("thumbnails/" ++ cert.image)
+                            , attribute "srcset" ("thumbnails/" ++ cert.image ++ " 2x")
+                            ]
+                            []
+                        ]
+                    ]
+                ]
+            , div [ class "media-content" ]
+                [ div [ class "content" ]
+                    [ h3 [] [ a [ href cert.url ] [ text cert.title ] ]
+                    , p [] [ text cert.descrition ]
+                    ]
+                , div [ class "tags" ]
+                    (L.map (\t -> span [ class "tag is-info" ] [ text t ]) cert.tags)
+                ]
+            ]
+        ]
 
 
 rantsView : Model -> Html Msg

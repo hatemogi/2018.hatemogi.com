@@ -278,7 +278,7 @@ data =
     , Project "취미"
         1995
         "3인용 테트리스 게임"
-        (Just "http://blog.naver.com/PostView.nhn?blogId=taksangs&logNo=60050324463")
+        (Just "https://youtu.be/U0ZhSs5a3Ws")
         "개인"
         [ "Borland Pascal", "Assembly", "MS-DOS" ]
         """직접 개발한 VESA 한글 그래픽 라이브러리를 이용한 테트리스 게임 개발. 고등학교 시절에 직접 개발한 한글 그래픽 라이브러리를 이용해

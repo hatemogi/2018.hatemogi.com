@@ -80,6 +80,190 @@ function A9(fun, a, b, c, d, e, f, g, h, i) {
 
 
 
+// EQUALITY
+
+function _Utils_eq(x, y)
+{
+	for (
+		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
+		isEqual && (pair = stack.pop());
+		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
+		)
+	{}
+
+	return isEqual;
+}
+
+function _Utils_eqHelp(x, y, depth, stack)
+{
+	if (depth > 100)
+	{
+		stack.push(_Utils_Tuple2(x,y));
+		return true;
+	}
+
+	if (x === y)
+	{
+		return true;
+	}
+
+	if (typeof x !== 'object' || x === null || y === null)
+	{
+		typeof x === 'function' && _Debug_crash(5);
+		return false;
+	}
+
+	/**_UNUSED/
+	if (x.$ === 'Set_elm_builtin')
+	{
+		x = $elm$core$Set$toList(x);
+		y = $elm$core$Set$toList(y);
+	}
+	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
+	{
+		x = $elm$core$Dict$toList(x);
+		y = $elm$core$Dict$toList(y);
+	}
+	//*/
+
+	/**/
+	if (x.$ < 0)
+	{
+		x = $elm$core$Dict$toList(x);
+		y = $elm$core$Dict$toList(y);
+	}
+	//*/
+
+	for (var key in x)
+	{
+		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+var _Utils_equal = F2(_Utils_eq);
+var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
+
+
+
+// COMPARISONS
+
+// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
+// the particular integer values assigned to LT, EQ, and GT.
+
+function _Utils_cmp(x, y, ord)
+{
+	if (typeof x !== 'object')
+	{
+		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
+	}
+
+	/**_UNUSED/
+	if (x instanceof String)
+	{
+		var a = x.valueOf();
+		var b = y.valueOf();
+		return a === b ? 0 : a < b ? -1 : 1;
+	}
+	//*/
+
+	/**/
+	if (!x.$)
+	//*/
+	/**_UNUSED/
+	if (x.$[0] === '#')
+	//*/
+	{
+		return (ord = _Utils_cmp(x.a, y.a))
+			? ord
+			: (ord = _Utils_cmp(x.b, y.b))
+				? ord
+				: _Utils_cmp(x.c, y.c);
+	}
+
+	// traverse conses until end of a list or a mismatch
+	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
+	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
+}
+
+var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
+var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
+var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
+var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
+
+var _Utils_compare = F2(function(x, y)
+{
+	var n = _Utils_cmp(x, y);
+	return n < 0 ? $elm$core$Basics$LT : n ? $elm$core$Basics$GT : $elm$core$Basics$EQ;
+});
+
+
+// COMMON VALUES
+
+var _Utils_Tuple0 = 0;
+var _Utils_Tuple0_UNUSED = { $: '#0' };
+
+function _Utils_Tuple2(a, b) { return { a: a, b: b }; }
+function _Utils_Tuple2_UNUSED(a, b) { return { $: '#2', a: a, b: b }; }
+
+function _Utils_Tuple3(a, b, c) { return { a: a, b: b, c: c }; }
+function _Utils_Tuple3_UNUSED(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
+
+function _Utils_chr(c) { return c; }
+function _Utils_chr_UNUSED(c) { return new String(c); }
+
+
+// RECORDS
+
+function _Utils_update(oldRecord, updatedFields)
+{
+	var newRecord = {};
+
+	for (var key in oldRecord)
+	{
+		newRecord[key] = oldRecord[key];
+	}
+
+	for (var key in updatedFields)
+	{
+		newRecord[key] = updatedFields[key];
+	}
+
+	return newRecord;
+}
+
+
+// APPEND
+
+var _Utils_append = F2(_Utils_ap);
+
+function _Utils_ap(xs, ys)
+{
+	// append Strings
+	if (typeof xs === 'string')
+	{
+		return xs + ys;
+	}
+
+	// append Lists
+	if (!xs.b)
+	{
+		return ys;
+	}
+	var root = _List_Cons(xs.a, ys);
+	xs = xs.b
+	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
+	{
+		curr = curr.b = _List_Cons(xs.a, ys);
+	}
+	return root;
+}
+
+
+
 var _List_Nil = { $: 0 };
 var _List_Nil_UNUSED = { $: '[]' };
 
@@ -155,193 +339,9 @@ var _List_sortWith = F2(function(f, xs)
 {
 	return _List_fromArray(_List_toArray(xs).sort(function(a, b) {
 		var ord = A2(f, a, b);
-		return ord === elm$core$Basics$EQ ? 0 : ord === elm$core$Basics$LT ? -1 : 1;
+		return ord === $elm$core$Basics$EQ ? 0 : ord === $elm$core$Basics$LT ? -1 : 1;
 	}));
 });
-
-
-
-// EQUALITY
-
-function _Utils_eq(x, y)
-{
-	for (
-		var pair, stack = [], isEqual = _Utils_eqHelp(x, y, 0, stack);
-		isEqual && (pair = stack.pop());
-		isEqual = _Utils_eqHelp(pair.a, pair.b, 0, stack)
-		)
-	{}
-
-	return isEqual;
-}
-
-function _Utils_eqHelp(x, y, depth, stack)
-{
-	if (depth > 100)
-	{
-		stack.push(_Utils_Tuple2(x,y));
-		return true;
-	}
-
-	if (x === y)
-	{
-		return true;
-	}
-
-	if (typeof x !== 'object' || x === null || y === null)
-	{
-		typeof x === 'function' && _Debug_crash(5);
-		return false;
-	}
-
-	/**_UNUSED/
-	if (x.$ === 'Set_elm_builtin')
-	{
-		x = elm$core$Set$toList(x);
-		y = elm$core$Set$toList(y);
-	}
-	if (x.$ === 'RBNode_elm_builtin' || x.$ === 'RBEmpty_elm_builtin')
-	{
-		x = elm$core$Dict$toList(x);
-		y = elm$core$Dict$toList(y);
-	}
-	//*/
-
-	/**/
-	if (x.$ < 0)
-	{
-		x = elm$core$Dict$toList(x);
-		y = elm$core$Dict$toList(y);
-	}
-	//*/
-
-	for (var key in x)
-	{
-		if (!_Utils_eqHelp(x[key], y[key], depth + 1, stack))
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-var _Utils_equal = F2(_Utils_eq);
-var _Utils_notEqual = F2(function(a, b) { return !_Utils_eq(a,b); });
-
-
-
-// COMPARISONS
-
-// Code in Generate/JavaScript.hs, Basics.js, and List.js depends on
-// the particular integer values assigned to LT, EQ, and GT.
-
-function _Utils_cmp(x, y, ord)
-{
-	if (typeof x !== 'object')
-	{
-		return x === y ? /*EQ*/ 0 : x < y ? /*LT*/ -1 : /*GT*/ 1;
-	}
-
-	/**_UNUSED/
-	if (x instanceof String)
-	{
-		var a = x.valueOf();
-		var b = y.valueOf();
-		return a === b ? 0 : a < b ? -1 : 1;
-	}
-	//*/
-
-	/**/
-	if (!x.$)
-	//*/
-	/**_UNUSED/
-	if (x.$[0] === '#')
-	//*/
-	{
-		return (ord = _Utils_cmp(x.a, y.a))
-			? ord
-			: (ord = _Utils_cmp(x.b, y.b))
-				? ord
-				: _Utils_cmp(x.c, y.c);
-	}
-
-	// traverse conses until end of a list or a mismatch
-	for (; x.b && y.b && !(ord = _Utils_cmp(x.a, y.a)); x = x.b, y = y.b) {} // WHILE_CONSES
-	return ord || (x.b ? /*GT*/ 1 : y.b ? /*LT*/ -1 : /*EQ*/ 0);
-}
-
-var _Utils_lt = F2(function(a, b) { return _Utils_cmp(a, b) < 0; });
-var _Utils_le = F2(function(a, b) { return _Utils_cmp(a, b) < 1; });
-var _Utils_gt = F2(function(a, b) { return _Utils_cmp(a, b) > 0; });
-var _Utils_ge = F2(function(a, b) { return _Utils_cmp(a, b) >= 0; });
-
-var _Utils_compare = F2(function(x, y)
-{
-	var n = _Utils_cmp(x, y);
-	return n < 0 ? elm$core$Basics$LT : n ? elm$core$Basics$GT : elm$core$Basics$EQ;
-});
-
-
-// COMMON VALUES
-
-var _Utils_Tuple0 = 0;
-var _Utils_Tuple0_UNUSED = { $: '#0' };
-
-function _Utils_Tuple2(a, b) { return { a: a, b: b }; }
-function _Utils_Tuple2_UNUSED(a, b) { return { $: '#2', a: a, b: b }; }
-
-function _Utils_Tuple3(a, b, c) { return { a: a, b: b, c: c }; }
-function _Utils_Tuple3_UNUSED(a, b, c) { return { $: '#3', a: a, b: b, c: c }; }
-
-function _Utils_chr(c) { return c; }
-function _Utils_chr_UNUSED(c) { return new String(c); }
-
-
-// RECORDS
-
-function _Utils_update(oldRecord, updatedFields)
-{
-	var newRecord = {};
-
-	for (var key in oldRecord)
-	{
-		newRecord[key] = oldRecord[key];
-	}
-
-	for (var key in updatedFields)
-	{
-		newRecord[key] = updatedFields[key];
-	}
-
-	return newRecord;
-}
-
-
-// APPEND
-
-var _Utils_append = F2(_Utils_ap);
-
-function _Utils_ap(xs, ys)
-{
-	// append Strings
-	if (typeof xs === 'string')
-	{
-		return xs + ys;
-	}
-
-	// append Lists
-	if (!xs.b)
-	{
-		return ys;
-	}
-	var root = _List_Cons(xs.a, ys);
-	xs = xs.b
-	for (var curr = root; xs.b; xs = xs.b) // WHILE_CONS
-	{
-		curr = curr.b = _List_Cons(xs.a, ys);
-	}
-	return root;
-}
 
 
 
@@ -591,21 +591,21 @@ function _Debug_toAnsiString(ansi, value)
 		{
 			return _Debug_ctorColor(ansi, 'Set')
 				+ _Debug_fadeColor(ansi, '.fromList') + ' '
-				+ _Debug_toAnsiString(ansi, elm$core$Set$toList(value));
+				+ _Debug_toAnsiString(ansi, $elm$core$Set$toList(value));
 		}
 
 		if (tag === 'RBNode_elm_builtin' || tag === 'RBEmpty_elm_builtin')
 		{
 			return _Debug_ctorColor(ansi, 'Dict')
 				+ _Debug_fadeColor(ansi, '.fromList') + ' '
-				+ _Debug_toAnsiString(ansi, elm$core$Dict$toList(value));
+				+ _Debug_toAnsiString(ansi, $elm$core$Dict$toList(value));
 		}
 
 		if (tag === 'Array_elm_builtin')
 		{
 			return _Debug_ctorColor(ansi, 'Array')
 				+ _Debug_fadeColor(ansi, '.fromList') + ' '
-				+ _Debug_toAnsiString(ansi, elm$core$Array$toList(value));
+				+ _Debug_toAnsiString(ansi, $elm$core$Array$toList(value));
 		}
 
 		if (tag === '::' || tag === '[]')
@@ -848,12 +848,12 @@ function _String_uncons(string)
 {
 	var word = string.charCodeAt(0);
 	return word
-		? elm$core$Maybe$Just(
+		? $elm$core$Maybe$Just(
 			0xD800 <= word && word <= 0xDBFF
 				? _Utils_Tuple2(_Utils_chr(string[0] + string[1]), string.slice(2))
 				: _Utils_Tuple2(_Utils_chr(string[0]), string.slice(1))
 		)
-		: elm$core$Maybe$Nothing;
+		: $elm$core$Maybe$Nothing;
 }
 
 var _String_append = F2(function(a, b)
@@ -1118,14 +1118,14 @@ function _String_toInt(str)
 		var code = str.charCodeAt(i);
 		if (code < 0x30 || 0x39 < code)
 		{
-			return elm$core$Maybe$Nothing;
+			return $elm$core$Maybe$Nothing;
 		}
 		total = 10 * total + code - 0x30;
 	}
 
 	return i == start
-		? elm$core$Maybe$Nothing
-		: elm$core$Maybe$Just(code0 == 0x2D ? -total : total);
+		? $elm$core$Maybe$Nothing
+		: $elm$core$Maybe$Just(code0 == 0x2D ? -total : total);
 }
 
 
@@ -1136,11 +1136,11 @@ function _String_toFloat(s)
 	// check if it is a hex, octal, or binary number
 	if (s.length === 0 || /[\sxbo]/.test(s))
 	{
-		return elm$core$Maybe$Nothing;
+		return $elm$core$Maybe$Nothing;
 	}
 	var n = +s;
 	// faster isNaN check
-	return n === n ? elm$core$Maybe$Just(n) : elm$core$Maybe$Nothing;
+	return n === n ? $elm$core$Maybe$Just(n) : $elm$core$Maybe$Nothing;
 }
 
 function _String_fromList(chars)
@@ -1149,23 +1149,6 @@ function _String_fromList(chars)
 }
 
 
-
-function _Url_percentEncode(string)
-{
-	return encodeURIComponent(string);
-}
-
-function _Url_percentDecode(string)
-{
-	try
-	{
-		return elm$core$Maybe$Just(decodeURIComponent(string));
-	}
-	catch (e)
-	{
-		return elm$core$Maybe$Nothing;
-	}
-}
 
 
 function _Char_toCode(char)
@@ -1220,7 +1203,7 @@ function _Char_toLocaleLower(char)
 /**_UNUSED/
 function _Json_errorToString(error)
 {
-	return elm$json$Json$Decode$errorToString(error);
+	return $elm$json$Json$Decode$errorToString(error);
 }
 //*/
 
@@ -1361,7 +1344,7 @@ var _Json_runOnString = F2(function(decoder, string)
 	}
 	catch (e)
 	{
-		return elm$core$Result$Err(A2(elm$json$Json$Decode$Failure, 'This is not valid JSON! ' + e.message, _Json_wrap(string)));
+		return $elm$core$Result$Err(A2($elm$json$Json$Decode$Failure, 'This is not valid JSON! ' + e.message, _Json_wrap(string)));
 	}
 });
 
@@ -1376,7 +1359,7 @@ function _Json_runHelp(decoder, value)
 	{
 		case 3:
 			return (typeof value === 'boolean')
-				? elm$core$Result$Ok(value)
+				? $elm$core$Result$Ok(value)
 				: _Json_expecting('a BOOL', value);
 
 		case 2:
@@ -1385,34 +1368,34 @@ function _Json_runHelp(decoder, value)
 			}
 
 			if (-2147483647 < value && value < 2147483647 && (value | 0) === value) {
-				return elm$core$Result$Ok(value);
+				return $elm$core$Result$Ok(value);
 			}
 
 			if (isFinite(value) && !(value % 1)) {
-				return elm$core$Result$Ok(value);
+				return $elm$core$Result$Ok(value);
 			}
 
 			return _Json_expecting('an INT', value);
 
 		case 4:
 			return (typeof value === 'number')
-				? elm$core$Result$Ok(value)
+				? $elm$core$Result$Ok(value)
 				: _Json_expecting('a FLOAT', value);
 
 		case 6:
 			return (typeof value === 'string')
-				? elm$core$Result$Ok(value)
+				? $elm$core$Result$Ok(value)
 				: (value instanceof String)
-					? elm$core$Result$Ok(value + '')
+					? $elm$core$Result$Ok(value + '')
 					: _Json_expecting('a STRING', value);
 
 		case 9:
 			return (value === null)
-				? elm$core$Result$Ok(decoder.c)
+				? $elm$core$Result$Ok(decoder.c)
 				: _Json_expecting('null', value);
 
 		case 5:
-			return elm$core$Result$Ok(_Json_wrap(value));
+			return $elm$core$Result$Ok(_Json_wrap(value));
 
 		case 7:
 			if (!Array.isArray(value))
@@ -1435,7 +1418,7 @@ function _Json_runHelp(decoder, value)
 				return _Json_expecting('an OBJECT with a field named `' + field + '`', value);
 			}
 			var result = _Json_runHelp(decoder.b, value[field]);
-			return (elm$core$Result$isOk(result)) ? result : elm$core$Result$Err(A2(elm$json$Json$Decode$Field, field, result.a));
+			return ($elm$core$Result$isOk(result)) ? result : $elm$core$Result$Err(A2($elm$json$Json$Decode$Field, field, result.a));
 
 		case 11:
 			var index = decoder.e;
@@ -1448,7 +1431,7 @@ function _Json_runHelp(decoder, value)
 				return _Json_expecting('a LONGER array. Need index ' + index + ' but only see ' + value.length + ' entries', value);
 			}
 			var result = _Json_runHelp(decoder.b, value[index]);
-			return (elm$core$Result$isOk(result)) ? result : elm$core$Result$Err(A2(elm$json$Json$Decode$Index, index, result.a));
+			return ($elm$core$Result$isOk(result)) ? result : $elm$core$Result$Err(A2($elm$json$Json$Decode$Index, index, result.a));
 
 		case 12:
 			if (typeof value !== 'object' || value === null || Array.isArray(value))
@@ -1463,14 +1446,14 @@ function _Json_runHelp(decoder, value)
 				if (value.hasOwnProperty(key))
 				{
 					var result = _Json_runHelp(decoder.b, value[key]);
-					if (!elm$core$Result$isOk(result))
+					if (!$elm$core$Result$isOk(result))
 					{
-						return elm$core$Result$Err(A2(elm$json$Json$Decode$Field, key, result.a));
+						return $elm$core$Result$Err(A2($elm$json$Json$Decode$Field, key, result.a));
 					}
 					keyValuePairs = _List_Cons(_Utils_Tuple2(key, result.a), keyValuePairs);
 				}
 			}
-			return elm$core$Result$Ok(elm$core$List$reverse(keyValuePairs));
+			return $elm$core$Result$Ok($elm$core$List$reverse(keyValuePairs));
 
 		case 13:
 			var answer = decoder.f;
@@ -1478,17 +1461,17 @@ function _Json_runHelp(decoder, value)
 			for (var i = 0; i < decoders.length; i++)
 			{
 				var result = _Json_runHelp(decoders[i], value);
-				if (!elm$core$Result$isOk(result))
+				if (!$elm$core$Result$isOk(result))
 				{
 					return result;
 				}
 				answer = answer(result.a);
 			}
-			return elm$core$Result$Ok(answer);
+			return $elm$core$Result$Ok(answer);
 
 		case 14:
 			var result = _Json_runHelp(decoder.b, value);
-			return (!elm$core$Result$isOk(result))
+			return (!$elm$core$Result$isOk(result))
 				? result
 				: _Json_runHelp(decoder.h(result.a), value);
 
@@ -1497,19 +1480,19 @@ function _Json_runHelp(decoder, value)
 			for (var temp = decoder.g; temp.b; temp = temp.b) // WHILE_CONS
 			{
 				var result = _Json_runHelp(temp.a, value);
-				if (elm$core$Result$isOk(result))
+				if ($elm$core$Result$isOk(result))
 				{
 					return result;
 				}
 				errors = _List_Cons(result.a, errors);
 			}
-			return elm$core$Result$Err(elm$json$Json$Decode$OneOf(elm$core$List$reverse(errors)));
+			return $elm$core$Result$Err($elm$json$Json$Decode$OneOf($elm$core$List$reverse(errors)));
 
 		case 1:
-			return elm$core$Result$Err(A2(elm$json$Json$Decode$Failure, decoder.a, _Json_wrap(value)));
+			return $elm$core$Result$Err(A2($elm$json$Json$Decode$Failure, decoder.a, _Json_wrap(value)));
 
 		case 0:
-			return elm$core$Result$Ok(decoder.a);
+			return $elm$core$Result$Ok(decoder.a);
 	}
 }
 
@@ -1520,23 +1503,23 @@ function _Json_runArrayDecoder(decoder, value, toElmValue)
 	for (var i = 0; i < len; i++)
 	{
 		var result = _Json_runHelp(decoder, value[i]);
-		if (!elm$core$Result$isOk(result))
+		if (!$elm$core$Result$isOk(result))
 		{
-			return elm$core$Result$Err(A2(elm$json$Json$Decode$Index, i, result.a));
+			return $elm$core$Result$Err(A2($elm$json$Json$Decode$Index, i, result.a));
 		}
 		array[i] = result.a;
 	}
-	return elm$core$Result$Ok(toElmValue(array));
+	return $elm$core$Result$Ok(toElmValue(array));
 }
 
 function _Json_toElmArray(array)
 {
-	return A2(elm$core$Array$initialize, array.length, function(i) { return array[i]; });
+	return A2($elm$core$Array$initialize, array.length, function(i) { return array[i]; });
 }
 
 function _Json_expecting(type, value)
 {
-	return elm$core$Result$Err(A2(elm$json$Json$Decode$Failure, 'Expecting ' + type, _Json_wrap(value)));
+	return $elm$core$Result$Err(A2($elm$json$Json$Decode$Failure, 'Expecting ' + type, _Json_wrap(value)));
 }
 
 
@@ -1858,9 +1841,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aD,
-		impl.aS,
-		impl.aM,
+		impl.aC,
+		impl.aT,
+		impl.aN,
 		function() { return function() {} }
 	);
 });
@@ -1873,7 +1856,7 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 function _Platform_initialize(flagDecoder, args, init, update, subscriptions, stepperBuilder)
 {
 	var result = A2(_Json_run, flagDecoder, _Json_wrap(args ? args['flags'] : undefined));
-	elm$core$Result$isOk(result) || _Debug_crash(2 /**_UNUSED/, _Json_errorToString(result.a) /**/);
+	$elm$core$Result$isOk(result) || _Debug_crash(2 /**_UNUSED/, _Json_errorToString(result.a) /**/);
 	var managers = {};
 	result = init(result.a);
 	var model = result.a;
@@ -2251,7 +2234,7 @@ function _Platform_setupIncomingPort(name, sendToApp)
 	{
 		var result = A2(_Json_run, converter, _Json_wrap(incomingValue));
 
-		elm$core$Result$isOk(result) || _Debug_crash(4, name, result.a);
+		$elm$core$Result$isOk(result) || _Debug_crash(4, name, result.a);
 
 		var value = result.a;
 		for (var temp = subs; temp.b; temp = temp.b) // WHILE_CONS
@@ -2629,7 +2612,7 @@ var _VirtualDom_mapAttribute = F2(function(func, attr)
 
 function _VirtualDom_mapHandler(func, handler)
 {
-	var tag = elm$virtual_dom$VirtualDom$toHandlerInt(handler);
+	var tag = $elm$virtual_dom$VirtualDom$toHandlerInt(handler);
 
 	// 0 = Normal
 	// 1 = MayStopPropagation
@@ -2640,13 +2623,13 @@ function _VirtualDom_mapHandler(func, handler)
 		$: handler.$,
 		a:
 			!tag
-				? A2(elm$json$Json$Decode$map, func, handler.a)
+				? A2($elm$json$Json$Decode$map, func, handler.a)
 				:
-			A3(elm$json$Json$Decode$map2,
+			A3($elm$json$Json$Decode$map2,
 				tag < 3
 					? _VirtualDom_mapEventTuple
 					: _VirtualDom_mapEventRecord,
-				elm$json$Json$Decode$succeed(func),
+				$elm$json$Json$Decode$succeed(func),
 				handler.a
 			)
 	};
@@ -2662,7 +2645,7 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 	return {
 		k: func(record.k),
 		O: record.O,
-		M: record.M
+		L: record.L
 	}
 });
 
@@ -2884,7 +2867,7 @@ function _VirtualDom_applyEvents(domNode, eventNode, events)
 		oldCallback = _VirtualDom_makeCallback(eventNode, newHandler);
 		domNode.addEventListener(key, oldCallback,
 			_VirtualDom_passiveSupported
-			&& { passive: elm$virtual_dom$VirtualDom$toHandlerInt(newHandler) < 2 }
+			&& { passive: $elm$virtual_dom$VirtualDom$toHandlerInt(newHandler) < 2 }
 		);
 		allCallbacks[key] = oldCallback;
 	}
@@ -2917,12 +2900,12 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		var handler = callback.q;
 		var result = _Json_runHelp(handler.a, event);
 
-		if (!elm$core$Result$isOk(result))
+		if (!$elm$core$Result$isOk(result))
 		{
 			return;
 		}
 
-		var tag = elm$virtual_dom$VirtualDom$toHandlerInt(handler);
+		var tag = $elm$virtual_dom$VirtualDom$toHandlerInt(handler);
 
 		// 0 = Normal
 		// 1 = MayStopPropagation
@@ -2934,7 +2917,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.O;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.M) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.L) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3880,11 +3863,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aD,
-		impl.aS,
-		impl.aM,
+		impl.aC,
+		impl.aT,
+		impl.aN,
 		function(sendToApp, initialModel) {
-			var view = impl.aU;
+			var view = impl.aV;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3916,12 +3899,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aD,
-		impl.aS,
-		impl.aM,
+		impl.aC,
+		impl.aT,
+		impl.aN,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.C && impl.C(sendToApp)
-			var view = impl.aU;
+			var divertHrefToApp = impl.M && impl.M(sendToApp)
+			var view = impl.aV;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3929,12 +3912,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ar);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.ao);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.aR) && (_VirtualDom_doc.title = title = doc.aR);
+				(title !== doc.aS) && (_VirtualDom_doc.title = title = doc.aS);
 			});
 		}
 	);
@@ -3985,12 +3968,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.aG;
-	var onUrlRequest = impl.aH;
+	var onUrlChange = impl.aF;
+	var onUrlRequest = impl.aG;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		C: function(sendToApp)
+		M: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4003,37 +3986,37 @@ function _Browser_application(impl)
 					event.preventDefault();
 					var href = domNode.href;
 					var curr = _Browser_getUrl();
-					var next = elm$url$Url$fromString(href).a;
+					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.ae === next.ae
-							&& curr.Y === next.Y
-							&& curr.ab.a === next.ab.a
+							&& curr.ad === next.ad
+							&& curr.X === next.X
+							&& curr.aa.a === next.aa.a
 						)
-							? elm$browser$Browser$Internal(next)
-							: elm$browser$Browser$External(href)
+							? $elm$browser$Browser$Internal(next)
+							: $elm$browser$Browser$External(href)
 					));
 				}
 			});
 		},
-		aD: function(flags)
+		aC: function(flags)
 		{
-			return A3(impl.aD, flags, _Browser_getUrl(), key);
+			return A3(impl.aC, flags, _Browser_getUrl(), key);
 		},
-		aU: impl.aU,
-		aS: impl.aS,
-		aM: impl.aM
+		aV: impl.aV,
+		aT: impl.aT,
+		aN: impl.aN
 	});
 }
 
 function _Browser_getUrl()
 {
-	return elm$url$Url$fromString(_VirtualDom_doc.location.href).a || _Debug_crash(1);
+	return $elm$url$Url$fromString(_VirtualDom_doc.location.href).a || _Debug_crash(1);
 }
 
 var _Browser_go = F2(function(key, n)
 {
-	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function() {
+	return A2($elm$core$Task$perform, $elm$core$Basics$never, _Scheduler_binding(function() {
 		n && history.go(n);
 		key();
 	}));
@@ -4041,7 +4024,7 @@ var _Browser_go = F2(function(key, n)
 
 var _Browser_pushUrl = F2(function(key, url)
 {
-	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function() {
+	return A2($elm$core$Task$perform, $elm$core$Basics$never, _Scheduler_binding(function() {
 		history.pushState({}, '', url);
 		key();
 	}));
@@ -4049,7 +4032,7 @@ var _Browser_pushUrl = F2(function(key, url)
 
 var _Browser_replaceUrl = F2(function(key, url)
 {
-	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function() {
+	return A2($elm$core$Task$perform, $elm$core$Basics$never, _Scheduler_binding(function() {
 		history.replaceState({}, '', url);
 		key();
 	}));
@@ -4077,7 +4060,7 @@ var _Browser_on = F3(function(node, eventName, sendToSelf)
 var _Browser_decodeEvent = F2(function(decoder, event)
 {
 	var result = _Json_runHelp(decoder, event);
-	return elm$core$Result$isOk(result) ? elm$core$Maybe$Just(result.a) : elm$core$Maybe$Nothing;
+	return $elm$core$Result$isOk(result) ? $elm$core$Maybe$Just(result.a) : $elm$core$Maybe$Nothing;
 });
 
 
@@ -4088,17 +4071,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aA: 'hidden', z: 'visibilitychange' }
+		? { ay: 'hidden', z: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aA: 'mozHidden', z: 'mozvisibilitychange' }
+		? { ay: 'mozHidden', z: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aA: 'msHidden', z: 'msvisibilitychange' }
+		? { ay: 'msHidden', z: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aA: 'webkitHidden', z: 'webkitvisibilitychange' }
-		: { aA: 'hidden', z: 'visibilitychange' };
+		? { ay: 'webkitHidden', z: 'webkitvisibilitychange' }
+		: { ay: 'hidden', z: 'visibilitychange' };
 }
 
 
@@ -4142,7 +4125,7 @@ function _Browser_withNode(id, doStuff)
 			var node = document.getElementById(id);
 			callback(node
 				? _Scheduler_succeed(doStuff(node))
-				: _Scheduler_fail(elm$browser$Browser$Dom$NotFound(id))
+				: _Scheduler_fail($elm$browser$Browser$Dom$NotFound(id))
 			);
 		});
 	});
@@ -4179,10 +4162,10 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aj: _Browser_getScene(),
-		ao: {
-			H: _Browser_window.pageXOffset,
-			I: _Browser_window.pageYOffset,
+		ah: _Browser_getScene(),
+		al: {
+			G: _Browser_window.pageXOffset,
+			H: _Browser_window.pageYOffset,
 			x: _Browser_doc.documentElement.clientWidth,
 			s: _Browser_doc.documentElement.clientHeight
 		}
@@ -4218,13 +4201,13 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aj: {
+			ah: {
 				x: node.scrollWidth,
 				s: node.scrollHeight
 			},
-			ao: {
-				H: node.scrollLeft,
-				I: node.scrollTop,
+			al: {
+				G: node.scrollLeft,
+				H: node.scrollTop,
 				x: node.clientWidth,
 				s: node.clientHeight
 			}
@@ -4256,16 +4239,16 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aj: _Browser_getScene(),
-			ao: {
-				H: x,
-				I: y,
+			ah: _Browser_getScene(),
+			al: {
+				G: x,
+				H: y,
 				x: _Browser_doc.documentElement.clientWidth,
 				s: _Browser_doc.documentElement.clientHeight
 			},
-			ax: {
-				H: x + rect.left,
-				I: y + rect.top,
+			av: {
+				G: x + rect.left,
+				H: y + rect.top,
 				x: rect.width,
 				s: rect.height
 			}
@@ -4280,7 +4263,7 @@ function _Browser_getElement(id)
 
 function _Browser_reload(skipCache)
 {
-	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function(callback)
+	return A2($elm$core$Task$perform, $elm$core$Basics$never, _Scheduler_binding(function(callback)
 	{
 		_VirtualDom_doc.location.reload(skipCache);
 	}));
@@ -4288,7 +4271,7 @@ function _Browser_reload(skipCache)
 
 function _Browser_load(url)
 {
-	return A2(elm$core$Task$perform, elm$core$Basics$never, _Scheduler_binding(function(callback)
+	return A2($elm$core$Task$perform, $elm$core$Basics$never, _Scheduler_binding(function(callback)
 	{
 		try
 		{
@@ -4303,6 +4286,23 @@ function _Browser_load(url)
 	}));
 }
 
+
+function _Url_percentEncode(string)
+{
+	return encodeURIComponent(string);
+}
+
+function _Url_percentDecode(string)
+{
+	try
+	{
+		return $elm$core$Maybe$Just(decodeURIComponent(string));
+	}
+	catch (e)
+	{
+		return $elm$core$Maybe$Nothing;
+	}
+}
 
 
 
@@ -4377,7 +4377,7 @@ function _Markdown_formatOptions(options)
 {
 	function toHighlight(code, lang)
 	{
-		if (!lang && elm$core$Maybe$isJust(options.T))
+		if (!lang && $elm$core$Maybe$isJust(options.T))
 		{
 			lang = options.T.a;
 		}
@@ -4390,45 +4390,28 @@ function _Markdown_formatOptions(options)
 		return code;
 	}
 
-	var gfm = options.X.a;
+	var gfm = options.ax.a;
 
 	return {
 		highlight: toHighlight,
 		gfm: gfm,
-		tables: gfm && gfm.aO,
-		breaks: gfm && gfm.as,
-		sanitize: options.ai,
-		smartypants: options.al
+		tables: gfm && gfm.aP,
+		breaks: gfm && gfm.ap,
+		sanitize: options.aL,
+		smartypants: options.aM
 	};
 }
-var author$project$Main$LinkClicked = function (a) {
+var $author$project$Main$LinkClicked = function (a) {
 	return {$: 0, a: a};
 };
-var author$project$Main$UrlChanged = function (a) {
+var $author$project$Main$UrlChanged = function (a) {
 	return {$: 1, a: a};
 };
-var author$project$Main$Model = F4(
-	function (key, url, route, projectFilter) {
-		return {aE: key, G: projectFilter, B: route, aT: url};
-	});
-var author$project$Main$R404 = 4;
-var author$project$Main$R글 = 2;
-var author$project$Main$R소개 = 0;
-var author$project$Main$R코틀린 = 3;
-var author$project$Main$R프로젝트 = 1;
-var elm$core$Basics$apR = F2(
-	function (x, f) {
-		return f(x);
-	});
-var elm$core$Basics$composeR = F3(
-	function (f, g, x) {
-		return g(
-			f(x));
-	});
-var elm$core$Basics$EQ = 1;
-var elm$core$Basics$GT = 2;
-var elm$core$Basics$LT = 0;
-var elm$core$Dict$foldr = F3(
+var $elm$core$Basics$EQ = 1;
+var $elm$core$Basics$GT = 2;
+var $elm$core$Basics$LT = 0;
+var $elm$core$List$cons = _List_cons;
+var $elm$core$Dict$foldr = F3(
 	function (func, acc, t) {
 		foldr:
 		while (true) {
@@ -4444,7 +4427,7 @@ var elm$core$Dict$foldr = F3(
 					func,
 					key,
 					value,
-					A3(elm$core$Dict$foldr, func, acc, right)),
+					A3($elm$core$Dict$foldr, func, acc, right)),
 					$temp$t = left;
 				func = $temp$func;
 				acc = $temp$acc;
@@ -4453,62 +4436,108 @@ var elm$core$Dict$foldr = F3(
 			}
 		}
 	});
-var elm$core$List$cons = _List_cons;
-var elm$core$Dict$toList = function (dict) {
+var $elm$core$Dict$toList = function (dict) {
 	return A3(
-		elm$core$Dict$foldr,
+		$elm$core$Dict$foldr,
 		F3(
 			function (key, value, list) {
 				return A2(
-					elm$core$List$cons,
+					$elm$core$List$cons,
 					_Utils_Tuple2(key, value),
 					list);
 			}),
 		_List_Nil,
 		dict);
 };
-var elm$core$Dict$keys = function (dict) {
+var $elm$core$Dict$keys = function (dict) {
 	return A3(
-		elm$core$Dict$foldr,
+		$elm$core$Dict$foldr,
 		F3(
 			function (key, value, keyList) {
-				return A2(elm$core$List$cons, key, keyList);
+				return A2($elm$core$List$cons, key, keyList);
 			}),
 		_List_Nil,
 		dict);
 };
-var elm$core$Set$toList = function (_n0) {
-	var dict = _n0;
-	return elm$core$Dict$keys(dict);
+var $elm$core$Set$toList = function (_v0) {
+	var dict = _v0;
+	return $elm$core$Dict$keys(dict);
 };
-var elm$core$Elm$JsArray$foldr = _JsArray_foldr;
-var elm$core$Array$foldr = F3(
-	function (func, baseCase, _n0) {
-		var tree = _n0.c;
-		var tail = _n0.d;
+var $elm$core$Elm$JsArray$foldr = _JsArray_foldr;
+var $elm$core$Array$foldr = F3(
+	function (func, baseCase, _v0) {
+		var tree = _v0.c;
+		var tail = _v0.d;
 		var helper = F2(
 			function (node, acc) {
 				if (!node.$) {
 					var subTree = node.a;
-					return A3(elm$core$Elm$JsArray$foldr, helper, acc, subTree);
+					return A3($elm$core$Elm$JsArray$foldr, helper, acc, subTree);
 				} else {
 					var values = node.a;
-					return A3(elm$core$Elm$JsArray$foldr, func, acc, values);
+					return A3($elm$core$Elm$JsArray$foldr, func, acc, values);
 				}
 			});
 		return A3(
-			elm$core$Elm$JsArray$foldr,
+			$elm$core$Elm$JsArray$foldr,
 			helper,
-			A3(elm$core$Elm$JsArray$foldr, func, baseCase, tail),
+			A3($elm$core$Elm$JsArray$foldr, func, baseCase, tail),
 			tree);
 	});
-var elm$core$Array$toList = function (array) {
-	return A3(elm$core$Array$foldr, elm$core$List$cons, _List_Nil, array);
+var $elm$core$Array$toList = function (array) {
+	return A3($elm$core$Array$foldr, $elm$core$List$cons, _List_Nil, array);
 };
-var elm$core$Basics$not = _Basics_not;
-var elm$core$Basics$add = _Basics_add;
-var elm$core$Basics$gt = _Utils_gt;
-var elm$core$List$foldl = F3(
+var $elm$core$Result$Err = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$json$Json$Decode$Failure = F2(
+	function (a, b) {
+		return {$: 3, a: a, b: b};
+	});
+var $elm$json$Json$Decode$Field = F2(
+	function (a, b) {
+		return {$: 0, a: a, b: b};
+	});
+var $elm$json$Json$Decode$Index = F2(
+	function (a, b) {
+		return {$: 1, a: a, b: b};
+	});
+var $elm$core$Result$Ok = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$json$Json$Decode$OneOf = function (a) {
+	return {$: 2, a: a};
+};
+var $elm$core$Basics$False = 1;
+var $elm$core$Basics$add = _Basics_add;
+var $elm$core$Maybe$Just = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$Maybe$Nothing = {$: 1};
+var $elm$core$String$all = _String_all;
+var $elm$core$Basics$and = _Basics_and;
+var $elm$core$Basics$append = _Utils_append;
+var $elm$json$Json$Encode$encode = _Json_encode;
+var $elm$core$String$fromInt = _String_fromNumber;
+var $elm$core$String$join = F2(
+	function (sep, chunks) {
+		return A2(
+			_String_join,
+			sep,
+			_List_toArray(chunks));
+	});
+var $elm$core$String$split = F2(
+	function (sep, string) {
+		return _List_fromArray(
+			A2(_String_split, sep, string));
+	});
+var $elm$json$Json$Decode$indent = function (str) {
+	return A2(
+		$elm$core$String$join,
+		'\n    ',
+		A2($elm$core$String$split, '\n', str));
+};
+var $elm$core$List$foldl = F3(
 	function (func, acc, list) {
 		foldl:
 		while (true) {
@@ -4527,10 +4556,499 @@ var elm$core$List$foldl = F3(
 			}
 		}
 	});
-var elm$core$List$reverse = function (list) {
-	return A3(elm$core$List$foldl, elm$core$List$cons, _List_Nil, list);
+var $elm$core$List$length = function (xs) {
+	return A3(
+		$elm$core$List$foldl,
+		F2(
+			function (_v0, i) {
+				return i + 1;
+			}),
+		0,
+		xs);
 };
-var elm$core$List$foldrHelper = F4(
+var $elm$core$List$map2 = _List_map2;
+var $elm$core$Basics$le = _Utils_le;
+var $elm$core$Basics$sub = _Basics_sub;
+var $elm$core$List$rangeHelp = F3(
+	function (lo, hi, list) {
+		rangeHelp:
+		while (true) {
+			if (_Utils_cmp(lo, hi) < 1) {
+				var $temp$lo = lo,
+					$temp$hi = hi - 1,
+					$temp$list = A2($elm$core$List$cons, hi, list);
+				lo = $temp$lo;
+				hi = $temp$hi;
+				list = $temp$list;
+				continue rangeHelp;
+			} else {
+				return list;
+			}
+		}
+	});
+var $elm$core$List$range = F2(
+	function (lo, hi) {
+		return A3($elm$core$List$rangeHelp, lo, hi, _List_Nil);
+	});
+var $elm$core$List$indexedMap = F2(
+	function (f, xs) {
+		return A3(
+			$elm$core$List$map2,
+			f,
+			A2(
+				$elm$core$List$range,
+				0,
+				$elm$core$List$length(xs) - 1),
+			xs);
+	});
+var $elm$core$Char$toCode = _Char_toCode;
+var $elm$core$Char$isLower = function (_char) {
+	var code = $elm$core$Char$toCode(_char);
+	return (97 <= code) && (code <= 122);
+};
+var $elm$core$Char$isUpper = function (_char) {
+	var code = $elm$core$Char$toCode(_char);
+	return (code <= 90) && (65 <= code);
+};
+var $elm$core$Basics$or = _Basics_or;
+var $elm$core$Char$isAlpha = function (_char) {
+	return $elm$core$Char$isLower(_char) || $elm$core$Char$isUpper(_char);
+};
+var $elm$core$Char$isDigit = function (_char) {
+	var code = $elm$core$Char$toCode(_char);
+	return (code <= 57) && (48 <= code);
+};
+var $elm$core$Char$isAlphaNum = function (_char) {
+	return $elm$core$Char$isLower(_char) || ($elm$core$Char$isUpper(_char) || $elm$core$Char$isDigit(_char));
+};
+var $elm$core$List$reverse = function (list) {
+	return A3($elm$core$List$foldl, $elm$core$List$cons, _List_Nil, list);
+};
+var $elm$core$String$uncons = _String_uncons;
+var $elm$json$Json$Decode$errorOneOf = F2(
+	function (i, error) {
+		return '\n\n(' + ($elm$core$String$fromInt(i + 1) + (') ' + $elm$json$Json$Decode$indent(
+			$elm$json$Json$Decode$errorToString(error))));
+	});
+var $elm$json$Json$Decode$errorToString = function (error) {
+	return A2($elm$json$Json$Decode$errorToStringHelp, error, _List_Nil);
+};
+var $elm$json$Json$Decode$errorToStringHelp = F2(
+	function (error, context) {
+		errorToStringHelp:
+		while (true) {
+			switch (error.$) {
+				case 0:
+					var f = error.a;
+					var err = error.b;
+					var isSimple = function () {
+						var _v1 = $elm$core$String$uncons(f);
+						if (_v1.$ === 1) {
+							return false;
+						} else {
+							var _v2 = _v1.a;
+							var _char = _v2.a;
+							var rest = _v2.b;
+							return $elm$core$Char$isAlpha(_char) && A2($elm$core$String$all, $elm$core$Char$isAlphaNum, rest);
+						}
+					}();
+					var fieldName = isSimple ? ('.' + f) : ('[\'' + (f + '\']'));
+					var $temp$error = err,
+						$temp$context = A2($elm$core$List$cons, fieldName, context);
+					error = $temp$error;
+					context = $temp$context;
+					continue errorToStringHelp;
+				case 1:
+					var i = error.a;
+					var err = error.b;
+					var indexName = '[' + ($elm$core$String$fromInt(i) + ']');
+					var $temp$error = err,
+						$temp$context = A2($elm$core$List$cons, indexName, context);
+					error = $temp$error;
+					context = $temp$context;
+					continue errorToStringHelp;
+				case 2:
+					var errors = error.a;
+					if (!errors.b) {
+						return 'Ran into a Json.Decode.oneOf with no possibilities' + function () {
+							if (!context.b) {
+								return '!';
+							} else {
+								return ' at json' + A2(
+									$elm$core$String$join,
+									'',
+									$elm$core$List$reverse(context));
+							}
+						}();
+					} else {
+						if (!errors.b.b) {
+							var err = errors.a;
+							var $temp$error = err,
+								$temp$context = context;
+							error = $temp$error;
+							context = $temp$context;
+							continue errorToStringHelp;
+						} else {
+							var starter = function () {
+								if (!context.b) {
+									return 'Json.Decode.oneOf';
+								} else {
+									return 'The Json.Decode.oneOf at json' + A2(
+										$elm$core$String$join,
+										'',
+										$elm$core$List$reverse(context));
+								}
+							}();
+							var introduction = starter + (' failed in the following ' + ($elm$core$String$fromInt(
+								$elm$core$List$length(errors)) + ' ways:'));
+							return A2(
+								$elm$core$String$join,
+								'\n\n',
+								A2(
+									$elm$core$List$cons,
+									introduction,
+									A2($elm$core$List$indexedMap, $elm$json$Json$Decode$errorOneOf, errors)));
+						}
+					}
+				default:
+					var msg = error.a;
+					var json = error.b;
+					var introduction = function () {
+						if (!context.b) {
+							return 'Problem with the given value:\n\n';
+						} else {
+							return 'Problem with the value at json' + (A2(
+								$elm$core$String$join,
+								'',
+								$elm$core$List$reverse(context)) + ':\n\n    ');
+						}
+					}();
+					return introduction + ($elm$json$Json$Decode$indent(
+						A2($elm$json$Json$Encode$encode, 4, json)) + ('\n\n' + msg));
+			}
+		}
+	});
+var $elm$core$Array$branchFactor = 32;
+var $elm$core$Array$Array_elm_builtin = F4(
+	function (a, b, c, d) {
+		return {$: 0, a: a, b: b, c: c, d: d};
+	});
+var $elm$core$Elm$JsArray$empty = _JsArray_empty;
+var $elm$core$Basics$ceiling = _Basics_ceiling;
+var $elm$core$Basics$fdiv = _Basics_fdiv;
+var $elm$core$Basics$logBase = F2(
+	function (base, number) {
+		return _Basics_log(number) / _Basics_log(base);
+	});
+var $elm$core$Basics$toFloat = _Basics_toFloat;
+var $elm$core$Array$shiftStep = $elm$core$Basics$ceiling(
+	A2($elm$core$Basics$logBase, 2, $elm$core$Array$branchFactor));
+var $elm$core$Array$empty = A4($elm$core$Array$Array_elm_builtin, 0, $elm$core$Array$shiftStep, $elm$core$Elm$JsArray$empty, $elm$core$Elm$JsArray$empty);
+var $elm$core$Elm$JsArray$initialize = _JsArray_initialize;
+var $elm$core$Array$Leaf = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$core$Basics$apL = F2(
+	function (f, x) {
+		return f(x);
+	});
+var $elm$core$Basics$apR = F2(
+	function (x, f) {
+		return f(x);
+	});
+var $elm$core$Basics$eq = _Utils_equal;
+var $elm$core$Basics$floor = _Basics_floor;
+var $elm$core$Elm$JsArray$length = _JsArray_length;
+var $elm$core$Basics$gt = _Utils_gt;
+var $elm$core$Basics$max = F2(
+	function (x, y) {
+		return (_Utils_cmp(x, y) > 0) ? x : y;
+	});
+var $elm$core$Basics$mul = _Basics_mul;
+var $elm$core$Array$SubTree = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
+var $elm$core$Array$compressNodes = F2(
+	function (nodes, acc) {
+		compressNodes:
+		while (true) {
+			var _v0 = A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, nodes);
+			var node = _v0.a;
+			var remainingNodes = _v0.b;
+			var newAcc = A2(
+				$elm$core$List$cons,
+				$elm$core$Array$SubTree(node),
+				acc);
+			if (!remainingNodes.b) {
+				return $elm$core$List$reverse(newAcc);
+			} else {
+				var $temp$nodes = remainingNodes,
+					$temp$acc = newAcc;
+				nodes = $temp$nodes;
+				acc = $temp$acc;
+				continue compressNodes;
+			}
+		}
+	});
+var $elm$core$Tuple$first = function (_v0) {
+	var x = _v0.a;
+	return x;
+};
+var $elm$core$Array$treeFromBuilder = F2(
+	function (nodeList, nodeListSize) {
+		treeFromBuilder:
+		while (true) {
+			var newNodeSize = $elm$core$Basics$ceiling(nodeListSize / $elm$core$Array$branchFactor);
+			if (newNodeSize === 1) {
+				return A2($elm$core$Elm$JsArray$initializeFromList, $elm$core$Array$branchFactor, nodeList).a;
+			} else {
+				var $temp$nodeList = A2($elm$core$Array$compressNodes, nodeList, _List_Nil),
+					$temp$nodeListSize = newNodeSize;
+				nodeList = $temp$nodeList;
+				nodeListSize = $temp$nodeListSize;
+				continue treeFromBuilder;
+			}
+		}
+	});
+var $elm$core$Array$builderToArray = F2(
+	function (reverseNodeList, builder) {
+		if (!builder.a) {
+			return A4(
+				$elm$core$Array$Array_elm_builtin,
+				$elm$core$Elm$JsArray$length(builder.c),
+				$elm$core$Array$shiftStep,
+				$elm$core$Elm$JsArray$empty,
+				builder.c);
+		} else {
+			var treeLen = builder.a * $elm$core$Array$branchFactor;
+			var depth = $elm$core$Basics$floor(
+				A2($elm$core$Basics$logBase, $elm$core$Array$branchFactor, treeLen - 1));
+			var correctNodeList = reverseNodeList ? $elm$core$List$reverse(builder.d) : builder.d;
+			var tree = A2($elm$core$Array$treeFromBuilder, correctNodeList, builder.a);
+			return A4(
+				$elm$core$Array$Array_elm_builtin,
+				$elm$core$Elm$JsArray$length(builder.c) + treeLen,
+				A2($elm$core$Basics$max, 5, depth * $elm$core$Array$shiftStep),
+				tree,
+				builder.c);
+		}
+	});
+var $elm$core$Basics$idiv = _Basics_idiv;
+var $elm$core$Basics$lt = _Utils_lt;
+var $elm$core$Array$initializeHelp = F5(
+	function (fn, fromIndex, len, nodeList, tail) {
+		initializeHelp:
+		while (true) {
+			if (fromIndex < 0) {
+				return A2(
+					$elm$core$Array$builderToArray,
+					false,
+					{d: nodeList, a: (len / $elm$core$Array$branchFactor) | 0, c: tail});
+			} else {
+				var leaf = $elm$core$Array$Leaf(
+					A3($elm$core$Elm$JsArray$initialize, $elm$core$Array$branchFactor, fromIndex, fn));
+				var $temp$fn = fn,
+					$temp$fromIndex = fromIndex - $elm$core$Array$branchFactor,
+					$temp$len = len,
+					$temp$nodeList = A2($elm$core$List$cons, leaf, nodeList),
+					$temp$tail = tail;
+				fn = $temp$fn;
+				fromIndex = $temp$fromIndex;
+				len = $temp$len;
+				nodeList = $temp$nodeList;
+				tail = $temp$tail;
+				continue initializeHelp;
+			}
+		}
+	});
+var $elm$core$Basics$remainderBy = _Basics_remainderBy;
+var $elm$core$Array$initialize = F2(
+	function (len, fn) {
+		if (len <= 0) {
+			return $elm$core$Array$empty;
+		} else {
+			var tailLen = len % $elm$core$Array$branchFactor;
+			var tail = A3($elm$core$Elm$JsArray$initialize, tailLen, len - tailLen, fn);
+			var initialFromIndex = (len - tailLen) - $elm$core$Array$branchFactor;
+			return A5($elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
+		}
+	});
+var $elm$core$Basics$True = 0;
+var $elm$core$Result$isOk = function (result) {
+	if (!result.$) {
+		return true;
+	} else {
+		return false;
+	}
+};
+var $elm$json$Json$Decode$map = _Json_map1;
+var $elm$json$Json$Decode$map2 = _Json_map2;
+var $elm$json$Json$Decode$succeed = _Json_succeed;
+var $elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
+	switch (handler.$) {
+		case 0:
+			return 0;
+		case 1:
+			return 1;
+		case 2:
+			return 2;
+		default:
+			return 3;
+	}
+};
+var $elm$browser$Browser$External = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$browser$Browser$Internal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$core$Basics$identity = function (x) {
+	return x;
+};
+var $elm$browser$Browser$Dom$NotFound = $elm$core$Basics$identity;
+var $elm$url$Url$Http = 0;
+var $elm$url$Url$Https = 1;
+var $elm$url$Url$Url = F6(
+	function (protocol, host, port_, path, query, fragment) {
+		return {W: fragment, X: host, aI: path, aa: port_, ad: protocol, ae: query};
+	});
+var $elm$core$String$contains = _String_contains;
+var $elm$core$String$length = _String_length;
+var $elm$core$String$slice = _String_slice;
+var $elm$core$String$dropLeft = F2(
+	function (n, string) {
+		return (n < 1) ? string : A3(
+			$elm$core$String$slice,
+			n,
+			$elm$core$String$length(string),
+			string);
+	});
+var $elm$core$String$indexes = _String_indexes;
+var $elm$core$String$isEmpty = function (string) {
+	return string === '';
+};
+var $elm$core$String$left = F2(
+	function (n, string) {
+		return (n < 1) ? '' : A3($elm$core$String$slice, 0, n, string);
+	});
+var $elm$core$String$toInt = _String_toInt;
+var $elm$url$Url$chompBeforePath = F5(
+	function (protocol, path, params, frag, str) {
+		if ($elm$core$String$isEmpty(str) || A2($elm$core$String$contains, '@', str)) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var _v0 = A2($elm$core$String$indexes, ':', str);
+			if (!_v0.b) {
+				return $elm$core$Maybe$Just(
+					A6($elm$url$Url$Url, protocol, str, $elm$core$Maybe$Nothing, path, params, frag));
+			} else {
+				if (!_v0.b.b) {
+					var i = _v0.a;
+					var _v1 = $elm$core$String$toInt(
+						A2($elm$core$String$dropLeft, i + 1, str));
+					if (_v1.$ === 1) {
+						return $elm$core$Maybe$Nothing;
+					} else {
+						var port_ = _v1;
+						return $elm$core$Maybe$Just(
+							A6(
+								$elm$url$Url$Url,
+								protocol,
+								A2($elm$core$String$left, i, str),
+								port_,
+								path,
+								params,
+								frag));
+					}
+				} else {
+					return $elm$core$Maybe$Nothing;
+				}
+			}
+		}
+	});
+var $elm$url$Url$chompBeforeQuery = F4(
+	function (protocol, params, frag, str) {
+		if ($elm$core$String$isEmpty(str)) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var _v0 = A2($elm$core$String$indexes, '/', str);
+			if (!_v0.b) {
+				return A5($elm$url$Url$chompBeforePath, protocol, '/', params, frag, str);
+			} else {
+				var i = _v0.a;
+				return A5(
+					$elm$url$Url$chompBeforePath,
+					protocol,
+					A2($elm$core$String$dropLeft, i, str),
+					params,
+					frag,
+					A2($elm$core$String$left, i, str));
+			}
+		}
+	});
+var $elm$url$Url$chompBeforeFragment = F3(
+	function (protocol, frag, str) {
+		if ($elm$core$String$isEmpty(str)) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var _v0 = A2($elm$core$String$indexes, '?', str);
+			if (!_v0.b) {
+				return A4($elm$url$Url$chompBeforeQuery, protocol, $elm$core$Maybe$Nothing, frag, str);
+			} else {
+				var i = _v0.a;
+				return A4(
+					$elm$url$Url$chompBeforeQuery,
+					protocol,
+					$elm$core$Maybe$Just(
+						A2($elm$core$String$dropLeft, i + 1, str)),
+					frag,
+					A2($elm$core$String$left, i, str));
+			}
+		}
+	});
+var $elm$url$Url$chompAfterProtocol = F2(
+	function (protocol, str) {
+		if ($elm$core$String$isEmpty(str)) {
+			return $elm$core$Maybe$Nothing;
+		} else {
+			var _v0 = A2($elm$core$String$indexes, '#', str);
+			if (!_v0.b) {
+				return A3($elm$url$Url$chompBeforeFragment, protocol, $elm$core$Maybe$Nothing, str);
+			} else {
+				var i = _v0.a;
+				return A3(
+					$elm$url$Url$chompBeforeFragment,
+					protocol,
+					$elm$core$Maybe$Just(
+						A2($elm$core$String$dropLeft, i + 1, str)),
+					A2($elm$core$String$left, i, str));
+			}
+		}
+	});
+var $elm$core$String$startsWith = _String_startsWith;
+var $elm$url$Url$fromString = function (str) {
+	return A2($elm$core$String$startsWith, 'http://', str) ? A2(
+		$elm$url$Url$chompAfterProtocol,
+		0,
+		A2($elm$core$String$dropLeft, 7, str)) : (A2($elm$core$String$startsWith, 'https://', str) ? A2(
+		$elm$url$Url$chompAfterProtocol,
+		1,
+		A2($elm$core$String$dropLeft, 8, str)) : $elm$core$Maybe$Nothing);
+};
+var $elm$core$Basics$never = function (_v0) {
+	never:
+	while (true) {
+		var nvr = _v0;
+		var $temp$_v0 = nvr;
+		_v0 = $temp$_v0;
+		continue never;
+	}
+};
+var $elm$core$Task$Perform = $elm$core$Basics$identity;
+var $elm$core$Task$succeed = _Scheduler_succeed;
+var $elm$core$Task$init = $elm$core$Task$succeed(0);
+var $elm$core$List$foldrHelper = F4(
 	function (fn, acc, ctr, ls) {
 		if (!ls.b) {
 			return acc;
@@ -4562,10 +5080,10 @@ var elm$core$List$foldrHelper = F4(
 						var d = r3.a;
 						var r4 = r3.b;
 						var res = (ctr > 500) ? A3(
-							elm$core$List$foldl,
+							$elm$core$List$foldl,
 							fn,
 							acc,
-							elm$core$List$reverse(r4)) : A4(elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
+							$elm$core$List$reverse(r4)) : A4($elm$core$List$foldrHelper, fn, acc, ctr + 1, r4);
 						return A2(
 							fn,
 							a,
@@ -4581,36 +5099,127 @@ var elm$core$List$foldrHelper = F4(
 			}
 		}
 	});
-var elm$core$List$foldr = F3(
+var $elm$core$List$foldr = F3(
 	function (fn, acc, ls) {
-		return A4(elm$core$List$foldrHelper, fn, acc, 0, ls);
+		return A4($elm$core$List$foldrHelper, fn, acc, 0, ls);
 	});
-var elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2(elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
-var elm$core$List$map = F2(
+var $elm$core$List$map = F2(
 	function (f, xs) {
 		return A3(
-			elm$core$List$foldr,
+			$elm$core$List$foldr,
 			F2(
 				function (x, acc) {
 					return A2(
-						elm$core$List$cons,
+						$elm$core$List$cons,
 						f(x),
 						acc);
 				}),
 			_List_Nil,
 			xs);
 	});
-var elm$core$Maybe$withDefault = F2(
+var $elm$core$Task$andThen = _Scheduler_andThen;
+var $elm$core$Task$map = F2(
+	function (func, taskA) {
+		return A2(
+			$elm$core$Task$andThen,
+			function (a) {
+				return $elm$core$Task$succeed(
+					func(a));
+			},
+			taskA);
+	});
+var $elm$core$Task$map2 = F3(
+	function (func, taskA, taskB) {
+		return A2(
+			$elm$core$Task$andThen,
+			function (a) {
+				return A2(
+					$elm$core$Task$andThen,
+					function (b) {
+						return $elm$core$Task$succeed(
+							A2(func, a, b));
+					},
+					taskB);
+			},
+			taskA);
+	});
+var $elm$core$Task$sequence = function (tasks) {
+	return A3(
+		$elm$core$List$foldr,
+		$elm$core$Task$map2($elm$core$List$cons),
+		$elm$core$Task$succeed(_List_Nil),
+		tasks);
+};
+var $elm$core$Platform$sendToApp = _Platform_sendToApp;
+var $elm$core$Task$spawnCmd = F2(
+	function (router, _v0) {
+		var task = _v0;
+		return _Scheduler_spawn(
+			A2(
+				$elm$core$Task$andThen,
+				$elm$core$Platform$sendToApp(router),
+				task));
+	});
+var $elm$core$Task$onEffects = F3(
+	function (router, commands, state) {
+		return A2(
+			$elm$core$Task$map,
+			function (_v0) {
+				return 0;
+			},
+			$elm$core$Task$sequence(
+				A2(
+					$elm$core$List$map,
+					$elm$core$Task$spawnCmd(router),
+					commands)));
+	});
+var $elm$core$Task$onSelfMsg = F3(
+	function (_v0, _v1, _v2) {
+		return $elm$core$Task$succeed(0);
+	});
+var $elm$core$Task$cmdMap = F2(
+	function (tagger, _v0) {
+		var task = _v0;
+		return A2($elm$core$Task$map, tagger, task);
+	});
+_Platform_effectManagers['Task'] = _Platform_createManager($elm$core$Task$init, $elm$core$Task$onEffects, $elm$core$Task$onSelfMsg, $elm$core$Task$cmdMap);
+var $elm$core$Task$command = _Platform_leaf('Task');
+var $elm$core$Task$perform = F2(
+	function (toMessage, task) {
+		return $elm$core$Task$command(
+			A2($elm$core$Task$map, toMessage, task));
+	});
+var $elm$browser$Browser$application = _Browser_application;
+var $author$project$Main$Model = F4(
+	function (key, url, route, projectFilter) {
+		return {aD: key, F: projectFilter, B: route, aU: url};
+	});
+var $elm$core$Platform$Cmd$batch = _Platform_batch;
+var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
+var $author$project$Main$R404 = 4;
+var $author$project$Main$R글 = 2;
+var $author$project$Main$R소개 = 0;
+var $author$project$Main$R수료증 = 3;
+var $author$project$Main$R프로젝트 = 1;
+var $elm$core$Basics$composeR = F3(
+	function (f, g, x) {
+		return g(
+			f(x));
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$core$Basics$not = _Basics_not;
+var $elm$url$Url$percentDecode = _Url_percentDecode;
+var $elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (!maybe.$) {
 			var value = maybe.a;
@@ -4619,32 +5228,18 @@ var elm$core$Maybe$withDefault = F2(
 			return _default;
 		}
 	});
-var elm$core$Basics$eq = _Utils_equal;
-var elm$core$String$isEmpty = function (string) {
-	return string === '';
-};
-var elm$core$Maybe$Just = function (a) {
-	return {$: 0, a: a};
-};
-var elm$core$Maybe$Nothing = {$: 1};
-var elm$core$String$split = F2(
-	function (sep, string) {
-		return _List_fromArray(
-			A2(_String_split, sep, string));
-	});
-var elm$url$Url$percentDecode = _Url_percentDecode;
-var author$project$Main$urlToRoute = function (url) {
+var $author$project$Main$urlToRoute = function (url) {
 	var paths = A2(
-		elm$core$List$filter,
-		A2(elm$core$Basics$composeR, elm$core$String$isEmpty, elm$core$Basics$not),
+		$elm$core$List$filter,
+		A2($elm$core$Basics$composeR, $elm$core$String$isEmpty, $elm$core$Basics$not),
 		A2(
-			elm$core$List$map,
-			elm$core$Maybe$withDefault(''),
+			$elm$core$List$map,
+			$elm$core$Maybe$withDefault(''),
 			A2(
-				elm$core$List$map,
-				elm$url$Url$percentDecode,
-				A2(elm$core$String$split, '/', url.aJ))));
-	_n0$6:
+				$elm$core$List$map,
+				$elm$url$Url$percentDecode,
+				A2($elm$core$String$split, '/', url.aI))));
+	_v0$6:
 	while (true) {
 		if (!paths.b) {
 			return 0;
@@ -4659,640 +5254,46 @@ var author$project$Main$urlToRoute = function (url) {
 						return 1;
 					case '글':
 						return 2;
-					case '코틀린':
+					case '수료증':
 						return 3;
 					default:
-						break _n0$6;
+						break _v0$6;
 				}
 			} else {
-				break _n0$6;
+				break _v0$6;
 			}
 		}
 	}
 	return 4;
 };
-var elm$core$Basics$False = 1;
-var elm$core$Basics$True = 0;
-var elm$core$Result$isOk = function (result) {
-	if (!result.$) {
-		return true;
-	} else {
-		return false;
-	}
-};
-var elm$core$Array$branchFactor = 32;
-var elm$core$Array$Array_elm_builtin = F4(
-	function (a, b, c, d) {
-		return {$: 0, a: a, b: b, c: c, d: d};
-	});
-var elm$core$Basics$ceiling = _Basics_ceiling;
-var elm$core$Basics$fdiv = _Basics_fdiv;
-var elm$core$Basics$logBase = F2(
-	function (base, number) {
-		return _Basics_log(number) / _Basics_log(base);
-	});
-var elm$core$Basics$toFloat = _Basics_toFloat;
-var elm$core$Array$shiftStep = elm$core$Basics$ceiling(
-	A2(elm$core$Basics$logBase, 2, elm$core$Array$branchFactor));
-var elm$core$Elm$JsArray$empty = _JsArray_empty;
-var elm$core$Array$empty = A4(elm$core$Array$Array_elm_builtin, 0, elm$core$Array$shiftStep, elm$core$Elm$JsArray$empty, elm$core$Elm$JsArray$empty);
-var elm$core$Array$Leaf = function (a) {
-	return {$: 1, a: a};
-};
-var elm$core$Array$SubTree = function (a) {
-	return {$: 0, a: a};
-};
-var elm$core$Elm$JsArray$initializeFromList = _JsArray_initializeFromList;
-var elm$core$Array$compressNodes = F2(
-	function (nodes, acc) {
-		compressNodes:
-		while (true) {
-			var _n0 = A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, nodes);
-			var node = _n0.a;
-			var remainingNodes = _n0.b;
-			var newAcc = A2(
-				elm$core$List$cons,
-				elm$core$Array$SubTree(node),
-				acc);
-			if (!remainingNodes.b) {
-				return elm$core$List$reverse(newAcc);
-			} else {
-				var $temp$nodes = remainingNodes,
-					$temp$acc = newAcc;
-				nodes = $temp$nodes;
-				acc = $temp$acc;
-				continue compressNodes;
-			}
-		}
-	});
-var elm$core$Tuple$first = function (_n0) {
-	var x = _n0.a;
-	return x;
-};
-var elm$core$Array$treeFromBuilder = F2(
-	function (nodeList, nodeListSize) {
-		treeFromBuilder:
-		while (true) {
-			var newNodeSize = elm$core$Basics$ceiling(nodeListSize / elm$core$Array$branchFactor);
-			if (newNodeSize === 1) {
-				return A2(elm$core$Elm$JsArray$initializeFromList, elm$core$Array$branchFactor, nodeList).a;
-			} else {
-				var $temp$nodeList = A2(elm$core$Array$compressNodes, nodeList, _List_Nil),
-					$temp$nodeListSize = newNodeSize;
-				nodeList = $temp$nodeList;
-				nodeListSize = $temp$nodeListSize;
-				continue treeFromBuilder;
-			}
-		}
-	});
-var elm$core$Basics$apL = F2(
-	function (f, x) {
-		return f(x);
-	});
-var elm$core$Basics$floor = _Basics_floor;
-var elm$core$Basics$max = F2(
-	function (x, y) {
-		return (_Utils_cmp(x, y) > 0) ? x : y;
-	});
-var elm$core$Basics$mul = _Basics_mul;
-var elm$core$Basics$sub = _Basics_sub;
-var elm$core$Elm$JsArray$length = _JsArray_length;
-var elm$core$Array$builderToArray = F2(
-	function (reverseNodeList, builder) {
-		if (!builder.a) {
-			return A4(
-				elm$core$Array$Array_elm_builtin,
-				elm$core$Elm$JsArray$length(builder.c),
-				elm$core$Array$shiftStep,
-				elm$core$Elm$JsArray$empty,
-				builder.c);
-		} else {
-			var treeLen = builder.a * elm$core$Array$branchFactor;
-			var depth = elm$core$Basics$floor(
-				A2(elm$core$Basics$logBase, elm$core$Array$branchFactor, treeLen - 1));
-			var correctNodeList = reverseNodeList ? elm$core$List$reverse(builder.d) : builder.d;
-			var tree = A2(elm$core$Array$treeFromBuilder, correctNodeList, builder.a);
-			return A4(
-				elm$core$Array$Array_elm_builtin,
-				elm$core$Elm$JsArray$length(builder.c) + treeLen,
-				A2(elm$core$Basics$max, 5, depth * elm$core$Array$shiftStep),
-				tree,
-				builder.c);
-		}
-	});
-var elm$core$Basics$idiv = _Basics_idiv;
-var elm$core$Basics$lt = _Utils_lt;
-var elm$core$Elm$JsArray$initialize = _JsArray_initialize;
-var elm$core$Array$initializeHelp = F5(
-	function (fn, fromIndex, len, nodeList, tail) {
-		initializeHelp:
-		while (true) {
-			if (fromIndex < 0) {
-				return A2(
-					elm$core$Array$builderToArray,
-					false,
-					{d: nodeList, a: (len / elm$core$Array$branchFactor) | 0, c: tail});
-			} else {
-				var leaf = elm$core$Array$Leaf(
-					A3(elm$core$Elm$JsArray$initialize, elm$core$Array$branchFactor, fromIndex, fn));
-				var $temp$fn = fn,
-					$temp$fromIndex = fromIndex - elm$core$Array$branchFactor,
-					$temp$len = len,
-					$temp$nodeList = A2(elm$core$List$cons, leaf, nodeList),
-					$temp$tail = tail;
-				fn = $temp$fn;
-				fromIndex = $temp$fromIndex;
-				len = $temp$len;
-				nodeList = $temp$nodeList;
-				tail = $temp$tail;
-				continue initializeHelp;
-			}
-		}
-	});
-var elm$core$Basics$le = _Utils_le;
-var elm$core$Basics$remainderBy = _Basics_remainderBy;
-var elm$core$Array$initialize = F2(
-	function (len, fn) {
-		if (len <= 0) {
-			return elm$core$Array$empty;
-		} else {
-			var tailLen = len % elm$core$Array$branchFactor;
-			var tail = A3(elm$core$Elm$JsArray$initialize, tailLen, len - tailLen, fn);
-			var initialFromIndex = (len - tailLen) - elm$core$Array$branchFactor;
-			return A5(elm$core$Array$initializeHelp, fn, initialFromIndex, len, _List_Nil, tail);
-		}
-	});
-var elm$core$Result$Err = function (a) {
-	return {$: 1, a: a};
-};
-var elm$core$Result$Ok = function (a) {
-	return {$: 0, a: a};
-};
-var elm$json$Json$Decode$Failure = F2(
-	function (a, b) {
-		return {$: 3, a: a, b: b};
-	});
-var elm$json$Json$Decode$Field = F2(
-	function (a, b) {
-		return {$: 0, a: a, b: b};
-	});
-var elm$json$Json$Decode$Index = F2(
-	function (a, b) {
-		return {$: 1, a: a, b: b};
-	});
-var elm$json$Json$Decode$OneOf = function (a) {
-	return {$: 2, a: a};
-};
-var elm$core$Basics$and = _Basics_and;
-var elm$core$Basics$append = _Utils_append;
-var elm$core$Basics$or = _Basics_or;
-var elm$core$Char$toCode = _Char_toCode;
-var elm$core$Char$isLower = function (_char) {
-	var code = elm$core$Char$toCode(_char);
-	return (97 <= code) && (code <= 122);
-};
-var elm$core$Char$isUpper = function (_char) {
-	var code = elm$core$Char$toCode(_char);
-	return (code <= 90) && (65 <= code);
-};
-var elm$core$Char$isAlpha = function (_char) {
-	return elm$core$Char$isLower(_char) || elm$core$Char$isUpper(_char);
-};
-var elm$core$Char$isDigit = function (_char) {
-	var code = elm$core$Char$toCode(_char);
-	return (code <= 57) && (48 <= code);
-};
-var elm$core$Char$isAlphaNum = function (_char) {
-	return elm$core$Char$isLower(_char) || (elm$core$Char$isUpper(_char) || elm$core$Char$isDigit(_char));
-};
-var elm$core$List$length = function (xs) {
-	return A3(
-		elm$core$List$foldl,
-		F2(
-			function (_n0, i) {
-				return i + 1;
-			}),
-		0,
-		xs);
-};
-var elm$core$List$map2 = _List_map2;
-var elm$core$List$rangeHelp = F3(
-	function (lo, hi, list) {
-		rangeHelp:
-		while (true) {
-			if (_Utils_cmp(lo, hi) < 1) {
-				var $temp$lo = lo,
-					$temp$hi = hi - 1,
-					$temp$list = A2(elm$core$List$cons, hi, list);
-				lo = $temp$lo;
-				hi = $temp$hi;
-				list = $temp$list;
-				continue rangeHelp;
-			} else {
-				return list;
-			}
-		}
-	});
-var elm$core$List$range = F2(
-	function (lo, hi) {
-		return A3(elm$core$List$rangeHelp, lo, hi, _List_Nil);
-	});
-var elm$core$List$indexedMap = F2(
-	function (f, xs) {
-		return A3(
-			elm$core$List$map2,
-			f,
-			A2(
-				elm$core$List$range,
-				0,
-				elm$core$List$length(xs) - 1),
-			xs);
-	});
-var elm$core$String$all = _String_all;
-var elm$core$String$fromInt = _String_fromNumber;
-var elm$core$String$join = F2(
-	function (sep, chunks) {
-		return A2(
-			_String_join,
-			sep,
-			_List_toArray(chunks));
-	});
-var elm$core$String$uncons = _String_uncons;
-var elm$json$Json$Decode$indent = function (str) {
-	return A2(
-		elm$core$String$join,
-		'\n    ',
-		A2(elm$core$String$split, '\n', str));
-};
-var elm$json$Json$Encode$encode = _Json_encode;
-var elm$json$Json$Decode$errorOneOf = F2(
-	function (i, error) {
-		return '\n\n(' + (elm$core$String$fromInt(i + 1) + (') ' + elm$json$Json$Decode$indent(
-			elm$json$Json$Decode$errorToString(error))));
-	});
-var elm$json$Json$Decode$errorToString = function (error) {
-	return A2(elm$json$Json$Decode$errorToStringHelp, error, _List_Nil);
-};
-var elm$json$Json$Decode$errorToStringHelp = F2(
-	function (error, context) {
-		errorToStringHelp:
-		while (true) {
-			switch (error.$) {
-				case 0:
-					var f = error.a;
-					var err = error.b;
-					var isSimple = function () {
-						var _n1 = elm$core$String$uncons(f);
-						if (_n1.$ === 1) {
-							return false;
-						} else {
-							var _n2 = _n1.a;
-							var _char = _n2.a;
-							var rest = _n2.b;
-							return elm$core$Char$isAlpha(_char) && A2(elm$core$String$all, elm$core$Char$isAlphaNum, rest);
-						}
-					}();
-					var fieldName = isSimple ? ('.' + f) : ('[\'' + (f + '\']'));
-					var $temp$error = err,
-						$temp$context = A2(elm$core$List$cons, fieldName, context);
-					error = $temp$error;
-					context = $temp$context;
-					continue errorToStringHelp;
-				case 1:
-					var i = error.a;
-					var err = error.b;
-					var indexName = '[' + (elm$core$String$fromInt(i) + ']');
-					var $temp$error = err,
-						$temp$context = A2(elm$core$List$cons, indexName, context);
-					error = $temp$error;
-					context = $temp$context;
-					continue errorToStringHelp;
-				case 2:
-					var errors = error.a;
-					if (!errors.b) {
-						return 'Ran into a Json.Decode.oneOf with no possibilities' + function () {
-							if (!context.b) {
-								return '!';
-							} else {
-								return ' at json' + A2(
-									elm$core$String$join,
-									'',
-									elm$core$List$reverse(context));
-							}
-						}();
-					} else {
-						if (!errors.b.b) {
-							var err = errors.a;
-							var $temp$error = err,
-								$temp$context = context;
-							error = $temp$error;
-							context = $temp$context;
-							continue errorToStringHelp;
-						} else {
-							var starter = function () {
-								if (!context.b) {
-									return 'Json.Decode.oneOf';
-								} else {
-									return 'The Json.Decode.oneOf at json' + A2(
-										elm$core$String$join,
-										'',
-										elm$core$List$reverse(context));
-								}
-							}();
-							var introduction = starter + (' failed in the following ' + (elm$core$String$fromInt(
-								elm$core$List$length(errors)) + ' ways:'));
-							return A2(
-								elm$core$String$join,
-								'\n\n',
-								A2(
-									elm$core$List$cons,
-									introduction,
-									A2(elm$core$List$indexedMap, elm$json$Json$Decode$errorOneOf, errors)));
-						}
-					}
-				default:
-					var msg = error.a;
-					var json = error.b;
-					var introduction = function () {
-						if (!context.b) {
-							return 'Problem with the given value:\n\n';
-						} else {
-							return 'Problem with the value at json' + (A2(
-								elm$core$String$join,
-								'',
-								elm$core$List$reverse(context)) + ':\n\n    ');
-						}
-					}();
-					return introduction + (elm$json$Json$Decode$indent(
-						A2(elm$json$Json$Encode$encode, 4, json)) + ('\n\n' + msg));
-			}
-		}
-	});
-var elm$core$Platform$Cmd$batch = _Platform_batch;
-var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
-var author$project$Main$init = F3(
+var $author$project$Main$init = F3(
 	function (flags, url, key) {
 		return _Utils_Tuple2(
 			A4(
-				author$project$Main$Model,
+				$author$project$Main$Model,
 				key,
 				url,
-				author$project$Main$urlToRoute(url),
-				elm$core$Maybe$Nothing),
-			elm$core$Platform$Cmd$none);
+				$author$project$Main$urlToRoute(url),
+				$elm$core$Maybe$Nothing),
+			$elm$core$Platform$Cmd$none);
 	});
-var elm$core$Platform$Sub$batch = _Platform_batch;
-var elm$core$Platform$Sub$none = elm$core$Platform$Sub$batch(_List_Nil);
-var author$project$Main$subscriptions = function (model) {
-	return elm$core$Platform$Sub$none;
+var $elm$core$Platform$Sub$batch = _Platform_batch;
+var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$subscriptions = function (model) {
+	return $elm$core$Platform$Sub$none;
 };
-var elm$browser$Browser$External = function (a) {
-	return {$: 1, a: a};
-};
-var elm$browser$Browser$Internal = function (a) {
-	return {$: 0, a: a};
-};
-var elm$browser$Browser$Dom$NotFound = elm$core$Basics$identity;
-var elm$core$Basics$never = function (_n0) {
-	never:
-	while (true) {
-		var nvr = _n0;
-		var $temp$_n0 = nvr;
-		_n0 = $temp$_n0;
-		continue never;
-	}
-};
-var elm$core$Basics$identity = function (x) {
-	return x;
-};
-var elm$core$Task$Perform = elm$core$Basics$identity;
-var elm$core$Task$succeed = _Scheduler_succeed;
-var elm$core$Task$init = elm$core$Task$succeed(0);
-var elm$core$Task$andThen = _Scheduler_andThen;
-var elm$core$Task$map = F2(
-	function (func, taskA) {
-		return A2(
-			elm$core$Task$andThen,
-			function (a) {
-				return elm$core$Task$succeed(
-					func(a));
-			},
-			taskA);
-	});
-var elm$core$Task$map2 = F3(
-	function (func, taskA, taskB) {
-		return A2(
-			elm$core$Task$andThen,
-			function (a) {
-				return A2(
-					elm$core$Task$andThen,
-					function (b) {
-						return elm$core$Task$succeed(
-							A2(func, a, b));
-					},
-					taskB);
-			},
-			taskA);
-	});
-var elm$core$Task$sequence = function (tasks) {
-	return A3(
-		elm$core$List$foldr,
-		elm$core$Task$map2(elm$core$List$cons),
-		elm$core$Task$succeed(_List_Nil),
-		tasks);
-};
-var elm$core$Platform$sendToApp = _Platform_sendToApp;
-var elm$core$Task$spawnCmd = F2(
-	function (router, _n0) {
-		var task = _n0;
-		return _Scheduler_spawn(
-			A2(
-				elm$core$Task$andThen,
-				elm$core$Platform$sendToApp(router),
-				task));
-	});
-var elm$core$Task$onEffects = F3(
-	function (router, commands, state) {
-		return A2(
-			elm$core$Task$map,
-			function (_n0) {
-				return 0;
-			},
-			elm$core$Task$sequence(
-				A2(
-					elm$core$List$map,
-					elm$core$Task$spawnCmd(router),
-					commands)));
-	});
-var elm$core$Task$onSelfMsg = F3(
-	function (_n0, _n1, _n2) {
-		return elm$core$Task$succeed(0);
-	});
-var elm$core$Task$cmdMap = F2(
-	function (tagger, _n0) {
-		var task = _n0;
-		return A2(elm$core$Task$map, tagger, task);
-	});
-_Platform_effectManagers['Task'] = _Platform_createManager(elm$core$Task$init, elm$core$Task$onEffects, elm$core$Task$onSelfMsg, elm$core$Task$cmdMap);
-var elm$core$Task$command = _Platform_leaf('Task');
-var elm$core$Task$perform = F2(
-	function (toMessage, task) {
-		return elm$core$Task$command(
-			A2(elm$core$Task$map, toMessage, task));
-	});
-var elm$json$Json$Decode$map = _Json_map1;
-var elm$json$Json$Decode$map2 = _Json_map2;
-var elm$json$Json$Decode$succeed = _Json_succeed;
-var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
-	switch (handler.$) {
-		case 0:
-			return 0;
-		case 1:
-			return 1;
-		case 2:
-			return 2;
-		default:
-			return 3;
-	}
-};
-var elm$core$String$length = _String_length;
-var elm$core$String$slice = _String_slice;
-var elm$core$String$dropLeft = F2(
-	function (n, string) {
-		return (n < 1) ? string : A3(
-			elm$core$String$slice,
-			n,
-			elm$core$String$length(string),
-			string);
-	});
-var elm$core$String$startsWith = _String_startsWith;
-var elm$url$Url$Http = 0;
-var elm$url$Url$Https = 1;
-var elm$core$String$indexes = _String_indexes;
-var elm$core$String$left = F2(
-	function (n, string) {
-		return (n < 1) ? '' : A3(elm$core$String$slice, 0, n, string);
-	});
-var elm$core$String$contains = _String_contains;
-var elm$core$String$toInt = _String_toInt;
-var elm$url$Url$Url = F6(
-	function (protocol, host, port_, path, query, fragment) {
-		return {W: fragment, Y: host, aJ: path, ab: port_, ae: protocol, af: query};
-	});
-var elm$url$Url$chompBeforePath = F5(
-	function (protocol, path, params, frag, str) {
-		if (elm$core$String$isEmpty(str) || A2(elm$core$String$contains, '@', str)) {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var _n0 = A2(elm$core$String$indexes, ':', str);
-			if (!_n0.b) {
-				return elm$core$Maybe$Just(
-					A6(elm$url$Url$Url, protocol, str, elm$core$Maybe$Nothing, path, params, frag));
-			} else {
-				if (!_n0.b.b) {
-					var i = _n0.a;
-					var _n1 = elm$core$String$toInt(
-						A2(elm$core$String$dropLeft, i + 1, str));
-					if (_n1.$ === 1) {
-						return elm$core$Maybe$Nothing;
-					} else {
-						var port_ = _n1;
-						return elm$core$Maybe$Just(
-							A6(
-								elm$url$Url$Url,
-								protocol,
-								A2(elm$core$String$left, i, str),
-								port_,
-								path,
-								params,
-								frag));
-					}
-				} else {
-					return elm$core$Maybe$Nothing;
-				}
-			}
-		}
-	});
-var elm$url$Url$chompBeforeQuery = F4(
-	function (protocol, params, frag, str) {
-		if (elm$core$String$isEmpty(str)) {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var _n0 = A2(elm$core$String$indexes, '/', str);
-			if (!_n0.b) {
-				return A5(elm$url$Url$chompBeforePath, protocol, '/', params, frag, str);
-			} else {
-				var i = _n0.a;
-				return A5(
-					elm$url$Url$chompBeforePath,
-					protocol,
-					A2(elm$core$String$dropLeft, i, str),
-					params,
-					frag,
-					A2(elm$core$String$left, i, str));
-			}
-		}
-	});
-var elm$url$Url$chompBeforeFragment = F3(
-	function (protocol, frag, str) {
-		if (elm$core$String$isEmpty(str)) {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var _n0 = A2(elm$core$String$indexes, '?', str);
-			if (!_n0.b) {
-				return A4(elm$url$Url$chompBeforeQuery, protocol, elm$core$Maybe$Nothing, frag, str);
-			} else {
-				var i = _n0.a;
-				return A4(
-					elm$url$Url$chompBeforeQuery,
-					protocol,
-					elm$core$Maybe$Just(
-						A2(elm$core$String$dropLeft, i + 1, str)),
-					frag,
-					A2(elm$core$String$left, i, str));
-			}
-		}
-	});
-var elm$url$Url$chompAfterProtocol = F2(
-	function (protocol, str) {
-		if (elm$core$String$isEmpty(str)) {
-			return elm$core$Maybe$Nothing;
-		} else {
-			var _n0 = A2(elm$core$String$indexes, '#', str);
-			if (!_n0.b) {
-				return A3(elm$url$Url$chompBeforeFragment, protocol, elm$core$Maybe$Nothing, str);
-			} else {
-				var i = _n0.a;
-				return A3(
-					elm$url$Url$chompBeforeFragment,
-					protocol,
-					elm$core$Maybe$Just(
-						A2(elm$core$String$dropLeft, i + 1, str)),
-					A2(elm$core$String$left, i, str));
-			}
-		}
-	});
-var elm$url$Url$fromString = function (str) {
-	return A2(elm$core$String$startsWith, 'http://', str) ? A2(
-		elm$url$Url$chompAfterProtocol,
-		0,
-		A2(elm$core$String$dropLeft, 7, str)) : (A2(elm$core$String$startsWith, 'https://', str) ? A2(
-		elm$url$Url$chompAfterProtocol,
-		1,
-		A2(elm$core$String$dropLeft, 8, str)) : elm$core$Maybe$Nothing);
-};
-var elm$browser$Browser$Navigation$load = _Browser_load;
-var elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
-var elm$url$Url$addPort = F2(
+var $elm$browser$Browser$Navigation$load = _Browser_load;
+var $elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
+var $elm$url$Url$addPort = F2(
 	function (maybePort, starter) {
 		if (maybePort.$ === 1) {
 			return starter;
 		} else {
 			var port_ = maybePort.a;
-			return starter + (':' + elm$core$String$fromInt(port_));
+			return starter + (':' + $elm$core$String$fromInt(port_));
 		}
 	});
-var elm$url$Url$addPrefixed = F3(
+var $elm$url$Url$addPrefixed = F3(
 	function (prefix, maybeSegment, starter) {
 		if (maybeSegment.$ === 1) {
 			return starter;
@@ -5303,31 +5304,31 @@ var elm$url$Url$addPrefixed = F3(
 				_Utils_ap(prefix, segment));
 		}
 	});
-var elm$url$Url$toString = function (url) {
+var $elm$url$Url$toString = function (url) {
 	var http = function () {
-		var _n0 = url.ae;
-		if (!_n0) {
+		var _v0 = url.ad;
+		if (!_v0) {
 			return 'http://';
 		} else {
 			return 'https://';
 		}
 	}();
 	return A3(
-		elm$url$Url$addPrefixed,
+		$elm$url$Url$addPrefixed,
 		'#',
 		url.W,
 		A3(
-			elm$url$Url$addPrefixed,
+			$elm$url$Url$addPrefixed,
 			'?',
-			url.af,
+			url.ae,
 			_Utils_ap(
 				A2(
-					elm$url$Url$addPort,
-					url.ab,
-					_Utils_ap(http, url.Y)),
-				url.aJ)));
+					$elm$url$Url$addPort,
+					url.aa,
+					_Utils_ap(http, url.X)),
+				url.aI)));
 };
-var author$project$Main$update = F2(
+var $author$project$Main$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
 			case 0:
@@ -5337,14 +5338,14 @@ var author$project$Main$update = F2(
 					return _Utils_Tuple2(
 						model,
 						A2(
-							elm$browser$Browser$Navigation$pushUrl,
-							model.aE,
-							elm$url$Url$toString(url)));
+							$elm$browser$Browser$Navigation$pushUrl,
+							model.aD,
+							$elm$url$Url$toString(url)));
 				} else {
 					var href = urlRequest.a;
 					return _Utils_Tuple2(
 						model,
-						elm$browser$Browser$Navigation$load(href));
+						$elm$browser$Browser$Navigation$load(href));
 				}
 			case 1:
 				var url = msg.a;
@@ -5352,982 +5353,1058 @@ var author$project$Main$update = F2(
 					_Utils_update(
 						model,
 						{
-							B: author$project$Main$urlToRoute(url),
-							aT: url
+							B: $author$project$Main$urlToRoute(url),
+							aU: url
 						}),
-					elm$core$Platform$Cmd$none);
+					$elm$core$Platform$Cmd$none);
 			default:
 				var f = msg.a;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{G: f}),
-					elm$core$Platform$Cmd$none);
+						{F: f}),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
-var elm_explorations$markdown$Markdown$defaultOptions = {
-	T: elm$core$Maybe$Nothing,
-	X: elm$core$Maybe$Just(
-		{as: false, aO: false}),
-	ai: true,
-	al: false
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
+var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$footer = _VirtualDom_node('footer');
+var $elm_explorations$markdown$Markdown$defaultOptions = {
+	T: $elm$core$Maybe$Nothing,
+	ax: $elm$core$Maybe$Just(
+		{ap: false, aP: false}),
+	aL: true,
+	aM: false
 };
-var elm$core$Maybe$isJust = function (maybe) {
+var $elm$core$Maybe$isJust = function (maybe) {
 	if (!maybe.$) {
 		return true;
 	} else {
 		return false;
 	}
 };
-var elm_explorations$markdown$Markdown$toHtmlWith = _Markdown_toHtml;
-var elm_explorations$markdown$Markdown$toHtml = elm_explorations$markdown$Markdown$toHtmlWith(elm_explorations$markdown$Markdown$defaultOptions);
-var author$project$Main$markdown = function (content) {
-	return A2(elm_explorations$markdown$Markdown$toHtml, _List_Nil, content);
+var $elm_explorations$markdown$Markdown$toHtmlWith = _Markdown_toHtml;
+var $elm_explorations$markdown$Markdown$toHtml = $elm_explorations$markdown$Markdown$toHtmlWith($elm_explorations$markdown$Markdown$defaultOptions);
+var $author$project$Main$markdown = function (content) {
+	return A2($elm_explorations$markdown$Markdown$toHtml, _List_Nil, content);
 };
-var elm$html$Html$div = _VirtualDom_node('div');
-var elm$html$Html$footer = _VirtualDom_node('footer');
-var elm$html$Html$p = _VirtualDom_node('p');
-var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
-var elm$json$Json$Encode$string = _Json_wrap;
-var elm$html$Html$Attributes$stringProperty = F2(
-	function (key, string) {
-		return A2(
-			_VirtualDom_property,
-			key,
-			elm$json$Json$Encode$string(string));
-	});
-var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
-var author$project$Main$footerView = function (model) {
+var $elm$html$Html$p = _VirtualDom_node('p');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Main$footerView = function (model) {
 	return A2(
-		elm$html$Html$footer,
+		$elm$html$Html$footer,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('footer')
+				$elm$html$Html$Attributes$class('footer')
 			]),
 		_List_fromArray(
 			[
 				A2(
-				elm$html$Html$div,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('content has-text-justified')
+						$elm$html$Html$Attributes$class('content has-text-justified')
 					]),
 				_List_fromArray(
 					[
 						A2(
-						elm$html$Html$p,
+						$elm$html$Html$p,
 						_List_Nil,
 						_List_fromArray(
 							[
-								elm$html$Html$text('hatemogi.com')
+								$elm$html$Html$text('hatemogi.com')
 							])),
-						author$project$Main$markdown('이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는\n                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. '),
-						author$project$Main$markdown('그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다.'),
-						author$project$Main$markdown('이 웹사이트는 [Elm, Bulma, FontAwesome를 써서\n                          만들었습니다](https://medium.com/happyprogrammer-in-jeju/elm-순수-함수형-언어로-개인-홈-개편-45734486678c).')
+						$author$project$Main$markdown('이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는\n                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. '),
+						$author$project$Main$markdown('그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다.'),
+						$author$project$Main$markdown('이 웹사이트는 [Elm, Bulma, FontAwesome를 써서\n                          만들었습니다](https://medium.com/happyprogrammer-in-jeju/elm-순수-함수형-언어로-개인-홈-개편-45734486678c).')
 					]))
 			]));
 };
-var author$project$Article$Article = F3(
+var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$html$Html$article = _VirtualDom_node('article');
+var $author$project$Article$Article = F3(
 	function (title, url, summary) {
-		return {aN: summary, aR: title, aT: url};
+		return {aO: summary, aS: title, aU: url};
 	});
-var author$project$Article$data = _List_fromArray(
+var $author$project$Article$data = _List_fromArray(
 	[
-		A3(author$project$Article$Article, '다음 캘린더 서비스 개발 비하인드 스토리', 'https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05', '이 글은, 다음 캘린더 서비스 개발자가 개인적으로 적은 뒷이야기입니다. 오래전 부정확한 기억에\n               기반했기에 사실과 다른 주관적인 내용이 포함돼 있을 수 있으니, 심각하게 읽지는 않으셨으면 좋겠습니다.\n               관련해서 떠오르는 다양한 주제의 산만한 생각을 정리했습니다. 일관된 주제 없이 개인적 회고에 불과하지만,\n               다른 서비스 개발자분들에게 도움이 될만한 경험이 전달되기를 기대합니다.'),
-		A3(author$project$Article$Article, '스타벅스 연결러 앱 공개 & 개발 후기', 'https://medium.com/happyprogrammer-in-jeju/스타벅스-연결러-앱-공개-개발-후기-c0c5f88a86e8', '올해 초 진행하다 중단한 프로젝트를 뒤늦게 계속해서 마무리지었습니다. 스타벅스에서 무료 WiFi를 연결할 때\n               거치는 번거로운 과정을 자동화해주는 macOS 앱을 만들려는 프로젝트였고, 그 개발 과정을 친절히 남겨보겠다는\n               의욕과 함께 시작했으나, 이내 흐지부지됐더랍니다. 중간 과정은 건너뛰고, 드디어 앱만 후딱 개발해서 공개한\n               과정 이야기와 후기를 남깁니다. 여러분이 개발자라면, 자신도 겪었을 만한 비슷한 상황을 공감할 수 있는 내용일\n               테고, 개발자가 아니시라면, 개발자들은 어떤 고민을 하면서 뭔가를 만드는지 조금은 알게 되실만한 내용이리라\n               기대합니다.'),
-		A3(author$project$Article$Article, '개알못인 당신이 웹개발을 시작한다면 (1)', 'https://medium.com/happyprogrammer-in-jeju/개알못인-당신이-웹개발을-시작한다면-1-9415c014a130', '\'개\'발을 \'알\'지 \'못\'하는 당신이 웹 개발을 시작한다면, 어디서부터 무얼 공부해야 할지라는 주제의 글입니다.\n               감히 누구도 편하게 얘기하기 어려운 주제입니다. 무능한 저 한 개인이 올바른 가이드를 제시해 드릴 수 없는\n               일입니다만, 무책임하게나마 감히 적어보겠습니다. 너무 신뢰하지 마시고 가벼이 읽어 주시고, 이렇게 생각하는\n               사람도 있구나 정도로 넘기시면 좋은 주제입니다.'),
-		A3(author$project$Article$Article, '한글코딩.org 개발기 (실패기?)', 'https://medium.com/happyprogrammer-in-jeju/한글코딩-org-개발기-실패기-f69bd4bc55c6', '개발자가 쓰는 말은 한국어인데, 소스코드는 영문으로 작성합니다. 나랏말쌈이 코드와 다른 상황입니다.\n               이제껏 무심코 영문으로만 개발해 왔습니다. 그러다 불현듯 한글로 쓰면 안 되는 이유가 뭘까 궁금해졌습니다.\n               그러다 흘러 흘러 <http://한글코딩.org>를 만들게 된 이야기입니다. 사이트를 만든지는 오래됐는데,\n               이제야 Draft에 묵혀놨던 후기를 꺼내서 마무리 지어 올립니다.'),
-		A3(author$project$Article$Article, '3/8 판교 긴급 출장 24시', 'https://medium.com/happyprogrammer-in-jeju/3-8-판교-긴급-출장-24시-3bad70af3176', '전 제주에 사는 원격근무 프리랜서 프로그래머입니다. 십수 년 월급쟁이 생활을 하다가,\n               여차여차해서 프리랜서가 됐어요. 처음에는 직장인이 아니라는 데서 생기는 이런저런 상황들이 어색했는데,\n               이제는 그럭저럭 관찰하고 반응하며 지내고 익숙해진 것 같습니다. 이 글은, 어쩌다 갑작스레 판교로 출장을\n               다녀오고 나서 적는 이런저런 개인적 이야기입니다. 별다른 지식의 공유나 일관된 주제는 없겠지만,\n               남의 일기 읽어보는 재미는 있을지도 모르겠군요.'),
-		A3(author$project$Article$Article, '스타트업에서 시니어 개발자를 구하기 어려운 이유', 'https://medium.com/happyprogrammer-in-jeju/스타트업에서-시니어-개발자를-구하기-어려운-이유-cd123f779052', '일부 소프트웨어 개발 인력 시장에서, 제가 근무했던 D사 같은 회사에 다니는 인력의 가치를 높게 평가하고\n               있는 듯합니다. 그래서인지, 종종 인재를 소개해 달라는 부탁을 받고는 했고, 그럴 때 들었던 생각을 차마\n               직접 얘기하지는 못하고 맘속에 담아뒀다가 이제야 풀어 보았습니다.')
+		A3($author$project$Article$Article, '다음 캘린더 서비스 개발 비하인드 스토리', 'https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05', '이 글은, 다음 캘린더 서비스 개발자가 개인적으로 적은 뒷이야기입니다. 오래전 부정확한 기억에\n               기반했기에 사실과 다른 주관적인 내용이 포함돼 있을 수 있으니, 심각하게 읽지는 않으셨으면 좋겠습니다.\n               관련해서 떠오르는 다양한 주제의 산만한 생각을 정리했습니다. 일관된 주제 없이 개인적 회고에 불과하지만,\n               다른 서비스 개발자분들에게 도움이 될만한 경험이 전달되기를 기대합니다.'),
+		A3($author$project$Article$Article, '스타벅스 연결러 앱 공개 & 개발 후기', 'https://medium.com/happyprogrammer-in-jeju/스타벅스-연결러-앱-공개-개발-후기-c0c5f88a86e8', '올해 초 진행하다 중단한 프로젝트를 뒤늦게 계속해서 마무리지었습니다. 스타벅스에서 무료 WiFi를 연결할 때\n               거치는 번거로운 과정을 자동화해주는 macOS 앱을 만들려는 프로젝트였고, 그 개발 과정을 친절히 남겨보겠다는\n               의욕과 함께 시작했으나, 이내 흐지부지됐더랍니다. 중간 과정은 건너뛰고, 드디어 앱만 후딱 개발해서 공개한\n               과정 이야기와 후기를 남깁니다. 여러분이 개발자라면, 자신도 겪었을 만한 비슷한 상황을 공감할 수 있는 내용일\n               테고, 개발자가 아니시라면, 개발자들은 어떤 고민을 하면서 뭔가를 만드는지 조금은 알게 되실만한 내용이리라\n               기대합니다.'),
+		A3($author$project$Article$Article, '개알못인 당신이 웹개발을 시작한다면 (1)', 'https://medium.com/happyprogrammer-in-jeju/개알못인-당신이-웹개발을-시작한다면-1-9415c014a130', '\'개\'발을 \'알\'지 \'못\'하는 당신이 웹 개발을 시작한다면, 어디서부터 무얼 공부해야 할지라는 주제의 글입니다.\n               감히 누구도 편하게 얘기하기 어려운 주제입니다. 무능한 저 한 개인이 올바른 가이드를 제시해 드릴 수 없는\n               일입니다만, 무책임하게나마 감히 적어보겠습니다. 너무 신뢰하지 마시고 가벼이 읽어 주시고, 이렇게 생각하는\n               사람도 있구나 정도로 넘기시면 좋은 주제입니다.'),
+		A3($author$project$Article$Article, '한글코딩.org 개발기 (실패기?)', 'https://medium.com/happyprogrammer-in-jeju/한글코딩-org-개발기-실패기-f69bd4bc55c6', '개발자가 쓰는 말은 한국어인데, 소스코드는 영문으로 작성합니다. 나랏말쌈이 코드와 다른 상황입니다.\n               이제껏 무심코 영문으로만 개발해 왔습니다. 그러다 불현듯 한글로 쓰면 안 되는 이유가 뭘까 궁금해졌습니다.\n               그러다 흘러 흘러 <http://한글코딩.org>를 만들게 된 이야기입니다. 사이트를 만든지는 오래됐는데,\n               이제야 Draft에 묵혀놨던 후기를 꺼내서 마무리 지어 올립니다.'),
+		A3($author$project$Article$Article, '3/8 판교 긴급 출장 24시', 'https://medium.com/happyprogrammer-in-jeju/3-8-판교-긴급-출장-24시-3bad70af3176', '전 제주에 사는 원격근무 프리랜서 프로그래머입니다. 십수 년 월급쟁이 생활을 하다가,\n               여차여차해서 프리랜서가 됐어요. 처음에는 직장인이 아니라는 데서 생기는 이런저런 상황들이 어색했는데,\n               이제는 그럭저럭 관찰하고 반응하며 지내고 익숙해진 것 같습니다. 이 글은, 어쩌다 갑작스레 판교로 출장을\n               다녀오고 나서 적는 이런저런 개인적 이야기입니다. 별다른 지식의 공유나 일관된 주제는 없겠지만,\n               남의 일기 읽어보는 재미는 있을지도 모르겠군요.'),
+		A3($author$project$Article$Article, '스타트업에서 시니어 개발자를 구하기 어려운 이유', 'https://medium.com/happyprogrammer-in-jeju/스타트업에서-시니어-개발자를-구하기-어려운-이유-cd123f779052', '일부 소프트웨어 개발 인력 시장에서, 제가 근무했던 D사 같은 회사에 다니는 인력의 가치를 높게 평가하고\n               있는 듯합니다. 그래서인지, 종종 인재를 소개해 달라는 부탁을 받고는 했고, 그럴 때 들었던 생각을 차마\n               직접 얘기하지는 못하고 맘속에 담아뒀다가 이제야 풀어 보았습니다.')
 	]);
-var elm$html$Html$a = _VirtualDom_node('a');
-var elm$html$Html$article = _VirtualDom_node('article');
-var elm$html$Html$i = _VirtualDom_node('i');
-var elm$html$Html$span = _VirtualDom_node('span');
-var elm$html$Html$strong = _VirtualDom_node('strong');
-var elm$html$Html$Attributes$href = function (url) {
+var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
-		elm$html$Html$Attributes$stringProperty,
+		$elm$html$Html$Attributes$stringProperty,
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
-var author$project$Main$articlesView = function (model) {
+var $elm$html$Html$i = _VirtualDom_node('i');
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $elm$html$Html$strong = _VirtualDom_node('strong');
+var $author$project$Main$articlesView = function (model) {
 	var articlef = function (a) {
 		return A2(
-			elm$html$Html$article,
+			$elm$html$Html$article,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('media')
+					$elm$html$Html$Attributes$class('media')
 				]),
 			_List_fromArray(
 				[
 					A2(
-					elm$html$Html$div,
+					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('media-content')
+							$elm$html$Html$Attributes$class('media-content')
 						]),
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$a,
+							$elm$html$Html$a,
 							_List_fromArray(
 								[
-									elm$html$Html$Attributes$href(a.aT)
+									$elm$html$Html$Attributes$href(a.aU)
 								]),
 							_List_fromArray(
 								[
 									A2(
-									elm$html$Html$strong,
+									$elm$html$Html$strong,
 									_List_Nil,
 									_List_fromArray(
 										[
-											elm$html$Html$text(a.aR)
+											$elm$html$Html$text(a.aS)
 										])),
 									A2(
-									elm$html$Html$span,
+									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											elm$html$Html$Attributes$class('icon')
+											$elm$html$Html$Attributes$class('icon')
 										]),
 									_List_fromArray(
 										[
 											A2(
-											elm$html$Html$i,
+											$elm$html$Html$i,
 											_List_fromArray(
 												[
-													elm$html$Html$Attributes$class('fas fa-link fa-sm')
+													$elm$html$Html$Attributes$class('fas fa-link fa-sm')
 												]),
 											_List_Nil)
 										]))
 								])),
-							author$project$Main$markdown(a.aN)
+							$author$project$Main$markdown(a.aO)
 						]))
 				]));
 	};
 	return A2(
-		elm$html$Html$div,
+		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
 				A2(
-				elm$html$Html$article,
+				$elm$html$Html$article,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('message')
+						$elm$html$Html$Attributes$class('message')
 					]),
 				_List_fromArray(
 					[
 						A2(
-						elm$html$Html$div,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								elm$html$Html$Attributes$class('message-body')
+								$elm$html$Html$Attributes$class('message-body')
 							]),
 						_List_fromArray(
 							[
-								author$project$Main$markdown('부족하나마 나름의 생각을 정리한 글들을 주로 [미디엄](https://medium.com/happyprogrammer-in-jeju)에 올리고 있습니다.\n               아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다.')
+								$author$project$Main$markdown('부족하나마 나름의 생각을 정리한 글들을 주로 [미디엄](https://medium.com/happyprogrammer-in-jeju)에 올리고 있습니다.\n               아래에 그 중 반응이 좋았거나, 제가 더 알리고 싶다고 생각하는 글을 몇 편 골라두었습니다.')
 							]))
 					])),
 				A2(
-				elm$html$Html$div,
+				$elm$html$Html$div,
 				_List_Nil,
-				A2(elm$core$List$map, articlef, author$project$Article$data))
+				A2($elm$core$List$map, articlef, $author$project$Article$data))
 			]));
 };
-var author$project$Intro$Section = F4(
-	function (title, timeline, url, description) {
-		return {aw: description, aQ: timeline, aR: title, aT: url};
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
 	});
-var author$project$Intro$data = _List_fromArray(
-	[
-		A4(author$project$Intro$Section, '', elm$core$Maybe$Nothing, elm$core$Maybe$Nothing, '소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n       직업으로 삼았습니다. 모 IT기업에서 백엔드 개발자로 일하고 있습니다.\n       오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,\n       Clojure, Haskell, Scala 같은 함수형 프로그래밍 언어를 공부하고 있습니다.'),
-		A4(
-		author$project$Intro$Section,
-		'모 IT기업',
-		elm$core$Maybe$Just('2020-현재'),
-		elm$core$Maybe$Nothing,
-		'경기도 소재 모 IT기업에서 백엔드 개발자로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n             혹시라도 제 개인적 발언이 회사 입장에서 불편하지 않도록, 재직중인 회사의 사명은 밝히지 않고 있습니다.'),
-		A4(
-		author$project$Intro$Section,
-		'NHN',
-		elm$core$Maybe$Just('2018-2020'),
-		elm$core$Maybe$Just('https://www.nhn.com/'),
-		'NHN Dooray개발실에서 업무용 메신저 서비스 개발을 담당하며, Akka로 메시징 서버를 구축했고,\n        Java와 Kotlin으로 API 서버를 개발했습니다. '),
-		A4(
-		author$project$Intro$Section,
-		'오후코드 프리랜서',
-		elm$core$Maybe$Just('2015-2018'),
-		elm$core$Maybe$Just('http://ohucode.com/'),
-		'개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n             위한 서버 소프트웨어를 개발해 납품했습니다.'),
-		A4(
-		author$project$Intro$Section,
-		'카카오',
-		elm$core$Maybe$Just('2004-2015'),
-		elm$core$Maybe$Just('https://kakaocorp.com'),
-		'지금은 카카오가 된 다음커뮤니케이션에서 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. 아, 초반에 1.5년 동안 일본 도쿄 지사에서 근무하는 행운을 누렸습니다. '),
-		A4(author$project$Intro$Section, '반갑습니다', elm$core$Maybe$Nothing, elm$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.')
-	]);
-var elm$html$Html$h2 = _VirtualDom_node('h2');
-var elm$html$Html$small = _VirtualDom_node('small');
-var author$project$Main$introView = function () {
-	var headingf = function (section) {
-		var _n1 = section.aT;
-		if (!_n1.$) {
-			var url = _n1.a;
-			return A2(
-				elm$html$Html$a,
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
+var $elm$html$Html$figure = _VirtualDom_node('figure');
+var $elm$html$Html$h3 = _VirtualDom_node('h3');
+var $elm$html$Html$img = _VirtualDom_node('img');
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
+var $author$project$Main$certificateView = function (cert) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('box')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$article,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$href(url)
+						$elm$html$Html$Attributes$class('media')
 					]),
 				_List_fromArray(
 					[
-						elm$html$Html$text(section.aR)
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('media-left is-hidden-mobile')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$figure,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('image')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$a,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$href(cert.aU)
+											]),
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$img,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$src('thumbnails/' + cert.aA),
+														A2($elm$html$Html$Attributes$attribute, 'srcset', 'thumbnails/' + (cert.aA + ' 2x'))
+													]),
+												_List_Nil)
+											]))
+									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('media-content')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('content')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$h3,
+										_List_Nil,
+										_List_fromArray(
+											[
+												A2(
+												$elm$html$Html$a,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$href(cert.aU)
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text(cert.aS)
+													]))
+											])),
+										A2(
+										$elm$html$Html$p,
+										_List_Nil,
+										_List_fromArray(
+											[
+												$elm$html$Html$text(cert.au)
+											]))
+									])),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('tags')
+									]),
+								A2(
+									$elm$core$List$map,
+									function (t) {
+										return A2(
+											$elm$html$Html$span,
+											_List_fromArray(
+												[
+													$elm$html$Html$Attributes$class('tag is-info')
+												]),
+											_List_fromArray(
+												[
+													$elm$html$Html$text(t)
+												]));
+									},
+									cert.aQ))
+							]))
+					]))
+			]));
+};
+var $author$project$Certs$Certificate = F6(
+	function (title, date, image, url, tags, descrition) {
+		return {as: date, au: descrition, aA: image, aQ: tags, aS: title, aU: url};
+	});
+var $author$project$Certs$data = _List_fromArray(
+	[
+		A6(
+		$author$project$Certs$Certificate,
+		'Functional Programming Principles in Scala',
+		'2019/12',
+		'functional-programming-principles.png',
+		'https://www.coursera.org/account/accomplishments/verify/G8484AJVKD38',
+		_List_fromArray(
+			['스칼라', '함수형', 'coursera']),
+		'스칼라 언어로 함수형 프로그래밍의 원리를 알려주는 수업입니다. \n        명령형 프로그래밍과는 접근하는 출발점이 달라서 인상적이었습니다. \n        프로그램 코드를 기준으로, 증명(!)을 시도하는 것도 놀라웠구요. \n        재귀 호출 훈련을 받을 수 있습니다.'),
+		A6(
+		$author$project$Certs$Certificate,
+		'Functional Program Design in Scala',
+		'2019/12',
+		'functional-program-design.png',
+		'https://www.coursera.org/account/accomplishments/verify/C46AZ4X9TD8H',
+		_List_fromArray(
+			['스칼라', '함수형', 'coursera']),
+		'스칼라 언어로 함수형 프로그래밍을 조금더 깊이있게 다루는 수업입니다. for-comprehension도 \n        본격적으로 활용하고, 모나드에 대해서도 알려줍니다. 비록 아직도 모나드를 잘 모르겠지만,\n        어쨌건 pure와 flatMap이 가능한 무언가라고 여겨봅시다.'),
+		A6(
+		$author$project$Certs$Certificate,
+		'Big Data Analysis with Scala and Spark',
+		'2019/12',
+		'bigdata-analysis.png',
+		'https://www.coursera.org/account/accomplishments/verify/9ZYD74J2N5QB',
+		_List_fromArray(
+			['스칼라', '함수형', 'Spark', '빅데이터', 'coursera']),
+		'대용량 데이터 분석을 도와주는 아파치 스파크에 대한 수업입니다. 스파크를 다루는 기초부터\n        활용까지 상세하게 알려줍니다. RDD가 무엇인지, 어떻게 효과적으로 활용해야 하는지 알 수 있게 됩니다.'),
+		A6(
+		$author$project$Certs$Certificate,
+		'Kotlin for Java Developers',
+		'2019/03',
+		'kotlin-for-java-developers.png',
+		'https://www.coursera.org/account/accomplishments/verify/YW847W7GCM88',
+		_List_fromArray(
+			['코틀린', 'coursera']),
+		'Kotlin언어를 개발한 JetBrain사에서 직접 만든 수업입니다. 자바 개발자를 대상으로 코틀린을 쉽게 \n        배울 수 있도록 친절하게 설명해줍니다. 안드로이드 개발의 표준언어로 채택되었기에 관심을 갖고 \n        공부해보았습니다. 자바와 1:1 대응 구현이 가능하면서 매우 편리한 문법 기능이 많이있어서 좋았습니다.'),
+		A6(
+		$author$project$Certs$Certificate,
+		'Programming Reactive Systems',
+		'2020/12',
+		'reactive-systems.png',
+		'https://courses.edx.org/certificates/2bb6c61caef64f27a35d3f47e086390f',
+		_List_fromArray(
+			['반응형', '함수형', '스칼라', 'edX']),
+		'동시성 처리가 편리한 액터 모델(actor model)을 구현한 Akka를 써서,\n        반응형 프로그래밍을 하는 방법을 알려주는 수업입니다. 반응형 프로그래밍이나,\n        Akka를 써서 서비스 개발을 해보실 분들께 추천드리는 수업입니다.')
+	]);
+var $author$project$Main$certificatesView = function (model) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		A2(
+			$elm$core$List$cons,
+			A2(
+				$elm$html$Html$article,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('message')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('message-body')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$p,
+								_List_Nil,
+								_List_fromArray(
+									[
+										$elm$html$Html$text('모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다. \n                    하지만 제게는 그런 장식품이 없었지요. 그 부러웠던 마음을 이제라도 달래려, \n                    그간 받은 수료증이라도 이렇게 온라인에 걸어두렵니다. ')
+									]))
+							]))
+					])),
+			A2($elm$core$List$map, $author$project$Main$certificateView, $author$project$Certs$data)));
+};
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $author$project$Intro$Section = F4(
+	function (title, timeline, url, description) {
+		return {at: description, aR: timeline, aS: title, aU: url};
+	});
+var $author$project$Intro$data = _List_fromArray(
+	[
+		A4(
+		$author$project$Intro$Section,
+		'어딘가',
+		$elm$core$Maybe$Just('2020-현재'),
+		$elm$core$Maybe$Nothing,
+		'경기도 소재 회사에서 백엔드 개발자로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n        혹시라도 제 개인적 발언이 회사 입장에서 불편하지 않도록, 그리고 제가 마음대로 말하는 데에 불편함이 없도록, \n        재직중인 회사의 사명은 밝히지 않고 있습니다.'),
+		A4(
+		$author$project$Intro$Section,
+		'NHN',
+		$elm$core$Maybe$Just('2018-2020'),
+		$elm$core$Maybe$Just('https://www.nhn.com/'),
+		'NHN Dooray개발실에서 업무용 메신저 서비스 개발을 담당하며, Akka로 메시징 서버를 구축했고,\n        Java와 Kotlin으로 API 서버를 개발했습니다. '),
+		A4(
+		$author$project$Intro$Section,
+		'오후코드 프리랜서',
+		$elm$core$Maybe$Just('2015-2018'),
+		$elm$core$Maybe$Just('http://ohucode.com/'),
+		'개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를\n             위한 서버 소프트웨어를 개발해 납품했습니다.'),
+		A4(
+		$author$project$Intro$Section,
+		'카카오',
+		$elm$core$Maybe$Just('2004-2015'),
+		$elm$core$Maybe$Just('https://kakaocorp.com'),
+		'지금은 카카오가 된 다음커뮤니케이션에서 카페, 플래닛, 캘린더, 마이피플등의 서비스 개발에\n       참여했고, 간혹 웹 프론트엔드나 iOS앱 개발도 했지만, 대부분은 Java와 Ruby로\n       백엔드 웹서비스를 개발했습니다. 초반에 1년 반 정도 일본 도쿄 지사에서 근무한 경험이 있습니다.'),
+		A4($author$project$Intro$Section, '반갑습니다', $elm$core$Maybe$Nothing, $elm$core$Maybe$Nothing, '여기는 제 개인을 다른분들께 소개드리는 공간이자, 제가 이따금 되돌아 볼 기록을 남겨놓는 웹사이트입니다.\n       제가 소속된 단체나 지인들과 무관한 저 홀로 개인의 생각들이 널려있으니 너그러이 봐주시기 바랍니다.')
+	]);
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
+var $elm$html$Html$small = _VirtualDom_node('small');
+var $author$project$Main$introView = function () {
+	var headingf = function (section) {
+		var _v1 = section.aU;
+		if (!_v1.$) {
+			var url = _v1.a;
+			return A2(
+				$elm$html$Html$a,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$href(url)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(section.aS)
 					]));
 		} else {
-			return elm$html$Html$text(section.aR);
+			return $elm$html$Html$text(section.aS);
 		}
 	};
 	var sectionf = function (section) {
 		return A2(
-			elm$html$Html$article,
+			$elm$html$Html$article,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('media')
+					$elm$html$Html$Attributes$class('media')
 				]),
 			_List_fromArray(
 				[
 					A2(
-					elm$html$Html$div,
+					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('media-content')
+							$elm$html$Html$Attributes$class('media-content')
 						]),
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$h2,
+							$elm$html$Html$h2,
 							_List_Nil,
 							A2(
-								elm$core$List$cons,
+								$elm$core$List$cons,
 								headingf(section),
 								function () {
-									var _n0 = section.aQ;
-									if (!_n0.$) {
-										var timeline = _n0.a;
+									var _v0 = section.aR;
+									if (!_v0.$) {
+										var timeline = _v0.a;
 										return _List_fromArray(
 											[
 												A2(
-												elm$html$Html$small,
+												$elm$html$Html$small,
 												_List_fromArray(
 													[
-														elm$html$Html$Attributes$class('timeline')
+														$elm$html$Html$Attributes$class('timeline')
 													]),
 												_List_fromArray(
 													[
-														elm$html$Html$text(timeline)
+														$elm$html$Html$text(timeline)
 													]))
 											]);
 									} else {
 										return _List_Nil;
 									}
 								}())),
-							author$project$Main$markdown(section.aw)
+							$author$project$Main$markdown(section.at)
 						]))
 				]));
 	};
 	return A2(
-		elm$html$Html$div,
+		$elm$html$Html$div,
 		_List_Nil,
-		_Utils_ap(
-			A2(elm$core$List$map, sectionf, author$project$Intro$data),
-			_List_fromArray(
-				[
-					A2(
-					elm$html$Html$div,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('media')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$html$Html$a,
-							_List_fromArray(
-								[
-									elm$html$Html$Attributes$class('button is-info'),
-									elm$html$Html$Attributes$href('/프로젝트')
-								]),
-							_List_fromArray(
-								[
-									elm$html$Html$text('프로젝트 보기')
-								]))
-						]))
-				])));
+		A2(
+			$elm$core$List$cons,
+			A2(
+				$elm$html$Html$article,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('message')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('message-body')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('어딘가에서 백엔드 개발자로 일하고 있습니다.\n                       오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,\n                       Clojure, Scala, Haskell 같은 함수형 프로그래밍 언어를 공부하고 있습니다.')
+							]))
+					])),
+			_Utils_ap(
+				A2($elm$core$List$map, sectionf, $author$project$Intro$data),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('media')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$a,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('button is-info'),
+										$elm$html$Html$Attributes$href('/프로젝트')
+									]),
+								_List_fromArray(
+									[
+										$elm$html$Html$text('프로젝트 보기')
+									]))
+							]))
+					]))));
 }();
-var author$project$KotlinStudy$Model = function (key) {
-	return {aE: key};
-};
-var author$project$KotlinStudy$spanView = function (span) {
-	if (!span.$) {
-		var text = span.a;
-		return elm$html$Html$text(text);
-	} else {
-		return A2(elm$html$Html$span, _List_Nil, _List_Nil);
-	}
-};
-var elm$core$Basics$composeL = F3(
-	function (g, f, x) {
-		return g(
-			f(x));
-	});
-var elm$core$List$singleton = function (value) {
-	return _List_fromArray(
-		[value]);
-};
-var elm$html$Html$li = _VirtualDom_node('li');
-var elm$html$Html$ol = _VirtualDom_node('ol');
-var elm$html$Html$pre = _VirtualDom_node('pre');
-var elm$html$Html$ul = _VirtualDom_node('ul');
-var author$project$KotlinStudy$blockView = function (block) {
-	var li = A2(
-		elm$core$Basics$composeL,
-		A2(
-			elm$core$Basics$composeL,
-			elm$html$Html$li(_List_Nil),
-			elm$core$List$singleton),
-		author$project$KotlinStudy$spanView);
-	switch (block.$) {
-		case 0:
-			var spans = block.a;
-			return A2(
-				elm$html$Html$div,
-				_List_Nil,
-				A2(elm$core$List$map, author$project$KotlinStudy$spanView, spans));
-		case 1:
-			var spans = block.a;
-			return A2(
-				elm$html$Html$ul,
-				_List_Nil,
-				A2(elm$core$List$map, li, spans));
-		case 2:
-			var spans = block.a;
-			return A2(
-				elm$html$Html$ol,
-				_List_Nil,
-				A2(elm$core$List$map, li, spans));
-		case 3:
-			var title = block.a;
-			var code = block.b;
-			return A2(
-				elm$html$Html$pre,
-				_List_Nil,
-				_List_fromArray(
-					[
-						elm$html$Html$text(code)
-					]));
-		default:
-			var title = block.a;
-			var code = block.b;
-			return A2(
-				elm$html$Html$pre,
-				_List_Nil,
-				_List_fromArray(
-					[
-						elm$html$Html$text(code)
-					]));
-	}
-};
-var elm$html$Html$section = _VirtualDom_node('section');
-var author$project$KotlinStudy$sectionView = function (section) {
-	return A2(
-		elm$html$Html$section,
-		_List_Nil,
-		A2(
-			elm$core$List$cons,
-			A2(
-				elm$html$Html$h2,
-				_List_Nil,
-				_List_fromArray(
-					[
-						elm$html$Html$text(section.aR)
-					])),
-			A2(elm$core$List$map, author$project$KotlinStudy$blockView, section.R)));
-};
-var elm$html$Html$h1 = _VirtualDom_node('h1');
-var author$project$KotlinStudy$articleView = function (article) {
-	return A2(
-		elm$html$Html$article,
-		_List_Nil,
-		A2(
-			elm$core$List$cons,
-			A2(
-				elm$html$Html$h1,
-				_List_Nil,
-				_List_fromArray(
-					[
-						elm$html$Html$text(article.aR)
-					])),
-			A2(elm$core$List$map, author$project$KotlinStudy$sectionView, article.ak)));
-};
-var author$project$KotlinStudy$Article = F3(
-	function (id, title, sections) {
-		return {aB: id, ak: sections, aR: title};
-	});
-var author$project$KotlinStudy$Kotlin = F2(
-	function (a, b) {
-		return {$: 3, a: a, b: b};
-	});
-var author$project$KotlinStudy$Section = F2(
-	function (title, content) {
-		return {R: content, aR: title};
-	});
-var author$project$KotlinStudy$T = function (a) {
-	return {$: 0, a: a};
-};
-var author$project$KotlinStudy$UL = function (a) {
-	return {$: 1, a: a};
-};
-var author$project$KotlinStudy$study00 = A3(
-	author$project$KotlinStudy$Article,
-	'intro',
-	'코틀린 소개',
+var $elm$html$Html$main_ = _VirtualDom_node('main');
+var $author$project$Main$notFoundView = $elm$html$Html$text('404 찾을 수 없습니다');
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $author$project$Main$profileView = A2(
+	$elm$html$Html$div,
 	_List_fromArray(
 		[
-			A2(
-			author$project$KotlinStudy$Section,
-			'코틀린이란 무엇인가?',
-			_List_fromArray(
-				[
-					author$project$KotlinStudy$UL(
-					_List_fromArray(
-						[
-							author$project$KotlinStudy$T('자바 플랫폼에서 돌아가는 프로그래밍 언어'),
-							author$project$KotlinStudy$T('간결하고 실용적'),
-							author$project$KotlinStudy$T('자바와의 상호운용성을 중시'),
-							author$project$KotlinStudy$T('성능도 자바와 같은 수준')
-						]))
-				])),
-			A2(
-			author$project$KotlinStudy$Section,
-			'코틀린 맛보기',
-			_List_fromArray(
-				[
-					A2(author$project$KotlinStudy$Kotlin, '첫 예제', '\n        data class Person(val name: String,\n                          val age: Int? = null)\n        fun main(args: Array<String>) {\n            val people = listOf(Person("영희"),\n                                Person("철수", age = 29))\n            val oldest = people.maxBy { it.age ?: 0 }\n            println("나이가 가장 많은 사람: $oldest")\n        }\n\n        // 결과: 나이가 가장 많은 사람: Person(name=철수, age=29)\n      ')
-				]))
-		]));
-var author$project$KotlinStudy$articlesView = function (model) {
-	return author$project$KotlinStudy$articleView(author$project$KotlinStudy$study00);
-};
-var author$project$Main$kotlinStudyView = function (model) {
-	return author$project$KotlinStudy$articlesView(
-		author$project$KotlinStudy$Model(model.aE));
-};
-var author$project$Main$notFoundView = elm$html$Html$text('404 찾을 수 없습니다');
-var elm$html$Html$img = _VirtualDom_node('img');
-var elm$html$Html$Attributes$src = function (url) {
-	return A2(
-		elm$html$Html$Attributes$stringProperty,
-		'src',
-		_VirtualDom_noJavaScriptOrHtmlUri(url));
-};
-var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
-var author$project$Main$profileView = A2(
-	elm$html$Html$div,
-	_List_fromArray(
-		[
-			elm$html$Html$Attributes$class('card'),
-			A2(elm$html$Html$Attributes$style, 'width', '230px')
+			$elm$html$Html$Attributes$class('card'),
+			A2($elm$html$Html$Attributes$style, 'width', '230px')
 		]),
 	_List_fromArray(
 		[
 			A2(
-			elm$html$Html$div,
+			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('card-image')
+					$elm$html$Html$Attributes$class('card-image')
 				]),
 			_List_fromArray(
 				[
 					A2(
-					elm$html$Html$img,
+					$elm$html$Html$img,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$src('img/profile.jpg')
+							$elm$html$Html$Attributes$src('img/profile.jpg')
 						]),
 					_List_Nil)
 				])),
 			A2(
-			elm$html$Html$div,
+			$elm$html$Html$div,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('card-content has-text-left')
+					$elm$html$Html$Attributes$class('card-content has-text-left')
 				]),
 			_List_fromArray(
 				[
-					author$project$Main$markdown('**백엔드 개발자**. 개발에 몰입할 때가 가장 즐거운 걸 보면 아무래도 **백발 개발자**가 될 모양새.')
+					$author$project$Main$markdown('소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n               직업으로 삼았습니다. 모 IT기업에서 백엔드 개발자로 일하고 있습니다.')
 				])),
 			A2(
-			elm$html$Html$footer,
+			$elm$html$Html$footer,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('card-footer')
+					$elm$html$Html$Attributes$class('card-footer')
 				]),
 			_List_fromArray(
 				[
 					A2(
-					elm$html$Html$p,
+					$elm$html$Html$p,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('card-footer-item')
+							$elm$html$Html$Attributes$class('card-footer-item')
 						]),
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$span,
+							$elm$html$Html$span,
 							_List_Nil,
 							_List_fromArray(
 								[
 									A2(
-									elm$html$Html$a,
+									$elm$html$Html$a,
 									_List_fromArray(
 										[
-											elm$html$Html$Attributes$href('https://medium.com/happyprogrammer-in-jeju')
+											$elm$html$Html$Attributes$href('https://medium.com/happyprogrammer-in-jeju')
 										]),
 									_List_fromArray(
 										[
 											A2(
-											elm$html$Html$i,
+											$elm$html$Html$i,
 											_List_fromArray(
 												[
-													elm$html$Html$Attributes$class('fab fa-medium fa-lg')
+													$elm$html$Html$Attributes$class('fab fa-medium fa-lg')
 												]),
 											_List_Nil),
-											elm$html$Html$text(' 미디엄 보기')
+											$elm$html$Html$text(' 미디엄 보기')
 										]))
 								]))
 						]))
 				]))
 		]));
-var author$project$Main$ProjectFilter = function (a) {
+var $author$project$Main$ProjectFilter = function (a) {
 	return {$: 2, a: a};
 };
-var author$project$Projects$Project = F7(
+var $author$project$Projects$Project = F7(
 	function (category, year, title, url, role, tags, description) {
-		return {J: category, aw: description, aL: role, aP: tags, aR: title, aT: url, ap: year};
+		return {I: category, at: description, aK: role, aQ: tags, aS: title, aU: url, am: year};
 	});
-var author$project$Projects$data = _List_fromArray(
+var $author$project$Projects$data = _List_fromArray(
 	[
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		2019,
 		'GitHub.com 한글화 크롬 확장프로그램',
-		elm$core$Maybe$Just('https://chrome.google.com/webstore/detail/github-%ED%95%9C%EA%B8%80%ED%99%94/phhgannnkapemfnciphmbpenaflbngmm'),
+		$elm$core$Maybe$Just('https://chrome.google.com/webstore/detail/github-%ED%95%9C%EA%B8%80%ED%99%94/phhgannnkapemfnciphmbpenaflbngmm'),
 		'개인프로젝트',
 		_List_fromArray(
 			['TypeScript', 'chrome', '한글']),
 		'GitHub.com의 주요 화면을 한글로 번역하여 보여주는 크롬 확장 프로그램. 크롬 브라우저로 깃헙에 방문한 경우,\n        확장 프로그램이 주요 영문을 한국어도 번역 표기합니다.\n        '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2019,
 		'메신저 메시징 서버와 웹서비스 개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'수석',
 		_List_fromArray(
 			['Java', 'Kotlin', 'Ktor', 'Exposed']),
 		'사내외에서 운영하고 있는 메신저 서비스의 메시징 서버를 Akka로 개발하여 운영하며, 자바와 코틀린으로 백엔드 웹서비스를\n        개발 운영하고 있습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		2019,
 		'당신의 타자 실력을 알려주는 웹 앱',
-		elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/7e0c0e44b37c'),
+		$elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/7e0c0e44b37c'),
 		'개인프로젝트',
 		_List_fromArray(
 			['TypeScript', 'Vue', 'HTML5 Canvas', '한글']),
 		'한 달의 여유시간 동안 뭘 할까 고민하다가 재미삼아 타자 연습 웹 앱을 만들었습니다. 초성, 중성, 종성 자소별 색상을 따로\n        보이려 한글 비트맵 폰트를 그린 이야기와 입력 오토마타를 구현한 이야기도 정리해 두었습니다. 만든 결과물은\n        <http://type.hatemogi.com/>에서 볼 수 있습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2018,
 		'ProtoPie 엔터프라이즈 서버 백엔드 개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Clojure', 'Ring', 'Postgres', 'Docker', 'AWS']),
 		'UX 디자이너가 코드 작성 없이 모바일앱 프로토타이핑할 수 있는 데스크탑 애플리케이션인 [ProtoPie](https://protopie.io)의\n       기업용 클라우드 시스템 백엔드 개발 담당. ProtoPie의 고객사 자체 인프라 리눅스 시스템에 Docker Compose 이미지셋을 배포에서 자체\n       백엔드 시스템 운영할 수 있게 개발했으며, 현재 국내 대기업 세 곳과 납품계약되었고, 그 중 두 곳에 설치 운영 중입니다. '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2018,
 		'N사 협업플랫폼용 CardDAV 서버',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Java', 'Jetty', 'Mustache']),
 		'고객사에서 개발 및 운영중인 시스템을 위한 [CardDAV](https://en.wikipedia.org/wiki/CardDAV) 게이트웨이 서버를 개발해 납품.\n       주소록 서비스를 위한 표준 프로토콜인 CardDAV를 서버를 Java8에 Jetty를 써서 구현했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2017,
 		'N사 협업플랫폼용 LDAP 서버',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Java', 'Netty', 'Spring Boot']),
 		'고객사 시스템에 포함되는 [LDAP](https://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol)\n       게이트웨이 서버를 개발해 납품. Java8에 Netty를 써서 LDAP 프로토콜 통신하는 서버 구현했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2017,
 		'N사 협업플랫폼용 주소록 API 서버',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Java', 'Spring Boot', 'JPA', 'MySQL']),
 		'고객사 시스템에 포함되는 주소록 백엔드 API서버 개발. MySQL 데이터베이스에 JPA로 접근해서 REST API 서비스를 제공하는\n       자바 스프링부트 애플리케이션을 개발해서 납품했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2016,
 		'N사 협업플랫폼용 CalDAV 서버',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Java', 'Spring Boot']),
 		'고객사 시스템에 통합되는 캘린더 표준 프로토콜 [CalDAV](https://en.wikipedia.org/wiki/CalDAV) 지원 서버를\n       자바 스프링 부트로 개발해서 납품했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2015,
 		'N사 협업플랫폼용 메시징 서버',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Java', 'Akka']),
 		'고객사 시스템에 채팅 서비스 용도로 활용하는 메시징 서버를 자바에 Akka를 써서 비동기 서비스로 개발해서 납품했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2015,
 		'N사 협업플랫폼용 SMTP 서버',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'외주개발',
 		_List_fromArray(
 			['Java', 'Netty', 'Tape']),
 		'고객사 시스템에 메일 발송 기능을 위한 SMTP 서버를 자바에 Netty로 개발해서 납품. SMTP 프로토콜 성공 응답한 메일에 대해\n       완전한 발송 처리를 위해 고객사 기능 명세대로 Tape 파일 큐 라이브러리를 사용해서 구현했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2014,
 		'Daum Tomcat/Node PaaS 시스템 구축 리딩',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀장',
 		_List_fromArray(
 			['Java', 'Node', 'Ruby']),
 		'Java Tomcat 웹서비스와 Node.js서비스를 손쉽게 자동 배포하고 운영할 수 있는 클라우드 PaaS 시스템 구축을 리딩하고,\n       사내 타팀 이용을 장려하는 기술영업.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2013,
 		'Daum 사내 Rest API 접근 DNS 시스템 (애조로) 구축 리딩',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀장',
 		_List_fromArray(
 			['팀리딩', '기술영업']),
 		'사내 DNS를 직원 계정으로 접근해서 등록하고, 수정할 수 있는 웹서비스와 DNS서버 시스템을 기획하고 개발 리딩후 공개해서,\n       전사 직원이 각종 서비스 개발 테스트마다 고통받던 hosts파일 수정 작업으로부터 해방되었습니다. '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2013,
 		'Daum Redis PaaS 시스템 구축 리딩',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀장',
 		_List_fromArray(
 			['팀리딩', '기술영업']),
 		'메모리 기반 단순한 데이터베이스 서버인 Redis를 사내 각 서비스에서 손쉽게 사용할 수 있도록 PaaS 클라우드 서비스로 제공하는 기획하고 리딩.\n       당시 캐싱 목적으로는 일반적으로 Java EHCache나 [Memcached](https://en.wikipedia.org/wiki/Memcached)를 쓰던 추세였는데, 이들은 캐시 처리를 할 때,\n       발생하던 잦은 invalidation으로 인해 캐시 hit ratio가 떨어져서 DB 부하가 증가하던 상황을 Redis의 List 캐시를 적용하도록 안내해서\n       전체 시스템 안정성 향상에 도움이 되었습니다.\n       일반적으로 새로운 좋은 도구나 서비스가 있더라도, 실 개발팀 입장에서는 새로운 서비스를 전환 도입할 때 운영 경험이 아직 없기에\n       알 수 없는 장애 상황이 미리 두려워서 신규 도입에 보수적일 수 밖에 없다는 점을 공략하기 위해, 공통 플랫폼을 구축하고 운영을 대행해주는 방식으로\n       전사 전파에 실효를 거두어, 카페 서비스를 비롯한 여러 실 서비스에 적용 운영되었습니다.\n       사실 Redis서버는 매우 안정적이어서 대행 운영에 큰 부담이 없었고, 이용 개발팀 입장에서는 운영 부담만 없으면, 개발 부담은 아주 가벼이 여길 수\n       있기에 널리 이용되었습니다. 이 서비스의 실효와 안정성이 입소문을 타고 여러 팀에 알려져서 우리팀이 공개하는 타 서비스의 전파에도 긍정적 영향을 끼쳤고,\n       전사입장에서는 전체 서비스 안정적과 처리속도 향상 효과를 얻었습니다.\n       '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2012,
 		'Daum 사내 Git 저장소 시스템 구축 및 운영',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['Ruby', 'Sinatra', 'OpenSSH', 'Git', 'SQLite']),
 		'전사 개발자들이 자율적으로 편리하게 쓸 수 있는 Git 저장소 시스템을 구축해서 운영.\n       Ruby에 Sinatra를 써서 웹서비스를 개발했습니다. Git 서비스 인증을 위해 OpenSSH 소스를 약간 패치했고, 저장소 관련 데이터베이스는\n       SQLite로 가볍게 가져갔습니다. Git 시스템 자체가 워낙 폭발적인 인기를 얻었기에, 자연스럽게 제가 만든 서비스도 사내 개발자들에게 널리\n       사용됐으며, 2~3년 성공적으로 운영되다가, 카카오 합병 이후 카카오가 사용하던 GitHub Enterprise로 전환되었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2012,
 		'Daum 사내 실험 클라우드 플랫폼 구축',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['Ruby', 'CloudFoundry']),
 		'사내 실험적 클라우드 플랫폼을 오픈소스 CloudFoundry 제품을 이용해서 구축해서 제공. 개발 테스트 서비스를 손쉽게 배포해 운영\n       테스트해볼 수 있도록 만들었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2011,
 		'Daum 한메일 ActiveSync 게이트웨이 서버 개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'CTO스태프',
 		_List_fromArray(
 			['Ruby', 'Sinatra', 'Redis']),
 		'한메일 서비스를 안드로이드 스마트폰에서 손쉽게 연결해 쓸 수 있도록 ActiveSync 프로토콜을 지원하게끔 게이트웨이 서버를 개발.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2010,
 		'Daum 클라우드 파일 동기화 프로토콜 디자인 및 SDK 개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'CTO스태프',
 		_List_fromArray(
 			['Java', 'SDK']),
 		'Dropbox같은 서비스인 Daum 클라우드에서 파일 동기화를 위해 사용하는 프로토콜을 설계하고 자바 SDK를 개발해서 제공. 기존 파일과\n       새로 올리는 파일의 차이점을 추려서 송수신하도록 하여 네트워크 비용을 줄이게끔 설계해서 제공했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2010,
 		'Daum 마이피플 네트워크 아키텍쳐 설계 및 초기개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'TFT',
 		_List_fromArray(
 			['Objective-C', 'C']),
 		'MyPeople서비스를 초기 개발하는 TFT에서 네트워크 아키텍쳐를 설계하고, 메시징 서버 연동을 비롯한 클라이언트 개발에도 참여했습니다. '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2007,
 		'Daum 캘린더 서비스 개발 및 리딩',
-		elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05'),
+		$elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/다음-캘린더-서비스의-비하인드-스토리-ec0faac67f05'),
 		'TFT장',
 		_List_fromArray(
 			['팀리딩', 'Ruby', 'Rails', 'MySQL']),
 		'다음 캘린더 서비스의 초기 기획단계부터 안정화 단계까지 개발에 참여 및 TFT 리딩. Ruby On Rails로 백엔드 서비스를 구현했고,\n       당시 유행하던 웹 2.0 서비스를 한메일 익스프레스와 함께 다음 최초로 실서비스 도입한 사례. 카카오 합병에 이어 서비스 종료에\n       즈음해 작성해 공개한 글 (제목 링크 참조)도 꽤 호응을 얻었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2006,
 		'Daum 카페 채팅 서비스 부하분산 서버 개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['C', 'PThread']),
 		'다음 카페의 채팅 서비스에 교체 도입되는 채팅서버의 앞단에서 부하 분산을 담당하는 C 서버 개발. 당시 카페 채팅 서비스는\n       Java로 구현해 운영했는데, 과도한 트래픽으로 잦은 장애상황이 발생하던 상황이었고, CTO가 C기반 비동기 메시징 서버로 교체를\n       결정했고, 저는 그 교체시스템 중에 앞단 로드 밸런서를 개발했습니다. 채팅 서비스의 흐름상 멀티스레드 대비 비동기 처리의\n       효과가 극대화되는 특성으로 인해, 기존 36대의 채팅서버를 4대로 줄였고, 장애 빈도를 대폭 낮추었습니다. '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2005,
 		'Daum 일본, 개인홈 서비스 개발 및 운영',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀장',
 		_List_fromArray(
 			['Java', 'Spring', 'MySQL']),
 		'다음 재팬 근무시절 개인 홈 서비스 개발 및 유지 보수'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2004,
 		'Daum 일본, 커뮤니티 서비스 개발 및 운영',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['Java', 'Velocity', 'MySQL']),
 		'다음 재팬 근무시절 커뮤니티 서비스 유지 보수'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2003,
 		'Daum 플래닛 개인홈 서비스 개발 및 운영',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['Java', 'Struts', 'MySQL']),
 		'개인 커뮤니티 서비스인 **Daum 플래닛** 개발에 참여.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2003,
 		'Daum 카페 한줄 게시판, 투표판 개발',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['Java', 'Servlet', 'FreeMarker']),
 		'다음 카페 서비스 개발팀 소속으로 서비스 유지보수와 더불어 **한줄 게시판**과 **투표판** 기능 추가 개발.\n       당시 다음 카페의 전성기로 **일 3억 PV**를 처리하는 경험을 쌓을 수 있었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'업무',
 		2000,
 		'한국물류정보통신 시스템팀 사원',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'팀원',
 		_List_fromArray(
 			['C', 'UNIX', 'Python']),
 		'병역특례로 40개월간 한국물류정보통신(현재 KL-Net) 시스템팀에 근무하며, 윈도우NT 시스템 관리, 리눅스 개발장비 관리, CISCO 라우터 관리,\n       네트워크 방화벽 관리를 담당했고, EDI 전자문서중계 시스템의 유닉스 C 애플리케이션을 고객사에 수정배포하는 일도 담당했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		2017,
 		'스타웍스 macOS 앱 개발',
-		elm$core$Maybe$Just('http://스타웍스.com'),
+		$elm$core$Maybe$Just('http://스타웍스.com'),
 		'개인',
 		_List_fromArray(
 			['Swift']),
 		'스타벅스 WiFi 자동연결 macOS 애플리케이션과 개발기를 작성해 공유. 한국 스타벅스에서 맥북프로를 써서 무료 WiFi에 접속할 때\n       불편한 동의과정을 자동화해주는 macOS 앱을 만들어 공개했습니다. 스타벅스 기프트카드를 보낼 수 있는 무료 소프트웨어로 공개했고,\n       일부 사용자로부터 도합 10여만원 상당의 기프트카드를 받았습니다. Swift로 WebKit엔진을 붙여서 캡티브 네트워크 연결창을 띄워서\n       처리해 개발했습니다. [개발기도 미디엄에 연재](https://medium.com/happyprogrammer-in-jeju/스타벅스-연결러-앱-공개-개발-후기-c0c5f88a86e8)해서\n       일부 개발자들로부터 좋은 호응을 얻었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		2016,
 		'한글코딩.org 기획 공개',
-		elm$core$Maybe$Just('http://한글코딩.org/'),
+		$elm$core$Maybe$Just('http://한글코딩.org/'),
 		'개인',
 		_List_fromArray(
 			['Clojure']),
 		'변수, 함수, 객체 이름 지을 때, 콩글리시 영작 그만하고, 한글로 코딩하자는 주장을 담은 웹사이트 오픈.\n       관련해서 PyCon 2016에서 라이트닝토크도 발표자로 참여했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		2014,
 		'AewolInputMethod - macOS용 한글 입력기 개발',
-		elm$core$Maybe$Just('https://github.com/hatemogi/AewolInput'),
+		$elm$core$Maybe$Just('https://github.com/hatemogi/AewolInput'),
 		'개인',
 		_List_fromArray(
 			['Objective-C', 'C']),
 		'Dvorak 자판과 한글 두벌식 자판을 함께 쓰기 편한 macOS용 한글 입력기 개발 및 공개. 한글 두벌식 자판과 영문 드보락 자판을\n       함께 사용할 때 macOS에서 단축키 입력이 불편해지는 문제를 해결하는 입력기 애플리케이션을 개발해서 공개했습니다.\n       한글 입력 오토마타는 기존 오픈소스 라이브러리인 libhangul을 써서 개발했고, 저는 macOS의 IMKit 프레임워크를 사용해서\n       애플리케이션으로 만드는 작업을 했습니다.\n       [개발한 이야기](https://medium.com/happyprogrammer-in-jeju/dvorak과-한글-입력기-개발-8940bc4714a1)도 적어두었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		2010,
 		'귀여운 우주선 게임, xkobo for macOS',
-		elm$core$Maybe$Just('https://github.com/hatemogi/xkobo'),
+		$elm$core$Maybe$Just('https://github.com/hatemogi/xkobo'),
 		'개인',
 		_List_fromArray(
 			['GNU C', 'X Window System']),
 		'UNIX용 아케이드 게임을 macOS에서도 실행되게끔 수정해서 오픈소스 공개. 아쉽게도 현재 macOS는 X 윈도우 시스템이 포함되지 않은채로\n       배포되어, 그대로 빌드되지는 않을 것 같습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		1998,
 		'귀여운 우주선 게임, xkobo for Win32',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'개인',
 		_List_fromArray(
 			['Delphi', 'Win32']),
 		'대학시절 학과 동호회방에서 유행하던 UNIX X Window용 아케이드 게임을 윈도우용 Delphi로 재개발(포팅)해서 공개했습니다. 이 프로젝트로\n     저는 X윈도우 시스템과 Win32 시스템에 대한 이해도를 높히며 개발에 몰입할 수 있었고, 학과 동기들은 동호회방에서만 해볼 수 있던 게임을\n     각자 집에서도 해볼 수 있게되었습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		1995,
 		'3인용 테트리스 게임',
-		elm$core$Maybe$Just('http://blog.naver.com/PostView.nhn?blogId=taksangs&logNo=60050324463'),
+		$elm$core$Maybe$Just('https://youtu.be/U0ZhSs5a3Ws'),
 		'개인',
 		_List_fromArray(
 			['Borland Pascal', 'Assembly', 'MS-DOS']),
 		'직접 개발한 VESA 한글 그래픽 라이브러리를 이용한 테트리스 게임 개발. 고등학교 시절에 직접 개발한 한글 그래픽 라이브러리를 이용해\n       데모로 테트리스 게임을 만들어 공개했습니다. 배경 이미지와 음악을 변경할 수 있는 확장팩 기능을 넣어 하이텔과 나우누리에 공개했는데,\n       제 오리지날 버전도 **월간 마이크로소프트웨어 1995년 5월호** 180p에 소개가 실렸습니다만, 어떤 분이 당시 유행하던 일본만화를 주제로 테마를 입힌 버전이 원판보다\n       더 널리 알려져서, 사람들은 "**오 나의 여신님 테트리스**"라고 알고 있는 경우가 있습니다. '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'취미',
 		1992,
 		'MS-DOS 부팅 잠금 프로그램 개발 - 자물쇠',
-		elm$core$Maybe$Nothing,
+		$elm$core$Maybe$Nothing,
 		'개인',
 		_List_fromArray(
 			['Turbo Pascal', 'Assembly', 'MS-DOS']),
 		'중학생 때, MS-DOS 부팅 패스워드 인증 시스템 소프트웨어 개발. 당시 IBM호환 PC의 주운영체제는 MS-DOS였는데, 이는 사용자 로그인 과정이 없어서,\n       컴퓨터를 켜면 곧바로 사용자의 시스템을 쓸 수 있었습니다. 여기에 하드디스크 부트섹터를 조작해서, 패스워드 인증프로그램을 거쳐야\n       정상 부트과정을 이어가는 프로그램을 만들어 하이텔에 공개했습니다. '),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'발표',
 		2017,
 		'한글 코딩 도구 비지니스 피칭',
-		elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/한글-코딩-도구-비지니스-피칭-a7727fd99663'),
+		$elm$core$Maybe$Just('https://medium.com/happyprogrammer-in-jeju/한글-코딩-도구-비지니스-피칭-a7727fd99663'),
 		'개인',
 		_List_fromArray(
 			['Clojure']),
 		'한글로 코딩하는 언어와 웹플랫폼을 만들어 코딩교육에 활용해보자는 사업화 아이디어를\n       **제주창조경제혁신센터**에서 발표했습니다. 심사위원들로부터, 스크래치와 실무자용 언어 사이의 중고등학교용\n       프로그래밍 언어로 공략하면 유효하겠다는 평가를 받았습니다. 슬라이드 내용은 제목 링크 참조.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'발표',
 		2016,
 		'PyCon 라이트닝토크 - 한글코딩 5분 발표',
-		elm$core$Maybe$Just('https://youtu.be/46UkzB-3z3Y'),
+		$elm$core$Maybe$Just('https://youtu.be/46UkzB-3z3Y'),
 		'개인',
 		_List_fromArray(
 			['Python', 'Clojure']),
 		'한글코딩.org 사이트의 내용을 코믹 컨셉으로 파이콘 2016에서 발표했습니다. 파이콘 첫날 다른 사람들의 라이트닝토크 발표를 듣고\n       동기부여받아서 즉흥적으로 준비해 둘째날 발표했고, 내용 자체 전달과 설득은 어떨지 몰라도, 적어도 웃음은 유발했습니다.\n       [발표후기](https://medium.com/happyprogrammer-in-jeju/파이콘-2016-라이트닝-토크-발표-후기-763135a2a623)로도 정리했습니다.\n       제목링크를 누르시면 발표영상을 보실 수 있습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'발표',
 		2013,
 		'Daum DevOn 컨퍼런스 - 사내 Git 저장소 개발사례',
-		elm$core$Maybe$Just('https://www.slideshare.net/hatemogi/devon2013-git'),
+		$elm$core$Maybe$Just('https://www.slideshare.net/hatemogi/devon2013-git'),
 		'개인',
 		_List_fromArray(
 			['Git', 'Ruby']),
 		'다음 사내 개발자용 Git 저장소 시스템을 개발했던 경험을 DevOn 컨퍼런스에서 발표했습니다.\n       제목링크를 누르면 발표슬라이드를 보실 수 있습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'번역',
 		2015,
 		'클로저 선문답 - Clojure Koans 한글 번역',
-		elm$core$Maybe$Just('https://clojurekoans.hatemogi.com'),
+		$elm$core$Maybe$Just('https://clojurekoans.hatemogi.com'),
 		'개인',
 		_List_Nil,
 		'Clojure 프로그래밍 언어 기초 문법을 연습하는 내용의 웹페이지를 한국어로 번역해서 공개했습니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'번역',
 		2015,
 		'Ring - 클로저 웹서버 인터페이스 스펙 및 라이브러리 문서 번역',
-		elm$core$Maybe$Just('https://github.com/hatemogi/ring/wiki'),
+		$elm$core$Maybe$Just('https://github.com/hatemogi/ring/wiki'),
 		'개인',
 		_List_Nil,
 		'클로저 프로그래밍 환경의 웹서비스 인터페이스인 Ring의 문서를 한국어로 번역했습니다. 클로저 Ring은 자바로 치자면 서블릿스펙과 비슷합니다.'),
 		A7(
-		author$project$Projects$Project,
+		$author$project$Projects$Project,
 		'번역',
 		2014,
 		'유의미 버전 SemVer 한글 번역',
-		elm$core$Maybe$Just('https://semver.org/lang/ko'),
+		$elm$core$Maybe$Just('https://semver.org/lang/ko'),
 		'개인',
 		_List_Nil,
 		'제품 버전 체계를 의미있게 잡아서 사용하자는 **Semantic Versioning** 스펙 문서를 한국어로 번역했습니다.')
 	]);
-var elm$core$Basics$negate = function (n) {
+var $elm$virtual_dom$VirtualDom$lazy = _VirtualDom_lazy;
+var $elm$html$Html$Lazy$lazy = $elm$virtual_dom$VirtualDom$lazy;
+var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var elm$core$List$sortBy = _List_sortBy;
-var elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
-};
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			elm$virtual_dom$VirtualDom$on,
-			event,
-			elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		elm$html$Html$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
-var elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
+var $elm$virtual_dom$VirtualDom$keyedNode = function (tag) {
 	return _VirtualDom_keyedNode(
 		_VirtualDom_noScript(tag));
 };
-var elm$html$Html$Keyed$node = elm$virtual_dom$VirtualDom$keyedNode;
-var elm$virtual_dom$VirtualDom$lazy = _VirtualDom_lazy;
-var elm$html$Html$Lazy$lazy = elm$virtual_dom$VirtualDom$lazy;
-var author$project$Main$projectsView = function (model) {
+var $elm$html$Html$Keyed$node = $elm$virtual_dom$VirtualDom$keyedNode;
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$core$List$sortBy = _List_sortBy;
+var $author$project$Main$projectsView = function (model) {
 	var categoryColor = function (cat) {
 		switch (cat) {
 			case '업무':
@@ -6346,108 +6423,108 @@ var author$project$Main$projectsView = function (model) {
 	};
 	var entryf = function (p) {
 		return A2(
-			elm$html$Html$article,
+			$elm$html$Html$article,
 			_List_fromArray(
 				[
-					elm$html$Html$Attributes$class('media')
+					$elm$html$Html$Attributes$class('media')
 				]),
 			_List_fromArray(
 				[
 					A2(
-					elm$html$Html$div,
+					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('media-left')
+							$elm$html$Html$Attributes$class('media-left')
 						]),
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$div,
+							$elm$html$Html$div,
 							_List_fromArray(
 								[
-									elm$html$Html$Attributes$class('tags has-addons')
+									$elm$html$Html$Attributes$class('tags has-addons')
 								]),
 							_List_fromArray(
 								[
 									A2(
-									elm$html$Html$span,
+									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											elm$html$Html$Attributes$class('tag')
+											$elm$html$Html$Attributes$class('tag')
 										]),
 									_List_fromArray(
 										[
-											elm$html$Html$text(
-											elm$core$String$fromInt(p.ap))
+											$elm$html$Html$text(
+											$elm$core$String$fromInt(p.am))
 										])),
 									A2(
-									elm$html$Html$span,
+									$elm$html$Html$span,
 									_List_fromArray(
 										[
-											elm$html$Html$Attributes$class('tag'),
-											elm$html$Html$Attributes$class(
-											categoryColor(p.J))
+											$elm$html$Html$Attributes$class('tag'),
+											$elm$html$Html$Attributes$class(
+											categoryColor(p.I))
 										]),
 									_List_fromArray(
 										[
-											elm$html$Html$text(p.J)
+											$elm$html$Html$text(p.I)
 										]))
 								]))
 						])),
 					A2(
-					elm$html$Html$div,
+					$elm$html$Html$div,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('media-content')
+							$elm$html$Html$Attributes$class('media-content')
 						]),
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$p,
+							$elm$html$Html$p,
 							_List_Nil,
 							_List_fromArray(
 								[
 									A2(
-									elm$html$Html$div,
+									$elm$html$Html$div,
 									_List_fromArray(
 										[
-											elm$html$Html$Attributes$class('content')
+											$elm$html$Html$Attributes$class('content')
 										]),
 									_List_fromArray(
 										[
 											A2(
-											elm$html$Html$strong,
+											$elm$html$Html$strong,
 											_List_Nil,
 											_List_fromArray(
 												[
 													function () {
-													var _n2 = p.aT;
-													if (_n2.$ === 1) {
-														return elm$html$Html$text(p.aR);
+													var _v1 = p.aU;
+													if (_v1.$ === 1) {
+														return $elm$html$Html$text(p.aS);
 													} else {
-														var url = _n2.a;
+														var url = _v1.a;
 														return A2(
-															elm$html$Html$a,
+															$elm$html$Html$a,
 															_List_fromArray(
 																[
-																	elm$html$Html$Attributes$href(url)
+																	$elm$html$Html$Attributes$href(url)
 																]),
 															_List_fromArray(
 																[
-																	elm$html$Html$text(p.aR),
+																	$elm$html$Html$text(p.aS),
 																	A2(
-																	elm$html$Html$span,
+																	$elm$html$Html$span,
 																	_List_fromArray(
 																		[
-																			elm$html$Html$Attributes$class('icon')
+																			$elm$html$Html$Attributes$class('icon')
 																		]),
 																	_List_fromArray(
 																		[
 																			A2(
-																			elm$html$Html$i,
+																			$elm$html$Html$i,
 																			_List_fromArray(
 																				[
-																					elm$html$Html$Attributes$class('fas fa-link fa-sm')
+																					$elm$html$Html$Attributes$class('fas fa-link fa-sm')
 																				]),
 																			_List_Nil)
 																		]))
@@ -6455,104 +6532,86 @@ var author$project$Main$projectsView = function (model) {
 													}
 												}()
 												])),
-											author$project$Main$markdown(p.aw)
+											$author$project$Main$markdown(p.at)
 										])),
 									A2(
-									elm$html$Html$div,
+									$elm$html$Html$div,
 									_List_fromArray(
 										[
-											elm$html$Html$Attributes$class('tags')
+											$elm$html$Html$Attributes$class('tags')
 										]),
 									A2(
-										elm$core$List$map,
+										$elm$core$List$map,
 										function (t) {
 											return A2(
-												elm$html$Html$span,
+												$elm$html$Html$span,
 												_List_fromArray(
 													[
-														elm$html$Html$Attributes$class('tag')
+														$elm$html$Html$Attributes$class('tag')
 													]),
 												_List_fromArray(
 													[
-														elm$html$Html$text(t)
+														$elm$html$Html$text(t)
 													]));
 										},
-										p.aP))
+										p.aQ))
 								]))
 						]))
 				]));
 	};
 	var keyedEntryf = function (p) {
 		return _Utils_Tuple2(
-			p.aR,
-			A2(elm$html$Html$Lazy$lazy, entryf, p));
+			p.aS,
+			A2($elm$html$Html$Lazy$lazy, entryf, p));
 	};
 	var button = function (category) {
-		var _n1 = model.G;
-		if (!_n1.$) {
-			var cat = _n1.a;
-			return A2(
-				elm$html$Html$span,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('button'),
-						elm$html$Html$Attributes$class(
-						_Utils_eq(category, cat) ? categoryColor(cat) : ''),
-						elm$html$Html$Events$onClick(
-						author$project$Main$ProjectFilter(
-							(category === '전체') ? elm$core$Maybe$Nothing : elm$core$Maybe$Just(category)))
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text(category)
-					]));
-		} else {
-			return A2(
-				elm$html$Html$span,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('button'),
-						elm$html$Html$Attributes$class(
-						(category === '전체') ? 'is-link' : ''),
-						elm$html$Html$Events$onClick(
-						author$project$Main$ProjectFilter(
-							(category === '전체') ? elm$core$Maybe$Nothing : elm$core$Maybe$Just(category)))
-					]),
-				_List_fromArray(
-					[
-						elm$html$Html$text(category)
-					]));
-		}
+		return A2(
+			$elm$html$Html$span,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('button'),
+					$elm$html$Html$Attributes$class(
+					_Utils_eq(
+						category,
+						A2($elm$core$Maybe$withDefault, '전체', model.F)) ? categoryColor(category) : ''),
+					$elm$html$Html$Events$onClick(
+					$author$project$Main$ProjectFilter(
+						(category === '전체') ? $elm$core$Maybe$Nothing : $elm$core$Maybe$Just(category)))
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text(category)
+				]));
 	};
 	return A2(
-		elm$html$Html$div,
+		$elm$html$Html$div,
 		_List_Nil,
 		_List_fromArray(
 			[
 				A2(
-				elm$html$Html$article,
+				$elm$html$Html$article,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('message')
+						$elm$html$Html$Attributes$class('message')
 					]),
 				_List_fromArray(
 					[
 						A2(
-						elm$html$Html$div,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								elm$html$Html$Attributes$class('message-body')
+								$elm$html$Html$Attributes$class('message-body')
 							]),
 						_List_fromArray(
 							[
-								author$project$Main$markdown('아래 일일이 열거한 것은 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,\n               저 스스로 어떤 일들을 해왔는지 참고해서 앞으로 할 일들을 고민해보려 합니다.\n               만약 그럴듯한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,\n               나머지 대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다.')
+								$author$project$Main$markdown('아래 일일이 열거한 것은 대부분 사소한 프로젝트들이라 애써 설명드릴만한 내용은 없지만,\n               저 스스로 어떤 일들을 해왔는지 참고해서 앞으로 할 일들을 고민해보려 합니다.\n               만약 그럴듯한 프로젝트가 있다면, 훌륭한 동료들이 하는 일에 작은 역할로 참여했던 것이고,\n               나머지 대부분 사소한 프로젝트는 제가 단독으로 진행한 것들일 겁니다.')
 							]))
 					])),
 				A2(
-				elm$html$Html$div,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('buttons has-addons')
+						$elm$html$Html$Attributes$class('buttons has-addons')
 					]),
 				_List_fromArray(
 					[
@@ -6563,108 +6622,123 @@ var author$project$Main$projectsView = function (model) {
 						button('번역')
 					])),
 				A3(
-				elm$html$Html$Keyed$node,
+				$elm$html$Html$Keyed$node,
 				'div',
 				_List_Nil,
 				A2(
-					elm$core$List$map,
+					$elm$core$List$map,
 					keyedEntryf,
 					A2(
-						elm$core$List$sortBy,
+						$elm$core$List$sortBy,
 						function (p) {
-							return -p.ap;
+							return -p.am;
 						},
 						A2(
-							elm$core$List$filter,
+							$elm$core$List$filter,
 							function (p) {
-								var _n0 = model.G;
-								if (!_n0.$) {
-									var f = _n0.a;
-									return _Utils_eq(p.J, f);
+								var _v0 = model.F;
+								if (!_v0.$) {
+									var f = _v0.a;
+									return _Utils_eq(p.I, f);
 								} else {
 									return true;
 								}
 							},
-							author$project$Projects$data))))
+							$author$project$Projects$data))))
 			]));
 };
-var elm$html$Html$main_ = _VirtualDom_node('main');
-var author$project$Main$mainView = function (model) {
+var $author$project$Main$mainView = function (model) {
 	var titlef = F2(
 		function (title, content) {
 			return _List_fromArray(
 				[
 					A2(
-					elm$html$Html$h1,
+					$elm$html$Html$h1,
 					_List_fromArray(
 						[
-							elm$html$Html$Attributes$class('title')
+							$elm$html$Html$Attributes$class('title')
 						]),
 					_List_fromArray(
 						[
-							elm$html$Html$text(title)
+							$elm$html$Html$text(title)
 						])),
 					content
 				]);
 		});
 	return A2(
-		elm$html$Html$div,
+		$elm$html$Html$div,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('container')
+				$elm$html$Html$Attributes$class('container')
 			]),
 		_List_fromArray(
 			[
 				A2(
-				elm$html$Html$div,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('columns is-centered')
+						$elm$html$Html$Attributes$class('columns is-centered')
 					]),
 				_List_fromArray(
 					[
 						A2(
-						elm$html$Html$div,
+						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								elm$html$Html$Attributes$class('column is-narrow is-hidden-mobile')
+								$elm$html$Html$Attributes$class('column is-narrow is-hidden-mobile')
 							]),
 						_List_fromArray(
-							[author$project$Main$profileView])),
+							[$author$project$Main$profileView])),
 						A2(
-						elm$html$Html$main_,
+						$elm$html$Html$main_,
 						_List_fromArray(
 							[
-								elm$html$Html$Attributes$class('column has-text-justified')
+								$elm$html$Html$Attributes$class('column has-text-justified')
 							]),
 						function () {
-							var _n0 = model.B;
-							switch (_n0) {
+							var _v0 = model.B;
+							switch (_v0) {
 								case 0:
-									return A2(titlef, '김대현', author$project$Main$introView);
+									return A2(titlef, '김대현', $author$project$Main$introView);
 								case 1:
 									return A2(
 										titlef,
 										'프로젝트',
-										author$project$Main$projectsView(model));
+										$author$project$Main$projectsView(model));
 								case 2:
 									return A2(
 										titlef,
 										'글',
-										author$project$Main$articlesView(model));
+										$author$project$Main$articlesView(model));
 								case 3:
 									return A2(
 										titlef,
-										'코틀린',
-										author$project$Main$kotlinStudyView(model));
+										'수료증',
+										$author$project$Main$certificatesView(model));
 								default:
-									return A2(titlef, '404 찾을 수 없습니다', author$project$Main$notFoundView);
+									return A2(titlef, '404 찾을 수 없습니다', $author$project$Main$notFoundView);
 							}
 						}())
 					]))
 			]));
 };
-var author$project$Main$routeToTitle = function (route) {
+var $elm$core$Tuple$second = function (_v0) {
+	var y = _v0.b;
+	return y;
+};
+var $elm$html$Html$Attributes$classList = function (classes) {
+	return $elm$html$Html$Attributes$class(
+		A2(
+			$elm$core$String$join,
+			' ',
+			A2(
+				$elm$core$List$map,
+				$elm$core$Tuple$first,
+				A2($elm$core$List$filter, $elm$core$Tuple$second, classes))));
+};
+var $elm$html$Html$li = _VirtualDom_node('li');
+var $elm$html$Html$nav = _VirtualDom_node('nav');
+var $author$project$Main$routeToTitle = function (route) {
 	switch (route) {
 		case 0:
 			return '소개';
@@ -6673,37 +6747,23 @@ var author$project$Main$routeToTitle = function (route) {
 		case 2:
 			return '글';
 		case 3:
-			return '코틀린';
+			return '수료증';
 		default:
 			return '404';
 	}
 };
-var author$project$Main$routeToUrl = function (route) {
-	return '/' + author$project$Main$routeToTitle(route);
+var $author$project$Main$routeToUrl = function (route) {
+	return '/' + $author$project$Main$routeToTitle(route);
 };
-var elm$html$Html$nav = _VirtualDom_node('nav');
-var elm$core$Tuple$second = function (_n0) {
-	var y = _n0.b;
-	return y;
-};
-var elm$html$Html$Attributes$classList = function (classes) {
-	return elm$html$Html$Attributes$class(
-		A2(
-			elm$core$String$join,
-			' ',
-			A2(
-				elm$core$List$map,
-				elm$core$Tuple$first,
-				A2(elm$core$List$filter, elm$core$Tuple$second, classes))));
-};
-var author$project$Main$menuView = function (model) {
+var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $author$project$Main$menuView = function (model) {
 	var menu = F2(
 		function (route, icon) {
 			return A2(
-				elm$html$Html$li,
+				$elm$html$Html$li,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$classList(
+						$elm$html$Html$Attributes$classList(
 						_List_fromArray(
 							[
 								_Utils_Tuple2(
@@ -6714,83 +6774,83 @@ var author$project$Main$menuView = function (model) {
 				_List_fromArray(
 					[
 						A2(
-						elm$html$Html$a,
+						$elm$html$Html$a,
 						_List_fromArray(
 							[
-								elm$html$Html$Attributes$href(
-								author$project$Main$routeToUrl(route))
+								$elm$html$Html$Attributes$href(
+								$author$project$Main$routeToUrl(route))
 							]),
 						_List_fromArray(
 							[
 								A2(
-								elm$html$Html$span,
+								$elm$html$Html$span,
 								_List_fromArray(
 									[
-										elm$html$Html$Attributes$class('icon is-small')
+										$elm$html$Html$Attributes$class('icon is-small')
 									]),
 								_List_fromArray(
 									[
 										A2(
-										elm$html$Html$i,
+										$elm$html$Html$i,
 										_List_fromArray(
 											[
-												elm$html$Html$Attributes$class('fas'),
-												elm$html$Html$Attributes$class(icon)
+												$elm$html$Html$Attributes$class('fas'),
+												$elm$html$Html$Attributes$class(icon)
 											]),
 										_List_Nil)
 									])),
 								A2(
-								elm$html$Html$span,
+								$elm$html$Html$span,
 								_List_Nil,
 								_List_fromArray(
 									[
-										elm$html$Html$text(
-										author$project$Main$routeToTitle(route))
+										$elm$html$Html$text(
+										$author$project$Main$routeToTitle(route))
 									]))
 							]))
 					]));
 		});
 	return A2(
-		elm$html$Html$nav,
+		$elm$html$Html$nav,
 		_List_fromArray(
 			[
-				elm$html$Html$Attributes$class('tabs is-boxed is-medium is-fullwidth')
+				$elm$html$Html$Attributes$class('tabs is-boxed is-medium is-fullwidth')
 			]),
 		_List_fromArray(
 			[
 				A2(
-				elm$html$Html$ul,
+				$elm$html$Html$ul,
 				_List_Nil,
 				_List_fromArray(
 					[
 						A2(menu, 0, 'fa-user-circle'),
 						A2(menu, 1, 'fa-file-code'),
-						A2(menu, 2, 'fa-edit')
+						A2(menu, 2, 'fa-edit'),
+						A2(menu, 3, 'fa-certificate')
 					]))
 			]));
 };
-var author$project$Main$view = function (model) {
+var $author$project$Main$view = function (model) {
 	return {
-		ar: _List_fromArray(
+		ao: _List_fromArray(
 			[
 				A2(
-				elm$html$Html$div,
+				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						elm$html$Html$Attributes$class('wrap')
+						$elm$html$Html$Attributes$class('wrap')
 					]),
 				_List_fromArray(
 					[
-						author$project$Main$menuView(model),
-						author$project$Main$mainView(model)
+						$author$project$Main$menuView(model),
+						$author$project$Main$mainView(model)
 					])),
-				author$project$Main$footerView(model)
+				$author$project$Main$footerView(model)
 			]),
-		aR: 'hatemogi.com - ' + author$project$Main$routeToTitle(model.B)
+		aS: 'hatemogi.com - ' + $author$project$Main$routeToTitle(model.B)
 	};
 };
-var elm$browser$Browser$application = _Browser_application;
-var author$project$Main$main = elm$browser$Browser$application(
-	{aD: author$project$Main$init, aG: author$project$Main$UrlChanged, aH: author$project$Main$LinkClicked, aM: author$project$Main$subscriptions, aS: author$project$Main$update, aU: author$project$Main$view});
-_Platform_export({'Main':{'init':author$project$Main$main(
-	elm$json$Json$Decode$succeed(0))(0)}});}(this));
+var $author$project$Main$main = $elm$browser$Browser$application(
+	{aC: $author$project$Main$init, aF: $author$project$Main$UrlChanged, aG: $author$project$Main$LinkClicked, aN: $author$project$Main$subscriptions, aT: $author$project$Main$update, aV: $author$project$Main$view});
+_Platform_export({'Main':{'init':$author$project$Main$main(
+	$elm$json$Json$Decode$succeed(0))(0)}});}(this));
