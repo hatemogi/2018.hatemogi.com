@@ -14,7 +14,7 @@ import Intro
 import KotlinStudy as Kt
 import List as L exposing (filter, map, sortBy)
 import Markdown
-import Projects
+import Projects as P
 import Url
 
 
@@ -33,12 +33,11 @@ main =
 
 -- MODEL
 
-
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
     , route : Route
-    , projectFilter : Maybe String
+    , projectFilter : Maybe P.Category
     }
 
 
@@ -62,7 +61,7 @@ init flags url key =
 type Msg
     = LinkClicked Browser.UrlRequest
     | UrlChanged Url.Url
-    | ProjectFilter (Maybe String)
+    | UpdateProjectFilter (Maybe P.Category)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -79,7 +78,7 @@ update msg model =
         UrlChanged url ->
             ( { model | url = url, route = urlToRoute url }, Cmd.none )
 
-        ProjectFilter f ->
+        UpdateProjectFilter f ->
             ( { model | projectFilter = f }, Cmd.none )
 
 
@@ -299,38 +298,36 @@ introView =
 projectsView : Model -> Html Msg
 projectsView model =
     let
-        categoryColor : String -> String
+        categoryColor : Maybe P.Category -> String
         categoryColor cat =
             case cat of
-                "업무" ->
+                Just P.Work ->
                     "is-warning"
 
-                "취미" ->
+                Just P.Hobby ->
                     "is-info"
 
-                "발표" ->
+                Just P.Talk ->
                     "is-success"
 
-                "번역" ->
+                Just P.Translation ->
                     "is-primary"
 
-                "전체" ->
+                Nothing ->
                     "is-link"
 
-                _ ->
-                    ""
 
-        keyedEntryf : Projects.Project -> ( String, Html Msg )
+        keyedEntryf : P.Project -> ( String, Html Msg )
         keyedEntryf p =
             ( p.title, lazy entryf p )
 
-        entryf : Projects.Project -> Html Msg
+        entryf : P.Project -> Html Msg
         entryf p =
             article [ class "media" ]
                 [ div [ class "media-left" ]
                     [ div [ class "tags has-addons" ]
                         [ span [ class "tag" ] [ text (String.fromInt p.year) ]
-                        , span [ class "tag", class (categoryColor p.category) ] [ text p.category ]
+                        , span [ class "tag", class (categoryColor (Just p.category)) ] [ text (P.categoryToString p.category) ]
                         ]
                     ]
                 , div [ class "media-content" ]
@@ -351,28 +348,14 @@ projectsView model =
                     ]
                 ]
 
-        button : String -> Html Msg
-        button category =
+        button : Maybe P.Category -> Html Msg
+        button maybeCategory =
             span
                 [ class "button"
-                , class
-                    (if category == Maybe.withDefault "전체" model.projectFilter then
-                        categoryColor category
-
-                     else
-                        ""
-                    )
-                , onClick
-                    (ProjectFilter
-                        (if category == "전체" then
-                            Nothing
-
-                         else
-                            Just category
-                        )
-                    )
+                , class ( categoryColor maybeCategory )
+                , onClick (UpdateProjectFilter maybeCategory )
                 ]
-                [ text category ]
+                [ text (Maybe.withDefault "전체" <| Maybe.map P.categoryToString maybeCategory) ]
     in
     div []
         [ article [ class "message" ]
@@ -385,10 +368,10 @@ projectsView model =
                 ]
             ]
         , div [ class "buttons has-addons" ]
-            [ button "전체", button "업무", button "취미", button "발표", button "번역" ]
+            [ button Nothing, button (Just P.Work), button (Just P.Hobby), button (Just P.Talk), button (Just P.Translation) ]
         , Keyed.node "div"
             []
-            (Projects.data
+            (P.data
                 |> filter
                     (\p ->
                         case model.projectFilter of
@@ -474,6 +457,11 @@ certificateView cert =
                 ]
             ]
         ]
+
+
+havingFunView : Model -> Html Msg
+havingFunView model =
+    div [] [ text "기술적으로 흥미를 느낀 주제들 공유" ]
 
 
 rantsView : Model -> Html Msg
