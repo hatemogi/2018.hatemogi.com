@@ -31,7 +31,14 @@ categoryToString category =
 
 data : List Project
 data =
-    [ Project Hobby
+    [ Project Work 2020
+        "광고 수익 배분 시스템"
+        Nothing
+        "개발리더"
+        [ "Scala", "함수형", "http4s", "cats"]
+        """재직중인 회사에서 제공하는 서비스 플랫폼에서, 사용자가 올린 동영상을 재생하고 발생하는 광고수익을 분배해주는 
+        시스템을 개발해서 오픈하고 운영중입니다. 무엇보다 본격 함수형 프로그래밍을 만끽하고 있는 것 같아서 즐겁습니다.""",
+    Project Hobby
         2019
         "GitHub.com 한글화 크롬 확장프로그램"
         (Just "https://chrome.google.com/webstore/detail/github-%ED%95%9C%EA%B8%80%ED%99%94/phhgannnkapemfnciphmbpenaflbngmm")
@@ -47,7 +54,7 @@ data =
         "수석"
         [ "Java", "Kotlin", "Ktor", "Exposed" ]
         """사내외에서 운영하고 있는 메신저 서비스의 메시징 서버를 Akka로 개발하여 운영하며, 자바와 코틀린으로 백엔드 웹서비스를
-        개발 운영하고 있습니다."""
+        개발 운영했습니다."""
 
     , Project Hobby
         2019

@@ -352,7 +352,7 @@ projectsView model =
         button maybeCategory =
             span
                 [ class "button"
-                , class ( categoryColor maybeCategory )
+                , classList [ (categoryColor maybeCategory, model.projectFilter == maybeCategory) ]
                 , onClick (UpdateProjectFilter maybeCategory )
                 ]
                 [ text (Maybe.withDefault "전체" <| Maybe.map P.categoryToString maybeCategory) ]
