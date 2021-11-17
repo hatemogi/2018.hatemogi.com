@@ -235,7 +235,7 @@ profileView =
         , div [ class "card-content has-text-left" ]
             [ markdown
                 """소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자
-               직업으로 삼았습니다. 모 IT기업에서 백엔드 개발자로 일하고 있습니다."""
+               직업으로 삼았습니다."""
             ]
         , footer [ class "card-footer" ]
             [ p [ class "card-footer-item" ]
@@ -283,7 +283,7 @@ introView =
     div []
         (article [ class "message" ]
             [ div [ class "message-body" ]
-                [ text """어딘가에서 백엔드 개발자로 일하고 있습니다.
+                [ text """백엔드 개발자로 일하고 있습니다.
                        오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,
                        Clojure, Scala, Haskell 같은 함수형 프로그래밍 언어를 공부하고 있습니다."""
                 ]
@@ -422,8 +422,8 @@ certificatesView model =
         (article [ class "message" ]
             [ div [ class "message-body" ]
                 [ p []
-                    [ text """모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다. 
-                    하지만 제게는 그런 장식품이 없었지요. 그 부러웠던 마음을 이제라도 달래려, 
+                    [ text """모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다.
+                    하지만 제게는 그런 장식품이 없었지요. 그 부러웠던 마음을 이제라도 달래려,
                     그간 받은 수료증이라도 이렇게 온라인에 걸어두렵니다. """
                     ]
                 ]

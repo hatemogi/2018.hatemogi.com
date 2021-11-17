@@ -22,7 +22,7 @@ type alias Project =
 
 categoryToString : Category -> String
 categoryToString category =
-    case category of 
+    case category of
         Work -> "업무"
         Talk -> "발표"
         Hobby -> "취미"
@@ -31,14 +31,26 @@ categoryToString category =
 
 data : List Project
 data =
-    [ Project Work 2020
-        "광고 수익 배분 시스템"
+    [ Project Talk 2021
+      "liftIO 2021 - 연속된 우연으로 꾸려진 개발팀의 함수형 Scala 활용기"
+      (Just "https://liftio.org/2021/")
+      "개인"
+      [ "Scala", "함수형"]
+      """함수형 프로그래밍을 주제로한 온라인 콘퍼런스에서 발표하였습니다. 발표자료는 웹사이트에 아마 공개되었고, 발표 영상은 추후 공개한다고 합니다."""
+    , Project Talk 2021
+      "라인개발실록 - 라인 백엔드 개발자의 함수형 프로그래밍 언어 실전 사용기"
+      (Just "https://www.youtube.com/watch?v=H6JxxWL6bJI")
+      "LINE+ MONAD LEAD"
+      [ "Scala", "함수형"]
+      """LINE 개발 유튜브 채널 라이브로 함수형 프로그래밍을 주제로 인터뷰를 진행했습니다."""
+    , Project Work 2020
+        "LINE+ 광고 수익 배분 시스템"
         Nothing
         "개발리더"
         [ "Scala", "함수형", "http4s", "cats"]
-        """재직중인 회사에서 제공하는 서비스 플랫폼에서, 사용자가 올린 동영상을 재생하고 발생하는 광고수익을 분배해주는 
-        시스템을 개발해서 오픈하고 운영중입니다. 무엇보다 본격 함수형 프로그래밍을 만끽하고 있는 것 같아서 즐겁습니다.""",
-    Project Hobby
+        """LINE Timeline 서비스 플랫폼에서, 사용자가 올린 동영상을 재생하고 발생하는 광고 수익을 분배해주는
+        시스템을 개발해서 일본과 대만에서 서비스 중입니다. 무엇보다 본격 함수형 프로그래밍을 만끽하고 있는 것 같아서 즐겁습니다."""
+    , Project Hobby
         2019
         "GitHub.com 한글화 크롬 확장프로그램"
         (Just "https://chrome.google.com/webstore/detail/github-%ED%95%9C%EA%B8%80%ED%99%94/phhgannnkapemfnciphmbpenaflbngmm")

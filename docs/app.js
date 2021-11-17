@@ -5750,7 +5750,7 @@ var $author$project$Main$certificatesView = function (model) {
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text('모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다. \n                    하지만 제게는 그런 장식품이 없었지요. 그 부러웠던 마음을 이제라도 달래려, \n                    그간 받은 수료증이라도 이렇게 온라인에 걸어두렵니다. ')
+										$elm$html$Html$text('모범생 친구들 집에 놀러가보면, 벽에 폼나는 상장들이 걸려 있었습니다.\n                    하지만 제게는 그런 장식품이 없었지요. 그 부러웠던 마음을 이제라도 달래려,\n                    그간 받은 수료증이라도 이렇게 온라인에 걸어두렵니다. ')
 									]))
 							]))
 					])),
@@ -5765,10 +5765,10 @@ var $author$project$Intro$data = _List_fromArray(
 	[
 		A4(
 		$author$project$Intro$Section,
-		'어딘가',
+		'LINE+',
 		$elm$core$Maybe$Just('2020-현재'),
-		$elm$core$Maybe$Nothing,
-		'경기도 소재 회사에서 백엔드 개발자로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n        혹시라도 제 개인적 발언이 회사 입장에서 불편하지 않도록, 그리고 제가 마음대로 말하는 데에 불편함이 없도록, \n        재직중인 회사의 사명은 밝히지 않고 있습니다.'),
+		$elm$core$Maybe$Just('https://engineering.linecorp.com/ko/'),
+		'LINE+ 광고개발실 MONAD팀 LEAD로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.\n        제 의견은 회사의 공식 입장을 대변하지 아니하며, 오롯이 제 개인의 사견입니다.'),
 		A4(
 		$author$project$Intro$Section,
 		'NHN',
@@ -5879,7 +5879,7 @@ var $author$project$Main$introView = function () {
 							]),
 						_List_fromArray(
 							[
-								$elm$html$Html$text('어딘가에서 백엔드 개발자로 일하고 있습니다.\n                       오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,\n                       Clojure, Scala, Haskell 같은 함수형 프로그래밍 언어를 공부하고 있습니다.')
+								$elm$html$Html$text('백엔드 개발자로 일하고 있습니다.\n                       오랜 기간 명령형 OOP로 개발하다가, 함수형 프로그래밍에 매료되어,\n                       Clojure, Scala, Haskell 같은 함수형 프로그래밍 언어를 공부하고 있습니다.')
 							]))
 					])),
 			_Utils_ap(
@@ -5945,7 +5945,7 @@ var $author$project$Main$profileView = A2(
 				]),
 			_List_fromArray(
 				[
-					$author$project$Main$markdown('소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n               직업으로 삼았습니다. 모 IT기업에서 백엔드 개발자로 일하고 있습니다.')
+					$author$project$Main$markdown('소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자\n               직업으로 삼았습니다.')
 				])),
 			A2(
 			$elm$html$Html$footer,
@@ -6030,14 +6030,34 @@ var $author$project$Projects$data = _List_fromArray(
 	[
 		A7(
 		$author$project$Projects$Project,
+		1,
+		2021,
+		'liftIO 2021 - 연속된 우연으로 꾸려진 개발팀의 함수형 Scala 활용기',
+		$elm$core$Maybe$Just('https://liftio.org/2021/'),
+		'개인',
+		_List_fromArray(
+			['Scala', '함수형']),
+		'함수형 프로그래밍을 주제로한 온라인 콘퍼런스에서 발표하였습니다. 발표자료는 웹사이트에 아마 공개되었고, 발표 영상은 추후 공개한다고 합니다.'),
+		A7(
+		$author$project$Projects$Project,
+		1,
+		2021,
+		'라인개발실록 - 라인 백엔드 개발자의 함수형 프로그래밍 언어 실전 사용기',
+		$elm$core$Maybe$Just('https://www.youtube.com/watch?v=H6JxxWL6bJI'),
+		'LINE+ MONAD LEAD',
+		_List_fromArray(
+			['Scala', '함수형']),
+		'LINE 개발 유튜브 채널 라이브로 함수형 프로그래밍을 주제로 인터뷰를 진행했습니다.'),
+		A7(
+		$author$project$Projects$Project,
 		0,
 		2020,
-		'광고 수익 배분 시스템',
+		'LINE+ 광고 수익 배분 시스템',
 		$elm$core$Maybe$Nothing,
 		'개발리더',
 		_List_fromArray(
 			['Scala', '함수형', 'http4s', 'cats']),
-		'재직중인 회사에서 제공하는 서비스 플랫폼에서, 사용자가 올린 동영상을 재생하고 발생하는 광고수익을 분배해주는 \n        시스템을 개발해서 오픈하고 운영중입니다. 무엇보다 본격 함수형 프로그래밍을 만끽하고 있는 것 같아서 즐겁습니다.'),
+		'LINE Timeline 서비스 플랫폼에서, 사용자가 올린 동영상을 재생하고 발생하는 광고 수익을 분배해주는\n        시스템을 개발해서 일본과 대만에서 서비스 중입니다. 무엇보다 본격 함수형 프로그래밍을 만끽하고 있는 것 같아서 즐겁습니다.'),
 		A7(
 		$author$project$Projects$Project,
 		2,
