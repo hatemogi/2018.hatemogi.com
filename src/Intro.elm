@@ -14,8 +14,8 @@ data =
     [ Section "LINE+"
         (Just "2020-현재")
         (Just "https://engineering.linecorp.com/ko/")
-        """LINE+ 광고개발실 MONAD팀 LEAD로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.
-        제 의견은 회사의 공식 입장을 대변하지 아니하며, 오롯이 제 개인의 사견입니다."""
+        """LINE+ 광고플랫폼 MONAD팀 LEAD로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.
+        제 의견은 회사의 공식 입장을 대변하지 아니하며, 오롯이 제 개인의 사견임을 밝힙니다."""
     , Section "NHN"
         (Just "2018-2020")
         (Just "https://www.nhn.com/")
