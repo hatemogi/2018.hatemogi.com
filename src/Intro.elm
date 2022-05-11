@@ -11,21 +11,24 @@ type alias Section =
 
 data : List Section
 data =
-    [ Section "LINE+"
-        (Just "2020-현재")
+    [ Section "Constacts"
+        (Just "2022")
+        (Just "https://www.constacts.com/")
+        """이번엔 하스켈입니다. 하스켈로 로켓 스타트업의 백엔드 시스템을 구축합니다."""
+    , Section "LINE+"
+        (Just "2020-2022")
         (Just "https://engineering.linecorp.com/ko/")
-        """LINE+ 광고플랫폼 MONAD팀 LEAD로 일하고 있습니다. Scala로 백엔드 서버를 구축하고 있습니다.
-        제 의견은 회사의 공식 입장을 대변하지 아니하며, 오롯이 제 개인의 사견임을 밝힙니다."""
+        """LINE+ 광고플랫폼 MONAD팀 LEAD로 일했습니다. 함수형 Scala로 광고 수익 배분 시스템을 구축해 운영했습니다.
+        """
     , Section "NHN"
         (Just "2018-2020")
         (Just "https://www.nhn.com/")
         """NHN Dooray개발실에서 업무용 메신저 서비스 개발을 담당하며, Akka로 메시징 서버를 구축했고,
         Java와 Kotlin으로 API 서버를 개발했습니다. """
-    , Section "오후코드 프리랜서"
+    , Section "오후코드"
         (Just "2015-2018")
         (Just "http://ohucode.com/")
-        """개인 소프트웨어 개발사 대표로 외주계약 개발자로 일하며, 두 주요 고객사를
-             위한 서버 소프트웨어를 개발해 납품했습니다."""
+        """개인 소프트웨어 개발사 대표로, 두 주요 고객사를 위한 서버 소프트웨어를 개발해 납품했습니다."""
     , Section "카카오"
         (Just "2004-2015")
         (Just "https://kakaocorp.com")
