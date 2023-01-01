@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/hatemogi/2018.hatemogi.com#readme",
   "devDependencies": {
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^9.4.2",
     "typescript": "^3.7.2",
     "uglify-js": "^3.14.3"
   },
