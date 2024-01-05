@@ -33,6 +33,7 @@ main =
 
 -- MODEL
 
+
 type alias Model =
     { key : Nav.Key
     , url : Url.Url
@@ -147,7 +148,8 @@ view : Model -> Browser.Document Msg
 view model =
     { title = "hatemogi.com - " ++ routeToTitle model.route
     , body =
-        [ div [ class "wrap" ] [ menuView model, mainView model ]
+        [ menuView model
+        , mainView model
         , footerView model
         ]
     }
@@ -157,69 +159,50 @@ menuView : Model -> Html Msg
 menuView model =
     let
         menu route icon =
-            li [ classList [ ( "is-active", model.route == route ) ] ]
+            li [ classList [ ( "active", model.route == route ) ] ]
                 [ a [ href (routeToUrl route) ]
                     [ span [ class "icon is-small" ]
                         [ i [ class "fas", class icon ] [] ]
-                    , span [] [ text (routeToTitle route) ]
+                    , span [] [ text (" " ++ routeToTitle route) ]
                     ]
                 ]
     in
-    nav [ class "tabs is-boxed is-medium is-fullwidth" ]
-        [ ul []
+    nav [ class "container-fluid" ]
+        [ ul [] [ li [] [ img [ src "img/hatemogi.svg", width 128 ] [] ] ]
+        , ul []
             [ menu R소개 "fa-user-circle"
             , menu R프로젝트 "fa-file-code"
             , menu R글 "fa-edit"
             , menu R수료증 "fa-certificate"
-
-            -- , menu R코틀린 "fa-school"
-            --          , menu S잡담 ("fa-comment", "잡담")
             ]
         ]
 
 
 mainView : Model -> Html Msg
 mainView model =
-    let
-        titlef : String -> Html Msg -> List (Html Msg)
-        titlef title content =
-            [ h1 [ class "title" ] [ text title ], content ]
-    in
-    div [ class "container" ]
-        [ div [ class "columns is-centered" ]
-            [ div [ class "column is-narrow is-hidden-mobile" ] [ profileView ]
-            , main_ [ class "column has-text-justified" ]
-                (case model.route of
-                    R소개 ->
-                        titlef "김대현" introView
+    main_ [ class "container" ]
+        [ case model.route of
+            R소개 ->
+                profileView
 
-                    R프로젝트 ->
-                        titlef "프로젝트" (projectsView model)
+            R프로젝트 ->
+                projectsView model
 
-                    R글 ->
-                        titlef "글" (articlesView model)
+            R글 ->
+                articlesView model
 
-                    R수료증 ->
-                        titlef "수료증" (certificatesView model)
+            R수료증 ->
+                certificatesView model
 
-                    R404 ->
-                        titlef "404 찾을 수 없습니다" notFoundView
-                )
-            ]
+            R404 ->
+                notFoundView
         ]
 
 
 footerView : Model -> Html Msg
 footerView model =
-    footer [ class "footer" ]
-        [ div [ class "content has-text-justified" ]
-            [ p [] [ text "hatemogi.com" ]
-            , markdown """이 사이트를 만든 [소스코드](https://github.com/hatemogi/2018.hatemogi.com)는
-                        [MIT 라이선스](https://opensource.org/licenses/mit-license.php)를 따릅니다. """
-            , markdown """그리고, 여기 적은 글은 [CC BY-NC-SA 4.0 라이선스](https://creativecommons.org/licenses/by-nc-sa/4.0/)를 따릅니다."""
-            , markdown """이 웹사이트는 [Elm, Bulma, FontAwesome를 써서
-                          만들었습니다](https://medium.com/happyprogrammer-in-jeju/elm-순수-함수형-언어로-개인-홈-개편-45734486678c)."""
-            ]
+    footer [ class "container-fluid" ]
+        [ small [] [ text "© hatemogi 2022" ]
         ]
 
 
@@ -230,12 +213,12 @@ notFoundView =
 
 profileView : Html Msg
 profileView =
-    div [ class "card", style "width" "230px" ]
-        [ div [ class "card-image" ] [ img [ src "img/profile.jpg" ] [] ]
+    div []
+        [ div [ class "card-image" ] [ img [ src "img/profile.jpg", width 256, class "round-5px" ] [] ]
         , div [ class "card-content has-text-left" ]
-            [ markdown
-                """소프트웨어 **프로그래머**. 어려서 재미삼아 프로그래밍에 빠져든 이래 개발을 취미이자
-               직업으로 삼았습니다."""
+            [ p [] [ text "안녕하세요. 백엔드 개발자 김대현입니다. 어려서 취미로 시작한 프로그래밍에 푹 빠져서, 결국 직업 프로그래머가 되었습니다." ]
+            , p [] [ text "스칼라, 클로저, 하스켈 같은 함수형 프로그래밍 언어를 공부하는 게 재미있어서, 어떻게 하면 다른 프로그래머들에게도 전파할 수 있을까 고민하기도 합니다." ]
+            , p [] [ text "제주도🏝에 거주하며 바닷가에서 한적하게 쉬며 커피☕️ 마시는 것을 좋아합니다." ]
             ]
         , footer [ class "card-footer" ]
             [ p [ class "card-footer-item" ]
@@ -316,7 +299,6 @@ projectsView model =
                 Nothing ->
                     "is-link"
 
-
         keyedEntryf : P.Project -> ( String, Html Msg )
         keyedEntryf p =
             ( p.title, lazy entryf p )
@@ -352,8 +334,8 @@ projectsView model =
         button maybeCategory =
             span
                 [ class "button"
-                , classList [ (categoryColor maybeCategory, model.projectFilter == maybeCategory) ]
-                , onClick (UpdateProjectFilter maybeCategory )
+                , classList [ ( categoryColor maybeCategory, model.projectFilter == maybeCategory ) ]
+                , onClick (UpdateProjectFilter maybeCategory)
                 ]
                 [ text (Maybe.withDefault "전체" <| Maybe.map P.categoryToString maybeCategory) ]
     in
@@ -457,16 +439,6 @@ certificateView cert =
                 ]
             ]
         ]
-
-
-havingFunView : Model -> Html Msg
-havingFunView model =
-    div [] [ text "기술적으로 흥미를 느낀 주제들 공유" ]
-
-
-rantsView : Model -> Html Msg
-rantsView model =
-    div [] [ text "잡담" ]
 
 
 markdown : String -> Html Msg
